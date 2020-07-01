@@ -29,7 +29,10 @@ with pkgs; mkShell {
   buildInputs = [
     # vscode-with-extensions
     # unstable.flutter
-    androidStudioPackages.dev
+    androidenv.androidPkgs_9_0.platform-tools
+    androidStudioPackages.beta
+    adb-sync
+    sqlite
     # Nedeed to run flutter doctor on vscode
     unzip
   ];
