@@ -7,29 +7,32 @@ part of 'db_helper.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
-class Todo extends DataClass implements Insertable<Todo> {
+class FoodData extends DataClass implements Insertable<FoodData> {
   final int id;
-  final String title;
-  final String content;
-  final int category;
-  Todo(
+  final String name;
+  final double portion;
+  final double calorie;
+  final String unit;
+  FoodData(
       {@required this.id,
-      @required this.title,
-      @required this.content,
-      this.category});
-  factory Todo.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      @required this.name,
+      this.portion,
+      this.calorie,
+      @required this.unit});
+  factory FoodData.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
-    return Todo(
+    final doubleType = db.typeSystem.forDartType<double>();
+    return FoodData(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      title:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
-      content:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}body']),
-      category:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}category']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      portion:
+          doubleType.mapFromDatabaseResponse(data['${effectivePrefix}portion']),
+      calorie:
+          doubleType.mapFromDatabaseResponse(data['${effectivePrefix}calorie']),
+      unit: stringType.mapFromDatabaseResponse(data['${effectivePrefix}unit']),
     );
   }
   @override
@@ -38,40 +41,44 @@ class Todo extends DataClass implements Insertable<Todo> {
     if (!nullToAbsent || id != null) {
       map['id'] = Variable<int>(id);
     }
-    if (!nullToAbsent || title != null) {
-      map['title'] = Variable<String>(title);
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
     }
-    if (!nullToAbsent || content != null) {
-      map['body'] = Variable<String>(content);
+    if (!nullToAbsent || portion != null) {
+      map['portion'] = Variable<double>(portion);
     }
-    if (!nullToAbsent || category != null) {
-      map['category'] = Variable<int>(category);
+    if (!nullToAbsent || calorie != null) {
+      map['calorie'] = Variable<double>(calorie);
+    }
+    if (!nullToAbsent || unit != null) {
+      map['unit'] = Variable<String>(unit);
     }
     return map;
   }
 
-  TodosCompanion toCompanion(bool nullToAbsent) {
-    return TodosCompanion(
+  FoodCompanion toCompanion(bool nullToAbsent) {
+    return FoodCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      title:
-          title == null && nullToAbsent ? const Value.absent() : Value(title),
-      content: content == null && nullToAbsent
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      portion: portion == null && nullToAbsent
           ? const Value.absent()
-          : Value(content),
-      category: category == null && nullToAbsent
+          : Value(portion),
+      calorie: calorie == null && nullToAbsent
           ? const Value.absent()
-          : Value(category),
+          : Value(calorie),
+      unit: unit == null && nullToAbsent ? const Value.absent() : Value(unit),
     );
   }
 
-  factory Todo.fromJson(Map<String, dynamic> json,
+  factory FoodData.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Todo(
+    return FoodData(
       id: serializer.fromJson<int>(json['id']),
-      title: serializer.fromJson<String>(json['title']),
-      content: serializer.fromJson<String>(json['content']),
-      category: serializer.fromJson<int>(json['category']),
+      name: serializer.fromJson<String>(json['name']),
+      portion: serializer.fromJson<double>(json['portion']),
+      calorie: serializer.fromJson<double>(json['calorie']),
+      unit: serializer.fromJson<String>(json['unit']),
     );
   }
   @override
@@ -79,84 +86,99 @@ class Todo extends DataClass implements Insertable<Todo> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'title': serializer.toJson<String>(title),
-      'content': serializer.toJson<String>(content),
-      'category': serializer.toJson<int>(category),
+      'name': serializer.toJson<String>(name),
+      'portion': serializer.toJson<double>(portion),
+      'calorie': serializer.toJson<double>(calorie),
+      'unit': serializer.toJson<String>(unit),
     };
   }
 
-  Todo copyWith({int id, String title, String content, int category}) => Todo(
+  FoodData copyWith(
+          {int id, String name, double portion, double calorie, String unit}) =>
+      FoodData(
         id: id ?? this.id,
-        title: title ?? this.title,
-        content: content ?? this.content,
-        category: category ?? this.category,
+        name: name ?? this.name,
+        portion: portion ?? this.portion,
+        calorie: calorie ?? this.calorie,
+        unit: unit ?? this.unit,
       );
   @override
   String toString() {
-    return (StringBuffer('Todo(')
+    return (StringBuffer('FoodData(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('content: $content, ')
-          ..write('category: $category')
+          ..write('name: $name, ')
+          ..write('portion: $portion, ')
+          ..write('calorie: $calorie, ')
+          ..write('unit: $unit')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(title.hashCode, $mrjc(content.hashCode, category.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(name.hashCode,
+          $mrjc(portion.hashCode, $mrjc(calorie.hashCode, unit.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is Todo &&
+      (other is FoodData &&
           other.id == this.id &&
-          other.title == this.title &&
-          other.content == this.content &&
-          other.category == this.category);
+          other.name == this.name &&
+          other.portion == this.portion &&
+          other.calorie == this.calorie &&
+          other.unit == this.unit);
 }
 
-class TodosCompanion extends UpdateCompanion<Todo> {
+class FoodCompanion extends UpdateCompanion<FoodData> {
   final Value<int> id;
-  final Value<String> title;
-  final Value<String> content;
-  final Value<int> category;
-  const TodosCompanion({
+  final Value<String> name;
+  final Value<double> portion;
+  final Value<double> calorie;
+  final Value<String> unit;
+  const FoodCompanion({
     this.id = const Value.absent(),
-    this.title = const Value.absent(),
-    this.content = const Value.absent(),
-    this.category = const Value.absent(),
+    this.name = const Value.absent(),
+    this.portion = const Value.absent(),
+    this.calorie = const Value.absent(),
+    this.unit = const Value.absent(),
   });
-  TodosCompanion.insert({
+  FoodCompanion.insert({
     this.id = const Value.absent(),
-    @required String title,
-    @required String content,
-    this.category = const Value.absent(),
-  })  : title = Value(title),
-        content = Value(content);
-  static Insertable<Todo> custom({
+    @required String name,
+    this.portion = const Value.absent(),
+    this.calorie = const Value.absent(),
+    @required String unit,
+  })  : name = Value(name),
+        unit = Value(unit);
+  static Insertable<FoodData> custom({
     Expression<int> id,
-    Expression<String> title,
-    Expression<String> content,
-    Expression<int> category,
+    Expression<String> name,
+    Expression<double> portion,
+    Expression<double> calorie,
+    Expression<String> unit,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (title != null) 'title': title,
-      if (content != null) 'body': content,
-      if (category != null) 'category': category,
+      if (name != null) 'name': name,
+      if (portion != null) 'portion': portion,
+      if (calorie != null) 'calorie': calorie,
+      if (unit != null) 'unit': unit,
     });
   }
 
-  TodosCompanion copyWith(
+  FoodCompanion copyWith(
       {Value<int> id,
-      Value<String> title,
-      Value<String> content,
-      Value<int> category}) {
-    return TodosCompanion(
+      Value<String> name,
+      Value<double> portion,
+      Value<double> calorie,
+      Value<String> unit}) {
+    return FoodCompanion(
       id: id ?? this.id,
-      title: title ?? this.title,
-      content: content ?? this.content,
-      category: category ?? this.category,
+      name: name ?? this.name,
+      portion: portion ?? this.portion,
+      calorie: calorie ?? this.calorie,
+      unit: unit ?? this.unit,
     );
   }
 
@@ -166,34 +188,38 @@ class TodosCompanion extends UpdateCompanion<Todo> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
     }
-    if (content.present) {
-      map['body'] = Variable<String>(content.value);
+    if (portion.present) {
+      map['portion'] = Variable<double>(portion.value);
     }
-    if (category.present) {
-      map['category'] = Variable<int>(category.value);
+    if (calorie.present) {
+      map['calorie'] = Variable<double>(calorie.value);
+    }
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('TodosCompanion(')
+    return (StringBuffer('FoodCompanion(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('content: $content, ')
-          ..write('category: $category')
+          ..write('name: $name, ')
+          ..write('portion: $portion, ')
+          ..write('calorie: $calorie, ')
+          ..write('unit: $unit')
           ..write(')'))
         .toString();
   }
 }
 
-class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
+class $FoodTable extends Food with TableInfo<$FoodTable, FoodData> {
   final GeneratedDatabase _db;
   final String _alias;
-  $TodosTable(this._db, [this._alias]);
+  $FoodTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedIntColumn _id;
   @override
@@ -203,265 +229,86 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
   }
 
-  final VerificationMeta _titleMeta = const VerificationMeta('title');
-  GeneratedTextColumn _title;
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
   @override
-  GeneratedTextColumn get title => _title ??= _constructTitle();
-  GeneratedTextColumn _constructTitle() {
-    return GeneratedTextColumn('title', $tableName, false,
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn('name', $tableName, false,
         minTextLength: 6, maxTextLength: 32);
   }
 
-  final VerificationMeta _contentMeta = const VerificationMeta('content');
-  GeneratedTextColumn _content;
+  final VerificationMeta _portionMeta = const VerificationMeta('portion');
+  GeneratedRealColumn _portion;
   @override
-  GeneratedTextColumn get content => _content ??= _constructContent();
-  GeneratedTextColumn _constructContent() {
-    return GeneratedTextColumn(
-      'body',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _categoryMeta = const VerificationMeta('category');
-  GeneratedIntColumn _category;
-  @override
-  GeneratedIntColumn get category => _category ??= _constructCategory();
-  GeneratedIntColumn _constructCategory() {
-    return GeneratedIntColumn(
-      'category',
+  GeneratedRealColumn get portion => _portion ??= _constructPortion();
+  GeneratedRealColumn _constructPortion() {
+    return GeneratedRealColumn(
+      'portion',
       $tableName,
       true,
     );
   }
 
+  final VerificationMeta _calorieMeta = const VerificationMeta('calorie');
+  GeneratedRealColumn _calorie;
   @override
-  List<GeneratedColumn> get $columns => [id, title, content, category];
-  @override
-  $TodosTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'todos';
-  @override
-  final String actualTableName = 'todos';
-  @override
-  VerificationContext validateIntegrity(Insertable<Todo> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
-    } else if (isInserting) {
-      context.missing(_titleMeta);
-    }
-    if (data.containsKey('body')) {
-      context.handle(_contentMeta,
-          content.isAcceptableOrUnknown(data['body'], _contentMeta));
-    } else if (isInserting) {
-      context.missing(_contentMeta);
-    }
-    if (data.containsKey('category')) {
-      context.handle(_categoryMeta,
-          category.isAcceptableOrUnknown(data['category'], _categoryMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Todo map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Todo.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  $TodosTable createAlias(String alias) {
-    return $TodosTable(_db, alias);
-  }
-}
-
-class Category extends DataClass implements Insertable<Category> {
-  final int id;
-  final String description;
-  Category({@required this.id, @required this.description});
-  factory Category.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    return Category(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      description: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}description']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || description != null) {
-      map['description'] = Variable<String>(description);
-    }
-    return map;
-  }
-
-  CategoriesCompanion toCompanion(bool nullToAbsent) {
-    return CategoriesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      description: description == null && nullToAbsent
-          ? const Value.absent()
-          : Value(description),
+  GeneratedRealColumn get calorie => _calorie ??= _constructCalorie();
+  GeneratedRealColumn _constructCalorie() {
+    return GeneratedRealColumn(
+      'calorie',
+      $tableName,
+      true,
     );
   }
 
-  factory Category.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Category(
-      id: serializer.fromJson<int>(json['id']),
-      description: serializer.fromJson<String>(json['description']),
-    );
-  }
+  final VerificationMeta _unitMeta = const VerificationMeta('unit');
+  GeneratedTextColumn _unit;
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'description': serializer.toJson<String>(description),
-    };
-  }
-
-  Category copyWith({int id, String description}) => Category(
-        id: id ?? this.id,
-        description: description ?? this.description,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('Category(')
-          ..write('id: $id, ')
-          ..write('description: $description')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf($mrjc(id.hashCode, description.hashCode));
-  @override
-  bool operator ==(dynamic other) =>
-      identical(this, other) ||
-      (other is Category &&
-          other.id == this.id &&
-          other.description == this.description);
-}
-
-class CategoriesCompanion extends UpdateCompanion<Category> {
-  final Value<int> id;
-  final Value<String> description;
-  const CategoriesCompanion({
-    this.id = const Value.absent(),
-    this.description = const Value.absent(),
-  });
-  CategoriesCompanion.insert({
-    this.id = const Value.absent(),
-    @required String description,
-  }) : description = Value(description);
-  static Insertable<Category> custom({
-    Expression<int> id,
-    Expression<String> description,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (description != null) 'description': description,
-    });
-  }
-
-  CategoriesCompanion copyWith({Value<int> id, Value<String> description}) {
-    return CategoriesCompanion(
-      id: id ?? this.id,
-      description: description ?? this.description,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (description.present) {
-      map['description'] = Variable<String>(description.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('CategoriesCompanion(')
-          ..write('id: $id, ')
-          ..write('description: $description')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $CategoriesTable extends Categories
-    with TableInfo<$CategoriesTable, Category> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $CategoriesTable(this._db, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
-  final VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
-  GeneratedTextColumn _description;
-  @override
-  GeneratedTextColumn get description =>
-      _description ??= _constructDescription();
-  GeneratedTextColumn _constructDescription() {
+  GeneratedTextColumn get unit => _unit ??= _constructUnit();
+  GeneratedTextColumn _constructUnit() {
     return GeneratedTextColumn(
-      'description',
+      'unit',
       $tableName,
       false,
     );
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, description];
+  List<GeneratedColumn> get $columns => [id, name, portion, calorie, unit];
   @override
-  $CategoriesTable get asDslTable => this;
+  $FoodTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'categories';
+  String get $tableName => _alias ?? 'food';
   @override
-  final String actualTableName = 'categories';
+  final String actualTableName = 'food';
   @override
-  VerificationContext validateIntegrity(Insertable<Category> instance,
+  VerificationContext validateIntegrity(Insertable<FoodData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (data.containsKey('description')) {
+    if (data.containsKey('name')) {
       context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description'], _descriptionMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     } else if (isInserting) {
-      context.missing(_descriptionMeta);
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('portion')) {
+      context.handle(_portionMeta,
+          portion.isAcceptableOrUnknown(data['portion'], _portionMeta));
+    }
+    if (data.containsKey('calorie')) {
+      context.handle(_calorieMeta,
+          calorie.isAcceptableOrUnknown(data['calorie'], _calorieMeta));
+    }
+    if (data.containsKey('unit')) {
+      context.handle(
+          _unitMeta, unit.isAcceptableOrUnknown(data['unit'], _unitMeta));
+    } else if (isInserting) {
+      context.missing(_unitMeta);
     }
     return context;
   }
@@ -469,25 +316,23 @@ class $CategoriesTable extends Categories
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Category map(Map<String, dynamic> data, {String tablePrefix}) {
+  FoodData map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Category.fromData(data, _db, prefix: effectivePrefix);
+    return FoodData.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  $CategoriesTable createAlias(String alias) {
-    return $CategoriesTable(_db, alias);
+  $FoodTable createAlias(String alias) {
+    return $FoodTable(_db, alias);
   }
 }
 
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
-  $TodosTable _todos;
-  $TodosTable get todos => _todos ??= $TodosTable(this);
-  $CategoriesTable _categories;
-  $CategoriesTable get categories => _categories ??= $CategoriesTable(this);
+  $FoodTable _food;
+  $FoodTable get food => _food ??= $FoodTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [todos, categories];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [food];
 }

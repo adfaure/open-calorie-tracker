@@ -11,7 +11,6 @@ part 'db_helper.g.dart';
 
 // This will generate a table called "Food" for us. The rows of that table will
 // be represented by a class called "Food".
-@DataClassName("Food")
 class Food extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 6, max: 32)();

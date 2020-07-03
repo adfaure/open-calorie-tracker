@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'food.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -71,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildTextAndValue(context, _calorieQuota, "Objectif"),
-            // _buildTextAndValue(context, "-", ""),
             Text("-", textScaleFactor: sizeFactor),
             _buildTextAndValue(context, _dailyCalorie, "Consomées"),
             Text("=", textScaleFactor: sizeFactor),
@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
   _navigateAndDisplaySelection(BuildContext context) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EnterWeight()),
+      MaterialPageRoute(builder: (context) => CreateFoodForm()),
     );
     setState(() {
       _weight = int.parse(result);
