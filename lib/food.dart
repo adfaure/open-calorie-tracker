@@ -18,92 +18,183 @@ class Food extends Table {
 }
 */
 
-Widget _boxedContainer(Widget child) {
-  return Container(
-      decoration: new BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 0, // soften the shadow
-            spreadRadius: 0, //extend the shadow
-          )
-        ],
-      ),
-      child: child);
+String _requiredTextField(String value) {
+  if (value.isEmpty) {
+    return 'This field is required.';
+  }
+  return null;
 }
 
 class _CreateFoodFormState extends State<CreateFoodForm> {
+  final _createFoodFormKey = GlobalKey<FormState>();
   final nameFormCtrl = TextEditingController();
   final brandFormCtrl = TextEditingController();
 
   final portionFormCtrl = TextEditingController();
   final calorieFormCtrl = TextEditingController();
   final unitFormCtrl = TextEditingController();
+  final portionPerContainerFormCtrl = TextEditingController();
+
+  final bgColor = Color(0xFFe3e3e3);
+  final title = "Create new food";
+  final scaleTextFieldDescription = 0.8;
+  final scaleCategoryDescription = 0.9;
+  final scaleTextField = 0.7;
 
   @override
   Widget build(BuildContext build) {
-    final bgColor = Color(0xc7c7c7c7);
-    final title = "Create new food";
-    final scaleTextFieldDescription = 1.0;
-    final scaleCategoryDescription = 1.2;
-
     return Scaffold(
         backgroundColor: bgColor,
         appBar: AppBar(
           title: Text(title),
         ),
-        body: Padding(
-            padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
-            child: Column(children: [
-              Container(
-                  color: Colors.blue,
-                  child: Row(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            "New food",
-                            textScaleFactor: scaleCategoryDescription,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ))
-                    ],
-                  )),
-              _boxedContainer(Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Column(children: [
-                    Row(children: [
-                      Text("Food name (Mandatory)",
-                          textScaleFactor: scaleTextFieldDescription,
-                          style: TextStyle(fontWeight: FontWeight.bold))
-                    ]),
-                    TextField(
-                      autofocus: true,
-                      textDirection: TextDirection.ltr,
-                      controller: nameFormCtrl,
-                      decoration: InputDecoration(hintText: "Durian fruit"),
-                      onEditingComplete: () =>
-                          {Navigator.pop(context, nameFormCtrl.text)},
-                    ),
-                    Divider(
-                      height: 30,
-                    ),
-                    // SizedBox(height: 15),
-                    Row(children: [
-                      Text("Brand (Optional):",
-                          textScaleFactor: scaleTextFieldDescription,
-                          style: TextStyle(fontWeight: FontWeight.bold))
-                    ]),
-                    TextField(
-                      autofocus: true,
-                      textDirection: TextDirection.ltr,
-                      controller: brandFormCtrl,
-                      decoration: InputDecoration(hintText: "Raw"),
-                      onEditingComplete: () =>
-                          {Navigator.pop(context, brandFormCtrl.text)},
-                    ),
-                  ])))
-            ])));
+        body: Form(
+            key: _createFoodFormKey,
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
+                child: ListView(
+                    children: _buildNewFood(context) +
+                        [SizedBox(height: 15)] +
+                        _buildNewPortion(context)))),
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionButton(
+              onPressed: () {
+                if (_createFoodFormKey.currentState.validate()) {
+                  Scaffold.of(context)
+                      .showSnackBar(SnackBar(content: Text('Processing Data')));
+                }
+              },
+              tooltip: 'Increment',
+              child: Icon(Icons
+                  .check)), // This trailing comma makes auto-formatting nicer for build methods.
+        ));
   }
+
+  List<Widget> _buildNewFood(BuildContext context) {
+    return [
+      Container(
+          color: Colors.blue,
+          child: Row(
+            children: [
+              Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    "New food",
+                    textScaleFactor: scaleCategoryDescription,
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ))
+            ],
+          )),
+      _boxedContainer(Padding(
+          padding: EdgeInsets.all(5),
+          child: Column(children: [
+            Row(children: [
+              Text("Food name (Required)",
+                  textScaleFactor: scaleTextFieldDescription,
+                  style: TextStyle(fontWeight: FontWeight.bold))
+            ]),
+            Container(
+                child: TextFormField(
+              validator: _requiredTextField,
+              textDirection: TextDirection.ltr,
+              controller: nameFormCtrl,
+              decoration: InputDecoration(hintText: "Durian fruit"),
+            )),
+            SizedBox(
+              height: 15,
+            ),
+            // SizedBox(height: 15),
+            Row(children: [
+              Text("Brand (Optional):",
+                  textScaleFactor: scaleTextFieldDescription,
+                  style: TextStyle(fontWeight: FontWeight.bold))
+            ]),
+            Container(
+                child: TextFormField(
+              textDirection: TextDirection.ltr,
+              controller: brandFormCtrl,
+              decoration: InputDecoration(hintText: "Raw"),
+            )),
+          ])))
+    ];
+  }
+
+  List<Widget> _buildNewPortion(BuildContext context) {
+    return [
+      Container(
+          color: Colors.blue,
+          child: Row(
+            children: [
+              Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    "Enter portion",
+                    textScaleFactor: scaleCategoryDescription,
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ))
+            ],
+          )),
+      _boxedContainer(Padding(
+          padding: EdgeInsets.all(5),
+          child: Column(children: [
+            Row(children: [
+              Expanded(
+                  child: Text("Portion (Required)",
+                      textScaleFactor: scaleTextFieldDescription,
+                      style: TextStyle(fontWeight: FontWeight.bold)))
+            ]),
+            Container(
+                child: Row(children: [
+              Flexible(
+                  child: TextFormField(
+                textDirection: TextDirection.ltr,
+                validator: _requiredTextField,
+                controller: portionFormCtrl,
+                keyboardType: TextInputType.number,
+              )),
+              SizedBox(width: 5),
+              Flexible(
+                  child: TextFormField(
+                textDirection: TextDirection.ltr,
+                controller: unitFormCtrl,
+                validator: _requiredTextField,
+                decoration: InputDecoration(hintText: "Unit(s)"),
+              )),
+            ])),
+            SizedBox(
+              height: 15,
+            ),
+            // SizedBox(height: 15),
+            Row(children: [
+              Text("Portion per container (Required):",
+                  textScaleFactor: scaleTextFieldDescription,
+                  style: TextStyle(fontWeight: FontWeight.bold))
+            ]),
+            Container(
+                child: TextFormField(
+              validator: _requiredTextField,
+              textDirection: TextDirection.ltr,
+              controller: portionPerContainerFormCtrl,
+              decoration: InputDecoration(hintText: "Raw"),
+            )),
+          ])))
+    ];
+  }
+}
+
+Widget _boxedContainer(Widget child) {
+  return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.white70,
+            blurRadius: 10, // soften the shadow
+            spreadRadius: 1, //extend the shadow
+          )
+        ],
+      ),
+      child: child);
 }

@@ -10,7 +10,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final BgColor = Color(0xc7c7c7c7);
+  final bgColor = Color(0xFFe3e3e3);
   int _weight = 0;
 
   // The user name
@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        backgroundColor: BgColor,
+        backgroundColor: bgColor,
         appBar: AppBar(
           title: Text(widget.title),
         ),
@@ -48,17 +48,18 @@ class _MyHomePageState extends State<MyHomePage> {
     final sizeFactor = 2.0;
 
     return Container(
-      decoration: new BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            blurRadius: 0, // soften the shadow
-            spreadRadius: 0, //extend the shadow
+            color: Colors.white70,
+            blurRadius: 10, // soften the shadow
+            spreadRadius: 1, //extend the shadow
           )
         ],
       ),
       child: Column(children: [
-        SizedBox(height: 5),
+        SizedBox(height: 15),
         // I use a row, so the text is placed to the right of the screen
         Row(children: [
           SizedBox(width: 5),
@@ -67,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
             textAlign: TextAlign.right,
           )
         ]),
+        SizedBox(height: 15),
         // On row for the daily consumption
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -78,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _buildTextAndValue(context, availableCalories, "Disponibles"),
           ],
         ),
-        SizedBox(height: 5)
+        SizedBox(height: 15)
       ]),
     );
   }
