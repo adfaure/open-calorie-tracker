@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'application_drawer.dart';
 import 'food.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -24,23 +25,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        backgroundColor: bgColor,
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: ListView(
-            children: [_buildAvailableCalories(context)],
-            padding: EdgeInsets.fromLTRB(0, 12, 0, 12)),
-        // Builder is usefull to create a new context
-        floatingActionButton: Builder(
-          builder: (context) => FloatingActionButton(
-              onPressed: () => _navigateAndDisplaySelection(context),
-              tooltip: 'Increment',
-              child: Icon(Icons
-                  .add)), // This trailing comma makes auto-formatting nicer for build methods.
-        ));
+      backgroundColor: bgColor,
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: ListView(
+          children: [_buildAvailableCalories(context)],
+          padding: EdgeInsets.fromLTRB(0, 12, 0, 12)),
+      // Builder is usefull to create a new context
+      drawer: buildDrawer(context),
+    );
   }
 
   _buildAvailableCalories(BuildContext context) {
@@ -95,16 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
-
-  _navigateAndDisplaySelection(BuildContext context) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CreateFoodForm()),
-    );
-    setState(() {
-      _weight = int.parse(result);
-    });
-  }
 }
 
 class EnterWeight extends StatelessWidget {
@@ -118,15 +103,15 @@ class EnterWeight extends StatelessWidget {
         ),
         body: Center(
             child: Padding(
-              padding: const EdgeInsets.all(60),
-              child: TextField(
-                autofocus: true,
-                keyboardType: TextInputType.number,
-                textDirection: TextDirection.ltr,
-                controller: weightFormCtrl,
-                onEditingComplete: () =>
+          padding: const EdgeInsets.all(60),
+          child: TextField(
+            autofocus: true,
+            keyboardType: TextInputType.number,
+            textDirection: TextDirection.ltr,
+            controller: weightFormCtrl,
+            onEditingComplete: () =>
                 {Navigator.pop(context, weightFormCtrl.text)},
-              ),
-            )));
+          ),
+        )));
   }
 }

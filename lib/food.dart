@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import "db_helper.dart";
 
 class CreateFoodForm extends StatefulWidget {
   CreateFoodForm({Key key, this.title}) : super(key: key);
@@ -56,17 +60,19 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                     children: _buildNewFood(context) +
                         [SizedBox(height: 15)] +
                         _buildNewPortion(context)))),
-        floatingActionButton: Builder(
-          builder: (context) => FloatingActionButton(
-              onPressed: () {
-                if (_createFoodFormKey.currentState.validate()) {
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Processing Data')));
-                }
-              },
-              tooltip: 'Increment',
-              child: Icon(Icons
-                  .check)), // This trailing comma makes auto-formatting nicer for build methods.
+        floatingActionButton: Consumer<MyDatabase>(
+          builder: (builder, database, child) {
+            debugPrint('movieTitle: $database');
+            return FloatingActionButton(
+                onPressed: () {
+                  if (_createFoodFormKey.currentState.validate()) {
+                    database.addTodo(
+                        FoodsCompanion.insert(name: "tesiiit", unit: "g"));
+                  }
+                },
+                tooltip: 'Increment',
+                child: Icon(Icons.check));
+          },
         ));
   }
 
@@ -197,4 +203,63 @@ Widget _boxedContainer(Widget child) {
         ],
       ),
       child: child);
+}
+
+class ListFood extends StatefulWidget {
+  ListFood({Key key}) : super(key: key);
+  final String title = "Your food";
+  final bgColor = Color(0xFFe3e3e3);
+
+  @override
+  _ListFoodState createState() => _ListFoodState();
+}
+
+class _ListFoodState extends State<ListFood> {
+  List<Food> foodsItem = List<Food>();
+  
+
+  @override
+  Widget build(BuildContext build) {
+    return Scaffold(
+        backgroundColor: widget.bgColor,
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: ListView.builder(
+            itemCount: foodsItem.length,
+            itemBuilder: (BuildContext ctxt, int index) {
+              return new Text(foodsItem[index].toString());
+            }),
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionButton(
+              onPressed: () => _navigateAndDisplaySelection(context),
+              tooltip: 'Increment',
+              child: Icon(Icons
+                  .add)), // This trailing comma makes auto-formatting nicer for build methods.
+        ));
+  }
+
+  void initState() {
+    super.initState();
+    debugPrint('init state');
+
+    loadFoodEntries();
+  }
+
+  _navigateAndDisplaySelection(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CreateFoodForm()),
+    );
+  }
+
+  void loadFoodEntries() async {
+    var database = Provider.of<MyDatabase>(context, listen: false);
+    var items = await database.allFoodEntries;
+    debugPrint('movieTitle: $database');
+    
+    setState(()  {
+      foodsItem = items;
+    });
+  }
 }

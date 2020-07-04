@@ -7,25 +7,25 @@ part of 'db_helper.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
-class FoodData extends DataClass implements Insertable<FoodData> {
+class Food extends DataClass implements Insertable<Food> {
   final int id;
   final String name;
   final double portion;
   final double calorie;
   final String unit;
-  FoodData(
+  Food(
       {@required this.id,
       @required this.name,
       this.portion,
       this.calorie,
       @required this.unit});
-  factory FoodData.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory Food.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
     final doubleType = db.typeSystem.forDartType<double>();
-    return FoodData(
+    return Food(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       portion:
@@ -56,8 +56,8 @@ class FoodData extends DataClass implements Insertable<FoodData> {
     return map;
   }
 
-  FoodCompanion toCompanion(bool nullToAbsent) {
-    return FoodCompanion(
+  FoodsCompanion toCompanion(bool nullToAbsent) {
+    return FoodsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       portion: portion == null && nullToAbsent
@@ -70,10 +70,10 @@ class FoodData extends DataClass implements Insertable<FoodData> {
     );
   }
 
-  factory FoodData.fromJson(Map<String, dynamic> json,
+  factory Food.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return FoodData(
+    return Food(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       portion: serializer.fromJson<double>(json['portion']),
@@ -93,9 +93,9 @@ class FoodData extends DataClass implements Insertable<FoodData> {
     };
   }
 
-  FoodData copyWith(
+  Food copyWith(
           {int id, String name, double portion, double calorie, String unit}) =>
-      FoodData(
+      Food(
         id: id ?? this.id,
         name: name ?? this.name,
         portion: portion ?? this.portion,
@@ -104,7 +104,7 @@ class FoodData extends DataClass implements Insertable<FoodData> {
       );
   @override
   String toString() {
-    return (StringBuffer('FoodData(')
+    return (StringBuffer('Food(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('portion: $portion, ')
@@ -122,7 +122,7 @@ class FoodData extends DataClass implements Insertable<FoodData> {
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is FoodData &&
+      (other is Food &&
           other.id == this.id &&
           other.name == this.name &&
           other.portion == this.portion &&
@@ -130,20 +130,20 @@ class FoodData extends DataClass implements Insertable<FoodData> {
           other.unit == this.unit);
 }
 
-class FoodCompanion extends UpdateCompanion<FoodData> {
+class FoodsCompanion extends UpdateCompanion<Food> {
   final Value<int> id;
   final Value<String> name;
   final Value<double> portion;
   final Value<double> calorie;
   final Value<String> unit;
-  const FoodCompanion({
+  const FoodsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.portion = const Value.absent(),
     this.calorie = const Value.absent(),
     this.unit = const Value.absent(),
   });
-  FoodCompanion.insert({
+  FoodsCompanion.insert({
     this.id = const Value.absent(),
     @required String name,
     this.portion = const Value.absent(),
@@ -151,7 +151,7 @@ class FoodCompanion extends UpdateCompanion<FoodData> {
     @required String unit,
   })  : name = Value(name),
         unit = Value(unit);
-  static Insertable<FoodData> custom({
+  static Insertable<Food> custom({
     Expression<int> id,
     Expression<String> name,
     Expression<double> portion,
@@ -167,13 +167,13 @@ class FoodCompanion extends UpdateCompanion<FoodData> {
     });
   }
 
-  FoodCompanion copyWith(
+  FoodsCompanion copyWith(
       {Value<int> id,
       Value<String> name,
       Value<double> portion,
       Value<double> calorie,
       Value<String> unit}) {
-    return FoodCompanion(
+    return FoodsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       portion: portion ?? this.portion,
@@ -205,7 +205,7 @@ class FoodCompanion extends UpdateCompanion<FoodData> {
 
   @override
   String toString() {
-    return (StringBuffer('FoodCompanion(')
+    return (StringBuffer('FoodsCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('portion: $portion, ')
@@ -216,10 +216,10 @@ class FoodCompanion extends UpdateCompanion<FoodData> {
   }
 }
 
-class $FoodTable extends Food with TableInfo<$FoodTable, FoodData> {
+class $FoodsTable extends Foods with TableInfo<$FoodsTable, Food> {
   final GeneratedDatabase _db;
   final String _alias;
-  $FoodTable(this._db, [this._alias]);
+  $FoodsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedIntColumn _id;
   @override
@@ -277,13 +277,13 @@ class $FoodTable extends Food with TableInfo<$FoodTable, FoodData> {
   @override
   List<GeneratedColumn> get $columns => [id, name, portion, calorie, unit];
   @override
-  $FoodTable get asDslTable => this;
+  $FoodsTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'food';
+  String get $tableName => _alias ?? 'foods';
   @override
-  final String actualTableName = 'food';
+  final String actualTableName = 'foods';
   @override
-  VerificationContext validateIntegrity(Insertable<FoodData> instance,
+  VerificationContext validateIntegrity(Insertable<Food> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -316,23 +316,23 @@ class $FoodTable extends Food with TableInfo<$FoodTable, FoodData> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FoodData map(Map<String, dynamic> data, {String tablePrefix}) {
+  Food map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return FoodData.fromData(data, _db, prefix: effectivePrefix);
+    return Food.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  $FoodTable createAlias(String alias) {
-    return $FoodTable(_db, alias);
+  $FoodsTable createAlias(String alias) {
+    return $FoodsTable(_db, alias);
   }
 }
 
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
-  $FoodTable _food;
-  $FoodTable get food => _food ??= $FoodTable(this);
+  $FoodsTable _foods;
+  $FoodsTable get foods => _foods ??= $FoodsTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [food];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [foods];
 }

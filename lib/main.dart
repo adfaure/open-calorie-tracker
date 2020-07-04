@@ -19,7 +19,6 @@ void readUserProfile() async {
   final prefs = await SharedPreferences.getInstance();
 }
 
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

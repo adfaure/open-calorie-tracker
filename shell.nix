@@ -43,7 +43,7 @@ let
     filename = "flutter_linux_${version}-${channel}.tar.xz";
     sha256Hash = "sha256:0kapja3nh7dfhjbn2np02wghijrjnpzsv4hz10fj54hs8hdx19di";
     patches = getPatches "${unstablePkgs.path}/pkgs/development/compilers/flutter/patches/beta";
-  };
+ };
 
   androidSdk = pkgs.androidenv.androidPkgs_9_0.androidsdk;
 

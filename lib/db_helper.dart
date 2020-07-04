@@ -11,7 +11,7 @@ part 'db_helper.g.dart';
 
 // This will generate a table called "Food" for us. The rows of that table will
 // be represented by a class called "Food".
-class Food extends Table {
+class Foods extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 6, max: 32)();
   RealColumn get portion => real().nullable()();
@@ -30,9 +30,10 @@ LazyDatabase _openConnection() {
   });
 }
 
+
 // this annotation tells moor to prepare a database class that uses both of the
 // tables we just defined. We'll see how to use that database class in a moment.
-@UseMoor(tables: [Food])
+@UseMoor(tables: [Foods])
 class MyDatabase extends _$MyDatabase {
   // we tell the database where to store the data with this constructor
   MyDatabase() : super(_openConnection());
@@ -41,4 +42,12 @@ class MyDatabase extends _$MyDatabase {
   // are covered later in this readme.
   @override
   int get schemaVersion => 1;
+
+  // returns the generated id
+  Future<int> addTodo(FoodsCompanion entry) {
+    return into(foods).insert(entry);
+  }
+
+  // loads all todo entries
+  Future<List<Food>> get allFoodEntries => select(foods).get();
 }
