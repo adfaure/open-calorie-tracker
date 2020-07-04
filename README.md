@@ -22,4 +22,5 @@ Then start the emulator: `./result/bin/run-test-emulator`.
 
 # Notes
 
-For some reasons, accepting adroid license causes `allowUnfree = true`, one quick workaround is to run the shell with: `NIXPKGS_ALLOW_UNFREE=1 nix-shell shell_test.nix`.
+- For some reasons, accepting adroid license causes `allowUnfree = true`, one quick workaround is to run the shell with: `NIXPKGS_ALLOW_UNFREE=1 nix-shell shell_test.nix`.
+- If database not working with dlopen failing this link might fix it: https://stackoverflow.com/a/62308661
