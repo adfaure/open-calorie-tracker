@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'db_helper.dart';
+import 'database/db_helper.dart';
 import 'home.dart';
 
 void main() {

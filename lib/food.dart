@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import "db_helper.dart";
+import "database/db_helper.dart";
 
 class CreateFoodForm extends StatefulWidget {
   CreateFoodForm({Key key, this.title}) : super(key: key);
@@ -215,8 +215,7 @@ class ListFood extends StatefulWidget {
 }
 
 class _ListFoodState extends State<ListFood> {
-  List<Food> foodsItem = List<Food>();
-  
+  Stream<List<Food>> foodsItem;
 
   @override
   Widget build(BuildContext build) {
@@ -225,11 +224,39 @@ class _ListFoodState extends State<ListFood> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: ListView.builder(
-            itemCount: foodsItem.length,
-            itemBuilder: (BuildContext ctxt, int index) {
-              return new Text(foodsItem[index].toString());
-            }),
+        body: Consumer<MyDatabase>(builder: (builder, database, child) {
+          return StreamBuilder(
+              stream: database.watchEntriesInFoods(),
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Food>> snapshot) {
+                return ListView.builder(
+                  // When the widget is first initialize, the data is null.
+                  // Tertiary operators prevent getting an error (It might be seen as a workaround, idk yet)
+                  itemCount: snapshot.data.length ?? 0,
+                  itemBuilder: (_, index) {
+                    return Card(
+                      color: Colors.orangeAccent,
+                      child: ListTile(
+                          leading: CircleAvatar(
+                            child: Text('$index'),
+                            radius: 20,
+                          ),
+                          title: Text(snapshot.data[index].name),
+                          subtitle: Text("Rs. ${snapshot.data[index].calorie}"),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete_outline),
+                            onPressed: () {
+                              setState(() {
+                                // AppDatabase().deleteOrder(snapshot.data[index]);
+                              });
+                            },
+                            color: Colors.red,
+                          )),
+                    );
+                  },
+                );
+              });
+        }),
         floatingActionButton: Builder(
           builder: (context) => FloatingActionButton(
               onPressed: () => _navigateAndDisplaySelection(context),
@@ -237,13 +264,6 @@ class _ListFoodState extends State<ListFood> {
               child: Icon(Icons
                   .add)), // This trailing comma makes auto-formatting nicer for build methods.
         ));
-  }
-
-  void initState() {
-    super.initState();
-    debugPrint('init state');
-
-    loadFoodEntries();
   }
 
   _navigateAndDisplaySelection(BuildContext context) async {
@@ -257,9 +277,9 @@ class _ListFoodState extends State<ListFood> {
     var database = Provider.of<MyDatabase>(context, listen: false);
     var items = await database.allFoodEntries;
     debugPrint('movieTitle: $database');
-    
-    setState(()  {
-      foodsItem = items;
+
+    setState(() {
+      // foodsItem = items;
     });
   }
 }
