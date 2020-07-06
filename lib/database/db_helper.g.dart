@@ -235,7 +235,7 @@ class $FoodsTable extends Foods with TableInfo<$FoodsTable, Food> {
   GeneratedTextColumn get name => _name ??= _constructName();
   GeneratedTextColumn _constructName() {
     return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 6, maxTextLength: 32);
+        minTextLength: 1, maxTextLength: 32);
   }
 
   final VerificationMeta _portionMeta = const VerificationMeta('portion');

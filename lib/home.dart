@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'application_drawer.dart';
-import 'food.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

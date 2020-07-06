@@ -9,12 +9,11 @@ import 'dart:io';
 // but it's needed for moor to know about the generated code
 part 'db_helper.g.dart';
 
-
 // This will generate a table called "Food" for us. The rows of that table will
 // be represented by a class called "Food".
 class Foods extends Table {
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get name => text().withLength(min: 6, max: 32)();
+  TextColumn get name => text().withLength(min: 1, max: 32)();
   RealColumn get portion => real().nullable()();
   RealColumn get calorie => real().nullable()();
   TextColumn get unit => text()();
@@ -31,13 +30,11 @@ LazyDatabase _openConnection() {
   });
 }
 
-
 // this annotation tells moor to prepare a database class that uses both of the
 // tables we just defined. We'll see how to use that database class in a moment.
 @UseMoor(
   tables: [Foods],
 )
-
 class MyDatabase extends _$MyDatabase {
   // we tell the database where to store the data with this constructor
   MyDatabase() : super(_openConnection());
@@ -54,10 +51,13 @@ class MyDatabase extends _$MyDatabase {
 
   // loads all todo entries
   Future<List<Food>> get allFoodEntries => select(foods).get();
- 
+
   // The stream will automatically emit new items whenever the underlying data changes.
   Stream<List<Food>> watchEntriesInFoods() {
     return (select(foods)).watch();
   }
 
- }
+  Future deleteFood(Food entry) {
+    return delete(foods).delete(entry);
+  }
+}

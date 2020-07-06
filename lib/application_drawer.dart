@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'food.dart';
+import 'food/food.dart';
 
 Drawer buildDrawer(BuildContext context) {
   return Drawer(
