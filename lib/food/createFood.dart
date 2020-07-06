@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
@@ -103,37 +102,38 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                   ))
             ],
           )),
-      boxedContainer(Padding(
-          padding: EdgeInsets.all(5),
-          child: Column(children: [
-            Row(children: [
-              Text("Food name (Required)",
-                  textScaleFactor: scaleTextFieldDescription,
-                  style: TextStyle(fontWeight: FontWeight.bold))
-            ]),
-            Container(
-                child: TextFormField(
-              validator: _requiredTextField,
-              textDirection: TextDirection.ltr,
-              controller: nameFormCtrl,
-              decoration: InputDecoration(hintText: "Durian fruit"),
-            )),
-            SizedBox(
-              height: 15,
-            ),
-            // SizedBox(height: 15),
-            Row(children: [
-              Text("Brand (Optional):",
-                  textScaleFactor: scaleTextFieldDescription,
-                  style: TextStyle(fontWeight: FontWeight.bold))
-            ]),
-            Container(
-                child: TextFormField(
-              textDirection: TextDirection.ltr,
-              controller: brandFormCtrl,
-              decoration: InputDecoration(hintText: "Raw"),
-            )),
-          ])))
+      BoxedContainer(
+          child: Padding(
+              padding: EdgeInsets.all(5),
+              child: Column(children: [
+                Row(children: [
+                  Text("Food name (Required)",
+                      textScaleFactor: scaleTextFieldDescription,
+                      style: TextStyle(fontWeight: FontWeight.bold))
+                ]),
+                Container(
+                    child: TextFormField(
+                  validator: _requiredTextField,
+                  textDirection: TextDirection.ltr,
+                  controller: nameFormCtrl,
+                  decoration: InputDecoration(hintText: "Durian fruit"),
+                )),
+                SizedBox(
+                  height: 15,
+                ),
+                // SizedBox(height: 15),
+                Row(children: [
+                  Text("Brand (Optional):",
+                      textScaleFactor: scaleTextFieldDescription,
+                      style: TextStyle(fontWeight: FontWeight.bold))
+                ]),
+                Container(
+                    child: TextFormField(
+                  textDirection: TextDirection.ltr,
+                  controller: brandFormCtrl,
+                  decoration: InputDecoration(hintText: "Raw"),
+                )),
+              ])))
     ];
   }
 
@@ -153,51 +153,52 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                   ))
             ],
           )),
-      boxedContainer(Padding(
-          padding: EdgeInsets.all(5),
-          child: Column(children: [
-            Row(children: [
-              Expanded(
-                  child: Text("Portion (Required)",
+      BoxedContainer(
+          child: Padding(
+              padding: EdgeInsets.all(5),
+              child: Column(children: [
+                Row(children: [
+                  Expanded(
+                      child: Text("Portion (Required)",
+                          textScaleFactor: scaleTextFieldDescription,
+                          style: TextStyle(fontWeight: FontWeight.bold)))
+                ]),
+                Container(
+                    child: Row(children: [
+                  Flexible(
+                      child: TextFormField(
+                    textDirection: TextDirection.ltr,
+                    validator: _requiredTextField,
+                    controller: portionFormCtrl,
+                    keyboardType: TextInputType.number,
+                  )),
+                  SizedBox(width: 5),
+                  Flexible(
+                      child: TextFormField(
+                    textDirection: TextDirection.ltr,
+                    controller: unitFormCtrl,
+                    validator: _requiredTextField,
+                    decoration: InputDecoration(hintText: "Unit(s)"),
+                  )),
+                ])),
+                SizedBox(
+                  height: 15,
+                ),
+                // SizedBox(height: 15),
+                Row(children: [
+                  Text("Calories per portion:",
                       textScaleFactor: scaleTextFieldDescription,
-                      style: TextStyle(fontWeight: FontWeight.bold)))
-            ]),
-            Container(
-                child: Row(children: [
-              Flexible(
-                  child: TextFormField(
-                textDirection: TextDirection.ltr,
-                validator: _requiredTextField,
-                controller: portionFormCtrl,
-                keyboardType: TextInputType.number,
-              )),
-              SizedBox(width: 5),
-              Flexible(
-                  child: TextFormField(
-                textDirection: TextDirection.ltr,
-                controller: unitFormCtrl,
-                validator: _requiredTextField,
-                decoration: InputDecoration(hintText: "Unit(s)"),
-              )),
-            ])),
-            SizedBox(
-              height: 15,
-            ),
-            // SizedBox(height: 15),
-            Row(children: [
-              Text("Calories per portion:",
-                  textScaleFactor: scaleTextFieldDescription,
-                  style: TextStyle(fontWeight: FontWeight.bold))
-            ]),
-            Container(
-                child: TextFormField(
-              validator: _requiredTextField,
-              textDirection: TextDirection.ltr,
-              keyboardType: TextInputType.number,
-              controller: calorieFormCtrl,
-              decoration: InputDecoration(hintText: ""),
-            )),
-          ])))
+                      style: TextStyle(fontWeight: FontWeight.bold))
+                ]),
+                Container(
+                    child: TextFormField(
+                  validator: _requiredTextField,
+                  textDirection: TextDirection.ltr,
+                  keyboardType: TextInputType.number,
+                  controller: calorieFormCtrl,
+                  decoration: InputDecoration(hintText: ""),
+                )),
+              ])))
     ];
   }
 }

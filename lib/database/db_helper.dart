@@ -14,9 +14,16 @@ part 'db_helper.g.dart';
 class Foods extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
-  RealColumn get portion => real().nullable()();
-  RealColumn get calorie => real().nullable()();
+  RealColumn get portion => real()();
+  RealColumn get calorie => real()();
   TextColumn get unit => text()();
+}
+
+class ConsumedFood extends Table {
+  DateTimeColumn get date => dateTime()();
+  IntColumn get food => integer().autoIncrement()();
+  RealColumn get consumedPortion => real()();
+  TextColumn get mealType => text()();
 }
 
 LazyDatabase _openConnection() {

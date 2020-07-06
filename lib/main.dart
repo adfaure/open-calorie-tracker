@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:open_weight/journal/journalView.dart';
 import 'database/db_helper.dart';
-import 'home.dart';
 
 void main() {
   runApp(
@@ -25,9 +25,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'OPT',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Open Calories Tracker'),
+          primarySwatch: Colors.blue,
+          cardTheme: CardTheme(
+              margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
+              shape: RoundedRectangleBorder(
+                  borderRadius: const BorderRadius.all(
+                Radius.circular(0.0),
+              )))),
+      home: JournalView(),
     );
   }
 }
