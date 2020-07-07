@@ -22,7 +22,6 @@ class Food extends Table {
   TextColumn get unit => text()();
 }
 */
-
 String _requiredTextField(String value) {
   if (value.isEmpty) {
     return 'This field is required.';
