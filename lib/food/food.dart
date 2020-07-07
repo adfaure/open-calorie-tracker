@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 import '../database/db_helper.dart';
 
 class ListFood extends StatefulWidget {
-  ListFood({Key key}) : super(key: key);
-  final String title = "Your food";
+  ListFood({Key key, @required this.title}) : super(key: key);
+  final String title;
   final bgColor = Color(0xFFe3e3e3);
 
   @override

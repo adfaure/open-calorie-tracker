@@ -4,6 +4,7 @@ import 'package:open_weight/database/db_helper.dart';
 import 'package:open_weight/food/foodCard.dart';
 import 'package:provider/provider.dart';
 
+/// Focus on a modifiable food entry.
 class FoodView extends StatelessWidget {
   final Food food;
 
@@ -23,18 +24,3 @@ class FoodView extends StatelessWidget {
         }));
   }
 }
-
-/*
-return Card(
-      child: ListTile(
-          leading: CircleAvatar(
-            child: Text('${food.name[0]}'),
-            radius: 20,
-          ),
-          title: Text(food.name),
-          subtitle:
-              Text("Calories. ${food.calorie} (${food.portion}${food.unit})"),
-          trailing: actionButton),
-    );
-  }
-*/

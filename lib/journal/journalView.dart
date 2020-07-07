@@ -40,13 +40,6 @@ class JournalView extends StatelessWidget {
               title: "Snacks",
             )
           ], padding: EdgeInsets.fromLTRB(0, 0, 0, 8));
-        }),
-        floatingActionButton: Builder(
-          builder: (context) => FloatingActionButton(
-              onPressed: () => {debugPrint("test")},
-              tooltip: 'Increment',
-              child: Icon(Icons
-                  .add)), // This trailing comma makes auto-formatting nicer for build methods.
-        ));
+        }));
   }
 }

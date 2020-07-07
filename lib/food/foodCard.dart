@@ -20,7 +20,7 @@ class FoodCard extends StatelessWidget {
   final food;
   final actionButton;
 
-  FoodCard({@required this.food, this.actionButton});
+  FoodCard({Key key, @required this.food, this.actionButton}) : super(key:key);
 
   @override
   Widget build(BuildContext context) {

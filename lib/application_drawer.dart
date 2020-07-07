@@ -41,7 +41,7 @@ class ApplicationDrawer extends StatelessWidget {
   _navigateShowFoodPanel(BuildContext context) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ListFood()),
+      MaterialPageRoute(builder: (context) => ListFood(title: "Your foods",)),
     );
   }
 }
