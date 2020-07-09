@@ -2,30 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
-import 'package:open_weight/food/foodView.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../database/db_helper.dart';
 
-class SelectFood extends StatefulWidget {
-  SelectFood({Key key, @required this.title}) : super(key: key);
+/// This widget should be called when one wishes to select a food, and a portion of it.
+/// However, it is very similar (not to say copied-pasted) from [food.dart].
+/// TODO: find a way to remove this duplication.
+class SelectFood extends StatelessWidget {
+  SelectFood({Key key, @required this.title, this.foodsItem}) : super(key: key);
+
+  final Stream<List<Food>> foodsItem;
   final String title;
   final bgColor = Color(0xFFe3e3e3);
-
-  @override
-  _SelectFoodState createState() => _SelectFoodState();
-}
-
-class _SelectFoodState extends State<SelectFood> {
-  Stream<List<Food>> foodsItem;
+  final _dialogKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext build) {
     return Scaffold(
-        backgroundColor: widget.bgColor,
+        backgroundColor: bgColor,
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(title),
         ),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           return StreamBuilder(
@@ -38,9 +36,11 @@ class _SelectFoodState extends State<SelectFood> {
                   // Tertiary operators prevent getting an error (It might be seen as a workaround, idk yet)
                   itemCount: snapshot.data.length ?? 0,
                   itemBuilder: (_, index) {
-                    return new GestureDetector(
-                        onTap: () =>
-                            {_getNumborOfPortion(snapshot.data[index])},
+                    // Passing by a builder so one can display a snackbar after the dialog ended.
+                    return GestureDetector(
+                        onTap: () => {
+                              _getNumborOfPortion(context, snapshot.data[index])
+                            },
                         child: FoodCard(
                           food: snapshot.data[index],
                         ));
@@ -58,57 +58,86 @@ class _SelectFoodState extends State<SelectFood> {
   }
 
   _navigateAndDisplaySelection(BuildContext context) async {
-    final result = await Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => CreateFoodForm()),
     );
   }
 
   /// Show dialog asking for the number of portion to add from selected food.
-  Future<void> _getNumborOfPortion(Food selectedFood) async {
+  Future<void> _getNumborOfPortion(
+      BuildContext context, Food selectedFood) async {
     final formatter = new NumberFormat("#");
     final numberOfPortionCtrl = TextEditingController();
-    var numberOfPortion = await showDialog<double>(
+
+    var portionSize = await showDialog<double>(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title:
-                Center(child: Text('Number of portion: ${selectedFood.name}')),
+            title: Center(
+                child: Column(children: [
+              Text(
+                'Number of portion: ${selectedFood.name}',
+              ),
+              Text(
+                '(Portion size: ' +
+                    formatter.format(selectedFood.portion) +
+                    "${selectedFood.unit})",
+                textAlign: TextAlign.left,
+                textScaleFactor: 0.7,
+              )
+            ])),
             children: <Widget>[
               Row(children: [
-                Expanded(
-                  child: Container(),
-                ),
-                Container(
-                  child: Text(formatter.format(selectedFood.portion) +
-                      "${selectedFood.unit} x "),
-                ),
-                Container(
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    keyboardType: TextInputType.number,
-                    controller: numberOfPortionCtrl,
-                    onSubmitted: (newValue) {
-                      var doubleString =
-                          numberOfPortionCtrl.text.replaceAll(",", ".");
-                      // TODO: What is the proper way to handle errors.
-                      try {
-                        double.parse(doubleString);
-                      } catch (e) {
-                        print(e);
-                      }
-                      Navigator.pop(context, double.parse(doubleString));
-                    },
-                  ),
-                  width: 70,
+                SizedBox(
+                  width: 50,
                 ),
                 Expanded(
-                  child: Container(),
+                  child: Form(
+                      key: _dialogKey,
+                      child: TextFormField(
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
+                        controller: numberOfPortionCtrl,
+                        decoration: InputDecoration(
+                          hintText: "1.5",
+                        ),
+                        validator: (value) {
+                          var doubleString =
+                              numberOfPortionCtrl.text.replaceAll(",", ".");
+                          var portionSize;
+                          try {
+                            portionSize = double.parse(doubleString);
+                          } catch (e) {
+                            return "Unvalid portion size.";
+                          }
+                          if (portionSize <= 0) {
+                            return "Require positive number.";
+                          }
+                          return null;
+                        },
+                        onFieldSubmitted: (newValue) {
+                          if (_dialogKey.currentState.validate()) {
+                            var doubleString =
+                                numberOfPortionCtrl.text.replaceAll(",", ".");
+                            Navigator.pop(context, double.parse(doubleString));
+                          }
+                        },
+                      )),
+                ),
+                SizedBox(
+                  width: 50,
                 ),
               ]),
             ],
           );
         });
-    return numberOfPortion;
+
+    /// Once the dialgo returns a valid portio size
+    /// we return to the previous vue.
+    if (portionSize != null) {
+      Navigator.of(context).pop(context);
+    }
+
   }
 }
