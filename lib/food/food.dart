@@ -7,24 +7,18 @@ import 'package:provider/provider.dart';
 
 import '../database/db_helper.dart';
 
-class ListFood extends StatefulWidget {
-  ListFood({Key key, @required this.title}) : super(key: key);
+class ListFood extends StatelessWidget {
+  ListFood({Key key, @required this.title, this.foodsItem}) : super(key: key);
   final String title;
   final bgColor = Color(0xFFe3e3e3);
-
-  @override
-  _ListFoodState createState() => _ListFoodState();
-}
-
-class _ListFoodState extends State<ListFood> {
-  Stream<List<Food>> foodsItem;
+  final Stream<List<Food>> foodsItem;
 
   @override
   Widget build(BuildContext build) {
     return Scaffold(
-        backgroundColor: widget.bgColor,
+        backgroundColor: bgColor,
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(title),
         ),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           return StreamBuilder(
@@ -45,9 +39,7 @@ class _ListFoodState extends State<ListFood> {
                             actionButton: IconButton(
                               icon: Icon(Icons.delete_outline),
                               onPressed: () {
-                                setState(() {
                                   database.deleteFood(snapshot.data[index]);
-                                });
                               },
                               color: Colors.red,
                             )));
@@ -80,4 +72,5 @@ class _ListFoodState extends State<ListFood> {
       MaterialPageRoute(builder: (context) => CreateFoodForm()),
     );
   }
+
 }
