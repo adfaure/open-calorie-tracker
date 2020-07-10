@@ -57,7 +57,7 @@ class ListFood extends StatelessWidget {
   }
 
   _showFoodView(BuildContext context, Food food) async {
-    final result = await Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => FoodView(
@@ -67,7 +67,7 @@ class ListFood extends StatelessWidget {
   }
 
   _navigateAndDisplaySelection(BuildContext context) async {
-    final result = await Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => CreateFoodForm()),
     );

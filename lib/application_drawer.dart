@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moor_db_viewer/moor_db_viewer.dart';
+import 'package:open_weight/database/db_helper.dart';
+import 'package:provider/provider.dart';
 
 import 'food/food.dart';
 
@@ -27,10 +30,9 @@ class ApplicationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('TBD'),
+            title: Text('Debug data'),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              _debugShowDatabase(context);
             },
           ),
         ],
@@ -38,10 +40,20 @@ class ApplicationDrawer extends StatelessWidget {
     );
   }
 
+  _debugShowDatabase(BuildContext context) async {
+    final database = Provider.of<MyDatabase>(context, listen: false);
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => MoorDbViewer(database)));
+  }
+
   _navigateShowFoodPanel(BuildContext context) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ListFood(title: "Your foods",)),
+      MaterialPageRoute(
+          builder: (context) => ListFood(
+                title: "Your foods",
+              )),
     );
   }
 }

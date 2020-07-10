@@ -71,10 +71,8 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                     database.addTodo(FoodsCompanion.insert(
                         name: nameFormCtrl.text,
                         unit: unitFormCtrl.text,
-                        calorie:
-                            Value<double>(double.parse(calorieFormCtrl.text)),
-                        portion:
-                            Value<double>(double.parse(portionFormCtrl.text))));
+                        calorie: double.parse(calorieFormCtrl.text),
+                        portion: double.parse(portionFormCtrl.text)));
 
                     Navigator.pop(context);
                   }

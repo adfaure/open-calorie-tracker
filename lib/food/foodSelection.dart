@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moor/moor.dart' hide Column;
+import 'package:open_weight/common/helpers.dart';
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +41,7 @@ class SelectFood extends StatelessWidget {
                     // Passing by a builder so one can display a snackbar after the dialog ended.
                     return GestureDetector(
                         onTap: () => {
-                              _getNumborOfPortion(context, snapshot.data[index])
+                              _getNumberOfPortion(context, snapshot.data[index])
                             },
                         child: FoodCard(
                           food: snapshot.data[index],
@@ -65,12 +67,13 @@ class SelectFood extends StatelessWidget {
   }
 
   /// Show dialog asking for the number of portion to add from selected food.
-  Future<void> _getNumborOfPortion(
-      BuildContext context, Food selectedFood) async {
+  _getNumberOfPortion(BuildContext context, Food selectedFood) async {
+    // Not showing decimals of portion
     final formatter = new NumberFormat("#");
+    // Portion controller
     final numberOfPortionCtrl = TextEditingController();
 
-    var portionSize = await showDialog<double>(
+    await showDialog<double>(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
@@ -131,13 +134,13 @@ class SelectFood extends StatelessWidget {
               ]),
             ],
           );
-        });
-
-    /// Once the dialgo returns a valid portio size
-    /// we return to the previous vue.
-    if (portionSize != null) {
-      Navigator.of(context).pop(context);
-    }
-
+        }).then((portionSize) {
+      var database = Provider.of<MyDatabase>(context, listen: false);
+      database.addConsumedFood(ConsumedFoodsCompanion.insert(
+          consumedPortion: portionSize,
+          food: selectedFood.id,
+          mealType: title,
+          date: today()));
+    });
   }
 }

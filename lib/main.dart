@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_weight/food/foodSelection.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +10,8 @@ void main() {
   runApp(
     Provider<MyDatabase>(
       create: (context) => MyDatabase(),
-      child: MyApp(),
+      child: MyApp(
+      ),
       dispose: (context, db) => db.close(),
     ),
   );
@@ -23,6 +25,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => JournalView(),
+      },
       title: 'OPT',
       theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -32,7 +39,7 @@ class MyApp extends StatelessWidget {
                   borderRadius: const BorderRadius.all(
                 Radius.circular(0.0),
               )))),
-      home: JournalView(),
+     // home: JournalView(),
     );
   }
 }

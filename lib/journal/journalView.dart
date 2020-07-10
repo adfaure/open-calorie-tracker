@@ -10,7 +10,6 @@ import 'package:open_weight/journal/calorieMeter.dart';
 import 'package:open_weight/journal/mealCard.dart';
 import '../database/db_helper.dart';
 
-
 class JournalView extends StatelessWidget {
   final title = "Journal";
 
@@ -25,20 +24,15 @@ class JournalView extends StatelessWidget {
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           return ListView(children: [
             DayCard(date: today()),
-            Divider(height: 2, color: Colors.black,),
+            Divider(
+              height: 2,
+              color: Colors.black,
+            ),
             CalorieMeter(),
-            MealCard(
-              title: "Breakfast",
-            ),
-            MealCard(
-              title: "Lunch",
-            ),
-            MealCard(
-              title: "Diner",
-            ),
-            MealCard(
-              title: "Snacks",
-            )
+            MealCard(title: "Breakfast", date: today()),
+            MealCard(title: "Lunch", date: today()),
+            MealCard(title: "Diner", date: today()),
+            MealCard(title: "Snacks", date: today())
           ], padding: EdgeInsets.fromLTRB(0, 0, 0, 8));
         }));
   }

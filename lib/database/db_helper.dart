@@ -1,4 +1,5 @@
 // These imports are only needed to open the database
+import 'package:flutter/rendering.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -19,11 +20,17 @@ class Foods extends Table {
   TextColumn get unit => text()();
 }
 
-class ConsumedFood extends Table {
+class ConsumedFoods extends Table {
+  IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get date => dateTime()();
-  IntColumn get food => integer().autoIncrement()();
+  IntColumn get food => integer()();
   RealColumn get consumedPortion => real()();
   TextColumn get mealType => text()();
+
+  @override
+  List<String> get customConstraints =>
+      ["FOREIGN KEY(food) REFERENCES foods(id)"];
+  // customConstraint("FOREIGN KEY(food) REFERENCES foods(id)")
 }
 
 LazyDatabase _openConnection() {
@@ -33,6 +40,8 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    file.delete();
+    debugPrint("$file");
     return VmDatabase(file);
   });
 }
@@ -40,7 +49,7 @@ LazyDatabase _openConnection() {
 // this annotation tells moor to prepare a database class that uses both of the
 // tables we just defined. We'll see how to use that database class in a moment.
 @UseMoor(
-  tables: [Foods],
+  tables: [Foods, ConsumedFoods],
 )
 class MyDatabase extends _$MyDatabase {
   // we tell the database where to store the data with this constructor
@@ -56,6 +65,10 @@ class MyDatabase extends _$MyDatabase {
     return into(foods).insert(entry);
   }
 
+  Future<int> addConsumedFood(ConsumedFoodsCompanion entry) {
+    return into(consumedFoods).insert(entry);
+  }
+
   // loads all todo entries
   Future<List<Food>> get allFoodEntries => select(foods).get();
 
@@ -64,7 +77,34 @@ class MyDatabase extends _$MyDatabase {
     return (select(foods)).watch();
   }
 
+  // The stream will automatically emit new items whenever the underlying data changes.
+  Stream<List<ConsumedFood>> watchEntriesInDailyFoods(DateTime selectDate) {
+    return (select(consumedFoods)..where((a) => a.date.equals(selectDate)))
+        .watch();
+  }
+
   Future deleteFood(Food entry) {
     return delete(foods).delete(entry);
+  }
+
+  /// https://github.com/simolus3/moor/issues/188
+  /// Only for devellopement,
+  /// the if(true ...) should be transformed to check a debug (or dev) mode flag instead
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(onCreate: (Migrator m) {
+      debugPrint("Create all tables");
+      return m.createAll();
+    }, beforeOpen: (openingDetails) async {
+      debugPrint("gtiaea");
+      if (true /* or some other flag */) {
+        final m = createMigrator(); // changed to this
+        for (final table in allTables) {
+          debugPrint("remove table: ${table.actualTableName}");
+          await m.deleteTable(table.actualTableName);
+          await m.createTable(table);
+        }
+      }
+    });
   }
 }
