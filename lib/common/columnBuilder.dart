@@ -25,12 +25,16 @@ class CustomColumnBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: this.crossAxisAlignment,
-      mainAxisSize: this.mainAxisSize,
-      mainAxisAlignment: this.mainAxisAlignment,
-      verticalDirection: this.verticalDirection,
-      children: List.generate(
-          this.itemCount, (index) => this.itemBuilder(context, index)).toList(),
-    );
+        crossAxisAlignment: this.crossAxisAlignment,
+        mainAxisSize: this.mainAxisSize,
+        mainAxisAlignment: this.mainAxisAlignment,
+        verticalDirection: this.verticalDirection,
+        children: ListTile.divideTiles(
+          context: context,
+          color: Colors.black54,          
+          tiles: List.generate(
+                  this.itemCount, (index) => this.itemBuilder(context, index)).toList()
+              ,
+        ).toList());
   }
 }

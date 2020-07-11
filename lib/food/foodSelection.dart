@@ -13,10 +13,11 @@ import '../database/db_helper.dart';
 /// However, it is very similar (not to say copied-pasted) from [food.dart].
 /// TODO: find a way to remove this duplication.
 class SelectFood extends StatelessWidget {
-  SelectFood({Key key, @required this.title, this.foodsItem}) : super(key: key);
+  SelectFood({Key key, @required this.title, this.foodsItem, @required this.mealType}) : super(key: key);
 
   final Stream<List<Food>> foodsItem;
   final String title;
+  final String mealType;
   final bgColor = Color(0xFFe3e3e3);
   final _dialogKey = GlobalKey<FormState>();
 
@@ -141,6 +142,7 @@ class SelectFood extends StatelessWidget {
           food: selectedFood.id,
           mealType: title,
           date: today()));
+      Navigator.of(context).pop();
     });
   }
 }

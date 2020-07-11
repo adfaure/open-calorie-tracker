@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-class FoodCard extends StatelessWidget {
+class FoodCard extends Card {
   final food;
   final actionButton;
   FoodCard({Key key, @required this.food, this.actionButton}) : super(key:key);

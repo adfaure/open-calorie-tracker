@@ -29,8 +29,15 @@ class ConsumedFoods extends Table {
 
   @override
   List<String> get customConstraints =>
-      ["FOREIGN KEY(food) REFERENCES foods(id)"];
+      ["FOREIGN KEY(food) REFERENCES foods(id) ON DELETE RESTRICT"];
   // customConstraint("FOREIGN KEY(food) REFERENCES foods(id)")
+}
+
+class ConsumedFoodsWitFood {
+  final Food food;
+  final ConsumedFood consumedFood;
+
+  ConsumedFoodsWitFood({@required this.food, @required this.consumedFood});
 }
 
 LazyDatabase _openConnection() {
@@ -40,7 +47,7 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    file.delete();
+    // file.delete();
     debugPrint("$file");
     return VmDatabase(file);
   });
@@ -78,9 +85,21 @@ class MyDatabase extends _$MyDatabase {
   }
 
   // The stream will automatically emit new items whenever the underlying data changes.
-  Stream<List<ConsumedFood>> watchEntriesInDailyFoods(DateTime selectDate) {
-    return (select(consumedFoods)..where((a) => a.date.equals(selectDate)))
-        .watch();
+  Stream<List<ConsumedFoodsWitFood>> watchEntriesInDailyFoods(
+      DateTime selectDate, String meal) {
+    // .
+    debugPrint("teeest");
+    return (select(consumedFoods)
+          ..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
+        .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
+        .watch()
+        .map((rows) {
+          return rows.map((row) {
+            return ConsumedFoodsWitFood(
+                food: row.readTable(foods),
+                consumedFood: row.readTable(consumedFoods));
+          }).toList();
+        });
   }
 
   Future deleteFood(Food entry) {
@@ -92,15 +111,17 @@ class MyDatabase extends _$MyDatabase {
   /// the if(true ...) should be transformed to check a debug (or dev) mode flag instead
   @override
   MigrationStrategy get migration {
-    return MigrationStrategy(onCreate: (Migrator m) {
+    return MigrationStrategy(
+    onCreate: (Migrator m) {
       debugPrint("Create all tables");
+      // Custom statement to enable primary key
+      customStatement('PRAGMA foreign_keys = ON;');
       return m.createAll();
     }, beforeOpen: (openingDetails) async {
-      debugPrint("gtiaea");
       if (true /* or some other flag */) {
         final m = createMigrator(); // changed to this
         for (final table in allTables) {
-          debugPrint("remove table: ${table.actualTableName}");
+          // debugPrint("remove table: ${table.actualTableName}");
           await m.deleteTable(table.actualTableName);
           await m.createTable(table);
         }

@@ -13,8 +13,8 @@ class BoxedContainer extends StatelessWidget {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.white70,
-              blurRadius: 10, // soften the shadow
+              color: Colors.white,
+              blurRadius: 0, // soften the shadow
               spreadRadius: 1, //extend the shadow
             )
           ],

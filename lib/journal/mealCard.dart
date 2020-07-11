@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moor/moor.dart' hide Column;
 import 'package:open_weight/common/columnBuilder.dart';
 import 'package:open_weight/common/helpers.dart';
+// Number formatting
+import 'package:intl/intl.dart';
 
 //internal dependencies
 import 'package:open_weight/database/db_helper.dart';
@@ -11,6 +13,7 @@ import 'package:provider/provider.dart';
 class MealCard extends StatefulWidget {
   final date;
   final String title;
+  final formatter = NumberFormat("#");
 
   MealCard({Key key, @required this.title, @required this.date})
       : super(key: key);
@@ -33,18 +36,23 @@ class _MealCardState extends State<MealCard> {
               trailing: IconButton(
                   icon: Icon(
                     Icons.add_circle,
-                    color: Colors.green.shade500,
+                    color: Colors.blue,
                     size: 35,
                   ),
                   onPressed: () {
                     _navigateAddFoodToMeal(context);
                   }))),
+      Divider(
+        color: Colors.black54,
+        height: 1,
+        thickness: 1,
+      ),
       Consumer<MyDatabase>(builder: (builder, database, child) {
         return StreamBuilder(
-            initialData: List<ConsumedFood>(),
-            stream: database.watchEntriesInDailyFoods(today()),
+            initialData: List<ConsumedFoodsWitFood>(),
+            stream: database.watchEntriesInDailyFoods(today(), widget.title),
             builder: (BuildContext context,
-                AsyncSnapshot<List<ConsumedFood>> snapshot) {
+                AsyncSnapshot<List<ConsumedFoodsWitFood>> snapshot) {
               var count = 0;
               if (snapshot.data != null) {
                 count = snapshot.data.length;
@@ -56,7 +64,9 @@ class _MealCardState extends State<MealCard> {
                   return Container(
                       color: Colors.white,
                       child: ListTile(
-                        title: Text("${snapshot.data[index].consumedPortion}"),
+                        dense: true,
+                        title: Text(snapshot.data[index].food.name),
+                        trailing: Text(" calories"),
                       ));
                 },
               );
@@ -68,7 +78,11 @@ class _MealCardState extends State<MealCard> {
   _navigateAddFoodToMeal(BuildContext context) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SelectFood(title: "Select food")),
+      MaterialPageRoute(
+          builder: (context) => SelectFood(
+                title: widget.title,
+                mealType: widget.title,
+              )),
     );
   }
 }
