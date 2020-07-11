@@ -24,13 +24,12 @@ class ConsumedFoods extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get date => dateTime()();
   IntColumn get food => integer()();
-  RealColumn get consumedPortion => real()();
+  RealColumn get quantity => real()();
   TextColumn get mealType => text()();
 
   @override
   List<String> get customConstraints =>
       ["FOREIGN KEY(food) REFERENCES foods(id) ON DELETE RESTRICT"];
-  // customConstraint("FOREIGN KEY(food) REFERENCES foods(id)")
 }
 
 class ConsumedFoodsWitFood {
@@ -38,6 +37,15 @@ class ConsumedFoodsWitFood {
   final ConsumedFood consumedFood;
 
   ConsumedFoodsWitFood({@required this.food, @required this.consumedFood});
+  
+  double consumedCalories() {
+    if(food == null) {
+      return 0;
+    }
+    var caloriesPerUnit = food.calorie / food.portion;
+    var total = consumedFood.quantity * caloriesPerUnit;
+    return total;
+  }
 }
 
 LazyDatabase _openConnection() {
@@ -87,8 +95,6 @@ class MyDatabase extends _$MyDatabase {
   // The stream will automatically emit new items whenever the underlying data changes.
   Stream<List<ConsumedFoodsWitFood>> watchEntriesInDailyFoods(
       DateTime selectDate, String meal) {
-    // .
-    debugPrint("teeest");
     return (select(consumedFoods)
           ..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
         .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
@@ -122,8 +128,8 @@ class MyDatabase extends _$MyDatabase {
         final m = createMigrator(); // changed to this
         for (final table in allTables) {
           // debugPrint("remove table: ${table.actualTableName}");
-          await m.deleteTable(table.actualTableName);
-          await m.createTable(table);
+          // await m.deleteTable(table.actualTableName);
+          // await m.createTable(table);
         }
       }
     });

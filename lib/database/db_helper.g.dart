@@ -337,13 +337,13 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
   final int id;
   final DateTime date;
   final int food;
-  final double consumedPortion;
+  final double quantity;
   final String mealType;
   ConsumedFood(
       {@required this.id,
       @required this.date,
       @required this.food,
-      @required this.consumedPortion,
+      @required this.quantity,
       @required this.mealType});
   factory ConsumedFood.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -357,8 +357,8 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
       date:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
       food: intType.mapFromDatabaseResponse(data['${effectivePrefix}food']),
-      consumedPortion: doubleType
-          .mapFromDatabaseResponse(data['${effectivePrefix}consumed_portion']),
+      quantity: doubleType
+          .mapFromDatabaseResponse(data['${effectivePrefix}quantity']),
       mealType: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}meal_type']),
     );
@@ -375,8 +375,8 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
     if (!nullToAbsent || food != null) {
       map['food'] = Variable<int>(food);
     }
-    if (!nullToAbsent || consumedPortion != null) {
-      map['consumed_portion'] = Variable<double>(consumedPortion);
+    if (!nullToAbsent || quantity != null) {
+      map['quantity'] = Variable<double>(quantity);
     }
     if (!nullToAbsent || mealType != null) {
       map['meal_type'] = Variable<String>(mealType);
@@ -389,9 +389,9 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
       food: food == null && nullToAbsent ? const Value.absent() : Value(food),
-      consumedPortion: consumedPortion == null && nullToAbsent
+      quantity: quantity == null && nullToAbsent
           ? const Value.absent()
-          : Value(consumedPortion),
+          : Value(quantity),
       mealType: mealType == null && nullToAbsent
           ? const Value.absent()
           : Value(mealType),
@@ -405,7 +405,7 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
       id: serializer.fromJson<int>(json['id']),
       date: serializer.fromJson<DateTime>(json['date']),
       food: serializer.fromJson<int>(json['food']),
-      consumedPortion: serializer.fromJson<double>(json['consumedPortion']),
+      quantity: serializer.fromJson<double>(json['quantity']),
       mealType: serializer.fromJson<String>(json['mealType']),
     );
   }
@@ -416,7 +416,7 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
       'id': serializer.toJson<int>(id),
       'date': serializer.toJson<DateTime>(date),
       'food': serializer.toJson<int>(food),
-      'consumedPortion': serializer.toJson<double>(consumedPortion),
+      'quantity': serializer.toJson<double>(quantity),
       'mealType': serializer.toJson<String>(mealType),
     };
   }
@@ -425,13 +425,13 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
           {int id,
           DateTime date,
           int food,
-          double consumedPortion,
+          double quantity,
           String mealType}) =>
       ConsumedFood(
         id: id ?? this.id,
         date: date ?? this.date,
         food: food ?? this.food,
-        consumedPortion: consumedPortion ?? this.consumedPortion,
+        quantity: quantity ?? this.quantity,
         mealType: mealType ?? this.mealType,
       );
   @override
@@ -440,7 +440,7 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
           ..write('id: $id, ')
           ..write('date: $date, ')
           ..write('food: $food, ')
-          ..write('consumedPortion: $consumedPortion, ')
+          ..write('quantity: $quantity, ')
           ..write('mealType: $mealType')
           ..write(')'))
         .toString();
@@ -449,10 +449,8 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
   @override
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
-      $mrjc(
-          date.hashCode,
-          $mrjc(food.hashCode,
-              $mrjc(consumedPortion.hashCode, mealType.hashCode)))));
+      $mrjc(date.hashCode,
+          $mrjc(food.hashCode, $mrjc(quantity.hashCode, mealType.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -460,7 +458,7 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
           other.id == this.id &&
           other.date == this.date &&
           other.food == this.food &&
-          other.consumedPortion == this.consumedPortion &&
+          other.quantity == this.quantity &&
           other.mealType == this.mealType);
 }
 
@@ -468,37 +466,37 @@ class ConsumedFoodsCompanion extends UpdateCompanion<ConsumedFood> {
   final Value<int> id;
   final Value<DateTime> date;
   final Value<int> food;
-  final Value<double> consumedPortion;
+  final Value<double> quantity;
   final Value<String> mealType;
   const ConsumedFoodsCompanion({
     this.id = const Value.absent(),
     this.date = const Value.absent(),
     this.food = const Value.absent(),
-    this.consumedPortion = const Value.absent(),
+    this.quantity = const Value.absent(),
     this.mealType = const Value.absent(),
   });
   ConsumedFoodsCompanion.insert({
     this.id = const Value.absent(),
     @required DateTime date,
     @required int food,
-    @required double consumedPortion,
+    @required double quantity,
     @required String mealType,
   })  : date = Value(date),
         food = Value(food),
-        consumedPortion = Value(consumedPortion),
+        quantity = Value(quantity),
         mealType = Value(mealType);
   static Insertable<ConsumedFood> custom({
     Expression<int> id,
     Expression<DateTime> date,
     Expression<int> food,
-    Expression<double> consumedPortion,
+    Expression<double> quantity,
     Expression<String> mealType,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (date != null) 'date': date,
       if (food != null) 'food': food,
-      if (consumedPortion != null) 'consumed_portion': consumedPortion,
+      if (quantity != null) 'quantity': quantity,
       if (mealType != null) 'meal_type': mealType,
     });
   }
@@ -507,13 +505,13 @@ class ConsumedFoodsCompanion extends UpdateCompanion<ConsumedFood> {
       {Value<int> id,
       Value<DateTime> date,
       Value<int> food,
-      Value<double> consumedPortion,
+      Value<double> quantity,
       Value<String> mealType}) {
     return ConsumedFoodsCompanion(
       id: id ?? this.id,
       date: date ?? this.date,
       food: food ?? this.food,
-      consumedPortion: consumedPortion ?? this.consumedPortion,
+      quantity: quantity ?? this.quantity,
       mealType: mealType ?? this.mealType,
     );
   }
@@ -530,8 +528,8 @@ class ConsumedFoodsCompanion extends UpdateCompanion<ConsumedFood> {
     if (food.present) {
       map['food'] = Variable<int>(food.value);
     }
-    if (consumedPortion.present) {
-      map['consumed_portion'] = Variable<double>(consumedPortion.value);
+    if (quantity.present) {
+      map['quantity'] = Variable<double>(quantity.value);
     }
     if (mealType.present) {
       map['meal_type'] = Variable<String>(mealType.value);
@@ -545,7 +543,7 @@ class ConsumedFoodsCompanion extends UpdateCompanion<ConsumedFood> {
           ..write('id: $id, ')
           ..write('date: $date, ')
           ..write('food: $food, ')
-          ..write('consumedPortion: $consumedPortion, ')
+          ..write('quantity: $quantity, ')
           ..write('mealType: $mealType')
           ..write(')'))
         .toString();
@@ -590,15 +588,13 @@ class $ConsumedFoodsTable extends ConsumedFoods
     );
   }
 
-  final VerificationMeta _consumedPortionMeta =
-      const VerificationMeta('consumedPortion');
-  GeneratedRealColumn _consumedPortion;
+  final VerificationMeta _quantityMeta = const VerificationMeta('quantity');
+  GeneratedRealColumn _quantity;
   @override
-  GeneratedRealColumn get consumedPortion =>
-      _consumedPortion ??= _constructConsumedPortion();
-  GeneratedRealColumn _constructConsumedPortion() {
+  GeneratedRealColumn get quantity => _quantity ??= _constructQuantity();
+  GeneratedRealColumn _constructQuantity() {
     return GeneratedRealColumn(
-      'consumed_portion',
+      'quantity',
       $tableName,
       false,
     );
@@ -617,8 +613,7 @@ class $ConsumedFoodsTable extends ConsumedFoods
   }
 
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, date, food, consumedPortion, mealType];
+  List<GeneratedColumn> get $columns => [id, date, food, quantity, mealType];
   @override
   $ConsumedFoodsTable get asDslTable => this;
   @override
@@ -645,13 +640,11 @@ class $ConsumedFoodsTable extends ConsumedFoods
     } else if (isInserting) {
       context.missing(_foodMeta);
     }
-    if (data.containsKey('consumed_portion')) {
-      context.handle(
-          _consumedPortionMeta,
-          consumedPortion.isAcceptableOrUnknown(
-              data['consumed_portion'], _consumedPortionMeta));
+    if (data.containsKey('quantity')) {
+      context.handle(_quantityMeta,
+          quantity.isAcceptableOrUnknown(data['quantity'], _quantityMeta));
     } else if (isInserting) {
-      context.missing(_consumedPortionMeta);
+      context.missing(_quantityMeta);
     }
     if (data.containsKey('meal_type')) {
       context.handle(_mealTypeMeta,

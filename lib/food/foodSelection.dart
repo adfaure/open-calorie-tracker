@@ -13,7 +13,9 @@ import '../database/db_helper.dart';
 /// However, it is very similar (not to say copied-pasted) from [food.dart].
 /// TODO: find a way to remove this duplication.
 class SelectFood extends StatelessWidget {
-  SelectFood({Key key, @required this.title, this.foodsItem, @required this.mealType}) : super(key: key);
+  SelectFood(
+      {Key key, @required this.title, this.foodsItem, @required this.mealType})
+      : super(key: key);
 
   final Stream<List<Food>> foodsItem;
   final String title;
@@ -81,12 +83,10 @@ class SelectFood extends StatelessWidget {
             title: Center(
                 child: Column(children: [
               Text(
-                'Number of portion: ${selectedFood.name}',
+                'Quantity: ${selectedFood.name}',
               ),
               Text(
-                '(Portion size: ' +
-                    formatter.format(selectedFood.portion) +
-                    "${selectedFood.unit})",
+                '(Unit: ' + "${selectedFood.unit})",
                 textAlign: TextAlign.left,
                 textScaleFactor: 0.7,
               )
@@ -104,18 +104,18 @@ class SelectFood extends StatelessWidget {
                         keyboardType: TextInputType.number,
                         controller: numberOfPortionCtrl,
                         decoration: InputDecoration(
-                          hintText: "1.5",
+                          hintText: "80",
                         ),
                         validator: (value) {
                           var doubleString =
                               numberOfPortionCtrl.text.replaceAll(",", ".");
-                          var portionSize;
+                          var quantity;
                           try {
-                            portionSize = double.parse(doubleString);
+                            quantity = double.parse(doubleString);
                           } catch (e) {
-                            return "Unvalid portion size.";
+                            return "Unvalid quantity.";
                           }
-                          if (portionSize <= 0) {
+                          if (quantity <= 0) {
                             return "Require positive number.";
                           }
                           return null;
@@ -135,14 +135,16 @@ class SelectFood extends StatelessWidget {
               ]),
             ],
           );
-        }).then((portionSize) {
-      var database = Provider.of<MyDatabase>(context, listen: false);
-      database.addConsumedFood(ConsumedFoodsCompanion.insert(
-          consumedPortion: portionSize,
-          food: selectedFood.id,
-          mealType: title,
-          date: today()));
-      Navigator.of(context).pop();
+        }).then((quantity) {
+      if (quantity != null) {
+        var database = Provider.of<MyDatabase>(context, listen: false);
+        database.addConsumedFood(ConsumedFoodsCompanion.insert(
+            quantity: quantity,
+            food: selectedFood.id,
+            mealType: title,
+            date: today()));
+        Navigator.of(context).pop();
+      }
     });
   }
 }

@@ -66,7 +66,7 @@ class _MealCardState extends State<MealCard> {
                       child: ListTile(
                         dense: true,
                         title: Text(snapshot.data[index].food.name),
-                        trailing: Text(" calories"),
+                        trailing: Text(snapshot.data[index].consumedCalories().toString() + " calories"),
                       ));
                 },
               );
