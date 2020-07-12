@@ -5,7 +5,6 @@ import 'package:open_weight/common/helpers.dart';
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
 import '../database/db_helper.dart';
 
@@ -71,12 +70,10 @@ class SelectFood extends StatelessWidget {
 
   /// Show dialog asking for the number of portion to add from selected food.
   _getNumberOfPortion(BuildContext context, Food selectedFood) async {
-    // Not showing decimals of portion
-    final formatter = new NumberFormat("#");
     // Portion controller
     final numberOfPortionCtrl = TextEditingController();
 
-    await showDialog<double>(
+    await showDialog<int>(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
@@ -111,7 +108,7 @@ class SelectFood extends StatelessWidget {
                               numberOfPortionCtrl.text.replaceAll(",", ".");
                           var quantity;
                           try {
-                            quantity = double.parse(doubleString);
+                            quantity = int.parse(doubleString);
                           } catch (e) {
                             return "Unvalid quantity.";
                           }
@@ -124,7 +121,7 @@ class SelectFood extends StatelessWidget {
                           if (_dialogKey.currentState.validate()) {
                             var doubleString =
                                 numberOfPortionCtrl.text.replaceAll(",", ".");
-                            Navigator.pop(context, double.parse(doubleString));
+                            Navigator.pop(context, int.parse(doubleString));
                           }
                         },
                       )),
@@ -137,6 +134,7 @@ class SelectFood extends StatelessWidget {
           );
         }).then((quantity) {
       if (quantity != null) {
+        debugPrint("aeue ");
         var database = Provider.of<MyDatabase>(context, listen: false);
         database.addConsumedFood(ConsumedFoodsCompanion.insert(
             quantity: quantity,

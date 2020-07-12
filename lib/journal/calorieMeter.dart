@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+// Number formatting
+import 'package:intl/intl.dart';
 
 class CalorieMeter extends StatelessWidget {
+  final consumedCalorie;
+  final objective;
+  final formater = NumberFormat("##.##");
+
+  CalorieMeter(
+      {Key key, @required this.consumedCalorie, @required this.objective})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // The calories it has to eat per day
-    int _calorieQuota = 0;
-
-    // The calories eaten today
-    int _dailyCalorie = 0;
-
-    var availableCalories = 1 + _calorieQuota - _dailyCalorie;
+    var availableCalories = objective - consumedCalorie;
     final sizeFactor = 2.0;
 
     return Card(
@@ -24,16 +27,18 @@ class CalorieMeter extends StatelessWidget {
             textAlign: TextAlign.right,
           )
         ]),
-        SizedBox(height: 15),
         // On row for the daily consumption
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildTextAndValue(context, _calorieQuota, "Objective"),
+            _buildTextAndValue(
+                context, formater.format(objective), "Objective"),
             Text("-", textScaleFactor: sizeFactor),
-            _buildTextAndValue(context, _dailyCalorie, "Consumed"),
+            _buildTextAndValue(
+                context, formater.format(consumedCalorie), "Consumed"),
             Text("=", textScaleFactor: sizeFactor),
-            _buildTextAndValue(context, availableCalories, "Available"),
+            _buildTextAndValue(
+                context, formater.format(availableCalories), "Available"),
           ],
         ),
         SizedBox(height: 15)

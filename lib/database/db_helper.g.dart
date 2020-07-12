@@ -10,8 +10,8 @@ part of 'db_helper.dart';
 class Food extends DataClass implements Insertable<Food> {
   final int id;
   final String name;
-  final double portion;
-  final double calorie;
+  final int portion;
+  final int calorie;
   final String unit;
   Food(
       {@required this.id,
@@ -24,14 +24,13 @@ class Food extends DataClass implements Insertable<Food> {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
-    final doubleType = db.typeSystem.forDartType<double>();
     return Food(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       portion:
-          doubleType.mapFromDatabaseResponse(data['${effectivePrefix}portion']),
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}portion']),
       calorie:
-          doubleType.mapFromDatabaseResponse(data['${effectivePrefix}calorie']),
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}calorie']),
       unit: stringType.mapFromDatabaseResponse(data['${effectivePrefix}unit']),
     );
   }
@@ -45,10 +44,10 @@ class Food extends DataClass implements Insertable<Food> {
       map['name'] = Variable<String>(name);
     }
     if (!nullToAbsent || portion != null) {
-      map['portion'] = Variable<double>(portion);
+      map['portion'] = Variable<int>(portion);
     }
     if (!nullToAbsent || calorie != null) {
-      map['calorie'] = Variable<double>(calorie);
+      map['calorie'] = Variable<int>(calorie);
     }
     if (!nullToAbsent || unit != null) {
       map['unit'] = Variable<String>(unit);
@@ -76,8 +75,8 @@ class Food extends DataClass implements Insertable<Food> {
     return Food(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
-      portion: serializer.fromJson<double>(json['portion']),
-      calorie: serializer.fromJson<double>(json['calorie']),
+      portion: serializer.fromJson<int>(json['portion']),
+      calorie: serializer.fromJson<int>(json['calorie']),
       unit: serializer.fromJson<String>(json['unit']),
     );
   }
@@ -87,14 +86,13 @@ class Food extends DataClass implements Insertable<Food> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
-      'portion': serializer.toJson<double>(portion),
-      'calorie': serializer.toJson<double>(calorie),
+      'portion': serializer.toJson<int>(portion),
+      'calorie': serializer.toJson<int>(calorie),
       'unit': serializer.toJson<String>(unit),
     };
   }
 
-  Food copyWith(
-          {int id, String name, double portion, double calorie, String unit}) =>
+  Food copyWith({int id, String name, int portion, int calorie, String unit}) =>
       Food(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -133,8 +131,8 @@ class Food extends DataClass implements Insertable<Food> {
 class FoodsCompanion extends UpdateCompanion<Food> {
   final Value<int> id;
   final Value<String> name;
-  final Value<double> portion;
-  final Value<double> calorie;
+  final Value<int> portion;
+  final Value<int> calorie;
   final Value<String> unit;
   const FoodsCompanion({
     this.id = const Value.absent(),
@@ -146,8 +144,8 @@ class FoodsCompanion extends UpdateCompanion<Food> {
   FoodsCompanion.insert({
     this.id = const Value.absent(),
     @required String name,
-    @required double portion,
-    @required double calorie,
+    @required int portion,
+    @required int calorie,
     @required String unit,
   })  : name = Value(name),
         portion = Value(portion),
@@ -156,8 +154,8 @@ class FoodsCompanion extends UpdateCompanion<Food> {
   static Insertable<Food> custom({
     Expression<int> id,
     Expression<String> name,
-    Expression<double> portion,
-    Expression<double> calorie,
+    Expression<int> portion,
+    Expression<int> calorie,
     Expression<String> unit,
   }) {
     return RawValuesInsertable({
@@ -172,8 +170,8 @@ class FoodsCompanion extends UpdateCompanion<Food> {
   FoodsCompanion copyWith(
       {Value<int> id,
       Value<String> name,
-      Value<double> portion,
-      Value<double> calorie,
+      Value<int> portion,
+      Value<int> calorie,
       Value<String> unit}) {
     return FoodsCompanion(
       id: id ?? this.id,
@@ -194,10 +192,10 @@ class FoodsCompanion extends UpdateCompanion<Food> {
       map['name'] = Variable<String>(name.value);
     }
     if (portion.present) {
-      map['portion'] = Variable<double>(portion.value);
+      map['portion'] = Variable<int>(portion.value);
     }
     if (calorie.present) {
-      map['calorie'] = Variable<double>(calorie.value);
+      map['calorie'] = Variable<int>(calorie.value);
     }
     if (unit.present) {
       map['unit'] = Variable<String>(unit.value);
@@ -241,11 +239,11 @@ class $FoodsTable extends Foods with TableInfo<$FoodsTable, Food> {
   }
 
   final VerificationMeta _portionMeta = const VerificationMeta('portion');
-  GeneratedRealColumn _portion;
+  GeneratedIntColumn _portion;
   @override
-  GeneratedRealColumn get portion => _portion ??= _constructPortion();
-  GeneratedRealColumn _constructPortion() {
-    return GeneratedRealColumn(
+  GeneratedIntColumn get portion => _portion ??= _constructPortion();
+  GeneratedIntColumn _constructPortion() {
+    return GeneratedIntColumn(
       'portion',
       $tableName,
       false,
@@ -253,11 +251,11 @@ class $FoodsTable extends Foods with TableInfo<$FoodsTable, Food> {
   }
 
   final VerificationMeta _calorieMeta = const VerificationMeta('calorie');
-  GeneratedRealColumn _calorie;
+  GeneratedIntColumn _calorie;
   @override
-  GeneratedRealColumn get calorie => _calorie ??= _constructCalorie();
-  GeneratedRealColumn _constructCalorie() {
-    return GeneratedRealColumn(
+  GeneratedIntColumn get calorie => _calorie ??= _constructCalorie();
+  GeneratedIntColumn _constructCalorie() {
+    return GeneratedIntColumn(
       'calorie',
       $tableName,
       false,
@@ -337,7 +335,7 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
   final int id;
   final DateTime date;
   final int food;
-  final double quantity;
+  final int quantity;
   final String mealType;
   ConsumedFood(
       {@required this.id,
@@ -350,15 +348,14 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
-    final doubleType = db.typeSystem.forDartType<double>();
     final stringType = db.typeSystem.forDartType<String>();
     return ConsumedFood(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       date:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
       food: intType.mapFromDatabaseResponse(data['${effectivePrefix}food']),
-      quantity: doubleType
-          .mapFromDatabaseResponse(data['${effectivePrefix}quantity']),
+      quantity:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}quantity']),
       mealType: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}meal_type']),
     );
@@ -376,7 +373,7 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
       map['food'] = Variable<int>(food);
     }
     if (!nullToAbsent || quantity != null) {
-      map['quantity'] = Variable<double>(quantity);
+      map['quantity'] = Variable<int>(quantity);
     }
     if (!nullToAbsent || mealType != null) {
       map['meal_type'] = Variable<String>(mealType);
@@ -405,7 +402,7 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
       id: serializer.fromJson<int>(json['id']),
       date: serializer.fromJson<DateTime>(json['date']),
       food: serializer.fromJson<int>(json['food']),
-      quantity: serializer.fromJson<double>(json['quantity']),
+      quantity: serializer.fromJson<int>(json['quantity']),
       mealType: serializer.fromJson<String>(json['mealType']),
     );
   }
@@ -416,17 +413,13 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
       'id': serializer.toJson<int>(id),
       'date': serializer.toJson<DateTime>(date),
       'food': serializer.toJson<int>(food),
-      'quantity': serializer.toJson<double>(quantity),
+      'quantity': serializer.toJson<int>(quantity),
       'mealType': serializer.toJson<String>(mealType),
     };
   }
 
   ConsumedFood copyWith(
-          {int id,
-          DateTime date,
-          int food,
-          double quantity,
-          String mealType}) =>
+          {int id, DateTime date, int food, int quantity, String mealType}) =>
       ConsumedFood(
         id: id ?? this.id,
         date: date ?? this.date,
@@ -466,7 +459,7 @@ class ConsumedFoodsCompanion extends UpdateCompanion<ConsumedFood> {
   final Value<int> id;
   final Value<DateTime> date;
   final Value<int> food;
-  final Value<double> quantity;
+  final Value<int> quantity;
   final Value<String> mealType;
   const ConsumedFoodsCompanion({
     this.id = const Value.absent(),
@@ -479,7 +472,7 @@ class ConsumedFoodsCompanion extends UpdateCompanion<ConsumedFood> {
     this.id = const Value.absent(),
     @required DateTime date,
     @required int food,
-    @required double quantity,
+    @required int quantity,
     @required String mealType,
   })  : date = Value(date),
         food = Value(food),
@@ -489,7 +482,7 @@ class ConsumedFoodsCompanion extends UpdateCompanion<ConsumedFood> {
     Expression<int> id,
     Expression<DateTime> date,
     Expression<int> food,
-    Expression<double> quantity,
+    Expression<int> quantity,
     Expression<String> mealType,
   }) {
     return RawValuesInsertable({
@@ -505,7 +498,7 @@ class ConsumedFoodsCompanion extends UpdateCompanion<ConsumedFood> {
       {Value<int> id,
       Value<DateTime> date,
       Value<int> food,
-      Value<double> quantity,
+      Value<int> quantity,
       Value<String> mealType}) {
     return ConsumedFoodsCompanion(
       id: id ?? this.id,
@@ -529,7 +522,7 @@ class ConsumedFoodsCompanion extends UpdateCompanion<ConsumedFood> {
       map['food'] = Variable<int>(food.value);
     }
     if (quantity.present) {
-      map['quantity'] = Variable<double>(quantity.value);
+      map['quantity'] = Variable<int>(quantity.value);
     }
     if (mealType.present) {
       map['meal_type'] = Variable<String>(mealType.value);
@@ -589,11 +582,11 @@ class $ConsumedFoodsTable extends ConsumedFoods
   }
 
   final VerificationMeta _quantityMeta = const VerificationMeta('quantity');
-  GeneratedRealColumn _quantity;
+  GeneratedIntColumn _quantity;
   @override
-  GeneratedRealColumn get quantity => _quantity ??= _constructQuantity();
-  GeneratedRealColumn _constructQuantity() {
-    return GeneratedRealColumn(
+  GeneratedIntColumn get quantity => _quantity ??= _constructQuantity();
+  GeneratedIntColumn _constructQuantity() {
+    return GeneratedIntColumn(
       'quantity',
       $tableName,
       false,

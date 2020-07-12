@@ -15,8 +15,8 @@ part 'db_helper.g.dart';
 class Foods extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
-  RealColumn get portion => real()();
-  RealColumn get calorie => real()();
+  IntColumn get portion => integer()();
+  IntColumn get calorie => integer()();
   TextColumn get unit => text()();
 }
 
@@ -24,7 +24,7 @@ class ConsumedFoods extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get date => dateTime()();
   IntColumn get food => integer()();
-  RealColumn get quantity => real()();
+  IntColumn get quantity => integer()();
   TextColumn get mealType => text()();
 
   @override
@@ -37,14 +37,14 @@ class ConsumedFoodsWitFood {
   final ConsumedFood consumedFood;
 
   ConsumedFoodsWitFood({@required this.food, @required this.consumedFood});
-  
-  double consumedCalories() {
-    if(food == null) {
+
+  int consumedCalories() {
+    if (food == null) {
       return 0;
     }
     var caloriesPerUnit = food.calorie / food.portion;
     var total = consumedFood.quantity * caloriesPerUnit;
-    return total;
+    return total.round();
   }
 }
 
@@ -108,6 +108,54 @@ class MyDatabase extends _$MyDatabase {
         });
   }
 
+  watchTotalDailyCalorieMeal(DateTime selectDate, String meal) {
+    return (select(consumedFoods)..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
+        .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
+        .watch()
+        .map((rows) {
+          return rows.map((row) {
+            return ConsumedFoodsWitFood(
+                food: row.readTable(foods),
+                consumedFood: row.readTable(consumedFoods));
+          }).fold(
+              0,
+              (previousValue, element) =>
+                  previousValue + element.consumedCalories());
+        });
+  }
+
+  watchTotalDailyCalorie(DateTime selectDate) {
+    return (select(consumedFoods)..where((a) => a.date.equals(selectDate)))
+        .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
+        .watch()
+        .map((rows) {
+          return rows.map((row) {
+            return ConsumedFoodsWitFood(
+                food: row.readTable(foods),
+                consumedFood: row.readTable(consumedFoods));
+          }).fold(
+              0,
+              (previousValue, element) =>
+                  previousValue + element.consumedCalories());
+        });
+  }
+
+  // The stream will automatically emit new items whenever the underlying data changes.
+  // Stream<List<ConsumedFoodsWitFood>> watchTotalDailyCalories(DateTime selectDate) async {
+  //   var query = await (select(consumedFoods)
+  //         ..where((a) => a.date.equals(selectDate)))
+  //       .join([
+  //     leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))
+  //   ]).get();
+
+  //   var foodList = query.map((row) {
+  //     return ConsumedFoodsWitFood(
+  //         food: row.readTable(foods),
+  //         consumedFood: row.readTable(consumedFoods));
+  //   }).toList();
+  //   return foodList;
+  // }
+
   Future deleteFood(Food entry) {
     return delete(foods).delete(entry);
   }
@@ -117,8 +165,7 @@ class MyDatabase extends _$MyDatabase {
   /// the if(true ...) should be transformed to check a debug (or dev) mode flag instead
   @override
   MigrationStrategy get migration {
-    return MigrationStrategy(
-    onCreate: (Migrator m) {
+    return MigrationStrategy(onCreate: (Migrator m) {
       debugPrint("Create all tables");
       // Custom statement to enable primary key
       customStatement('PRAGMA foreign_keys = ON;');

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:provider/provider.dart';
-// Column is defined both in dart and moore, hence importing both libraries is conflictual
-import 'package:moor/moor.dart' hide Column;
 
 class CreateFoodForm extends StatefulWidget {
   CreateFoodForm({Key key, this.title}) : super(key: key);
@@ -71,8 +69,8 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                     database.addTodo(FoodsCompanion.insert(
                         name: nameFormCtrl.text,
                         unit: unitFormCtrl.text,
-                        calorie: double.parse(calorieFormCtrl.text),
-                        portion: double.parse(portionFormCtrl.text)));
+                        calorie: int.parse(calorieFormCtrl.text),
+                        portion: int.parse(portionFormCtrl.text)));
 
                     Navigator.pop(context);
                   }
