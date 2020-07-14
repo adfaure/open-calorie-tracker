@@ -108,7 +108,7 @@ class MyDatabase extends _$MyDatabase {
         });
   }
 
-  watchTotalDailyCalorieMeal(DateTime selectDate, String meal) {
+  dynamic watchTotalDailyCalorieMeal(DateTime selectDate, String meal) {
     return (select(consumedFoods)..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
         .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
         .watch()
@@ -124,7 +124,7 @@ class MyDatabase extends _$MyDatabase {
         });
   }
 
-  watchTotalDailyCalorie(DateTime selectDate) {
+  dynamic watchTotalDailyCalorie(DateTime selectDate) {
     return (select(consumedFoods)..where((a) => a.date.equals(selectDate)))
         .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
         .watch()

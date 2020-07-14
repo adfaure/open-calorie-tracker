@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moor/moor.dart' hide Column;
-import 'package:open_weight/common/helpers.dart';
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
 import 'package:provider/provider.dart';
@@ -13,12 +12,13 @@ import '../database/db_helper.dart';
 /// TODO: find a way to remove this duplication.
 class SelectFood extends StatelessWidget {
   SelectFood(
-      {Key key, @required this.title, this.foodsItem, @required this.mealType})
+      {Key key, @required this.title, this.foodsItem, @required this.mealType, @required this.date})
       : super(key: key);
 
   final Stream<List<Food>> foodsItem;
   final String title;
   final String mealType;
+  final DateTime date;
   final bgColor = Color(0xFFe3e3e3);
   final _dialogKey = GlobalKey<FormState>();
 
@@ -134,13 +134,12 @@ class SelectFood extends StatelessWidget {
           );
         }).then((quantity) {
       if (quantity != null) {
-        debugPrint("aeue ");
         var database = Provider.of<MyDatabase>(context, listen: false);
         database.addConsumedFood(ConsumedFoodsCompanion.insert(
             quantity: quantity,
             food: selectedFood.id,
             mealType: title,
-            date: today()));
+            date: this.date));
         Navigator.of(context).pop();
       }
     });

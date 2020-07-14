@@ -12,7 +12,7 @@ import 'package:open_weight/database/db_helper.dart';
 import 'package:open_weight/food/foodSelection.dart';
 import 'package:provider/provider.dart';
 
-class MealCard extends StatefulWidget {
+class MealCard extends StatelessWidget {
   final date;
   final String title;
   final formater = new NumberFormat("##.##");
@@ -20,11 +20,6 @@ class MealCard extends StatefulWidget {
   MealCard({Key key, @required this.title, @required this.date})
       : super(key: key);
 
-  @override
-  _MealCardState createState() => _MealCardState();
-}
-
-class _MealCardState extends State<MealCard> {
   var totalCalorie;
 
   @override
@@ -33,20 +28,19 @@ class _MealCardState extends State<MealCard> {
       Card(
           margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
           child: ListTile(
-              title: Container(child: Text(widget.title)),
+              title: Container(child: Text(title)),
               subtitle:
                   Consumer<MyDatabase>(builder: (builder, database, child) {
                 return StreamBuilder(
-                    stream: database.watchTotalDailyCalorieMeal(
-                        today(), widget.title),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    stream: database.watchTotalDailyCalorieMeal(this.date, title),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
                       var _totalCalorie = 0;
                       if (snapshot.data != null) {
                         // Total calorie meal
                         _totalCalorie = snapshot.data;
                       }
-                      return Text(widget.formater.format(_totalCalorie));
+                      return Text(formater.format(_totalCalorie));
                     });
               }),
               trailing: IconButton(
@@ -61,7 +55,7 @@ class _MealCardState extends State<MealCard> {
       Consumer<MyDatabase>(builder: (builder, database, child) {
         return StreamBuilder(
             initialData: List<ConsumedFoodsWitFood>(),
-            stream: database.watchEntriesInDailyFoods(today(), widget.title),
+            stream: database.watchEntriesInDailyFoods(this.date, title),
             builder: (BuildContext context,
                 AsyncSnapshot<List<ConsumedFoodsWitFood>> snapshot) {
               var count = 0;
@@ -78,7 +72,7 @@ class _MealCardState extends State<MealCard> {
                       child: ListTile(
                         dense: true,
                         title: Text(snapshot.data[index].food.name),
-                        trailing: Text(widget.formater.format(
+                        trailing: Text(formater.format(
                                 snapshot.data[index].consumedCalories()) +
                             " calories"),
                       ));
@@ -94,8 +88,9 @@ class _MealCardState extends State<MealCard> {
       context,
       MaterialPageRoute(
           builder: (context) => SelectFood(
-                title: widget.title,
-                mealType: widget.title,
+                title: title,
+                mealType: title,
+                date: this.date
               )),
     );
   }

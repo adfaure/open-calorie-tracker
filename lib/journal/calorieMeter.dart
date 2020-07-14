@@ -18,7 +18,7 @@ class CalorieMeter extends StatelessWidget {
     return Card(
       margin: EdgeInsets.all(0),
       child: Column(children: [
-        SizedBox(height: 15),
+        SizedBox(height: 25),
         // I use a row, so the text is placed to the right of the screen
         Row(children: [
           SizedBox(width: 5),
@@ -28,6 +28,7 @@ class CalorieMeter extends StatelessWidget {
           )
         ]),
         // On row for the daily consumption
+        SizedBox(height: 12.5,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -41,7 +42,7 @@ class CalorieMeter extends StatelessWidget {
                 context, formater.format(availableCalories), "Available"),
           ],
         ),
-        SizedBox(height: 15)
+        SizedBox(height: 25)
       ]),
     );
   }
