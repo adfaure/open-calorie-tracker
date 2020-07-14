@@ -23,11 +23,15 @@ class DayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        height: 35,
+        height: 55,
         color: Colors.white,
         child: Row(
           children: [
+            SizedBox(
+              width: 15,
+            ),
             IconButton(
+                iconSize: 45,
                 icon: Icon(Icons.navigate_before, color: Colors.blue),
                 onPressed: onTapPrevious),
             Expanded(
@@ -37,9 +41,13 @@ class DayCard extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(dateFormat())))),
             IconButton(
+              iconSize: 45,
               icon: Icon(Icons.navigate_next, color: Colors.blue),
               onPressed: onTapNext,
-            )
+            ),
+            SizedBox(
+              width: 15,
+            ),
           ],
         ));
   }
@@ -54,7 +62,7 @@ class DayCard extends StatelessWidget {
 
     final aDate = DateTime(date.year, date.month, date.day);
     var text = "$day, ${date.day}. $month";
-    if(date.year != now.year) {
+    if (date.year != now.year) {
       text += ". ${date.year}";
     }
     if (aDate == _today)
