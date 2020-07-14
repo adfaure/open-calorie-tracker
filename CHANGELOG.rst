@@ -9,9 +9,10 @@ The format is based on `Keep a Changelog`_.
 Unreleased
 ----------
 
-Additions
-~~~~~~~~~
-
+- Can change the date of the journal.
+- Add a way to add food to a meal on the current journal's date.
+- Create food with the number of calories per portion.
+- Add table consumedFood to record food ate during a meal.
 - Add `moor` ORM framework to manage data, and create the first class `Food` representing a simple "ingredient".
 
 Miscellaneous
