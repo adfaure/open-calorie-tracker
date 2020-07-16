@@ -14,7 +14,7 @@ class CalorieMeter extends StatelessWidget {
   Widget build(BuildContext context) {
     var availableCalories = objective - consumedCalorie;
     final sizeFactor = 2.0;
-
+  
     return Card(
       margin: EdgeInsets.all(0),
       child: Column(children: [

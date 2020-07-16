@@ -53,7 +53,7 @@ class _JournalViewState extends State<JournalView> {
                 if (snapshot.data != null) {
                   data = snapshot.data;
                 }
-                return ListView(children: [
+                return Column(children: <Widget>[
                   DayCard(
                     date: this.date,
                     onTapMiddle: () => _selectDate(context),
@@ -68,20 +68,26 @@ class _JournalViewState extends State<JournalView> {
                       this.setState(() {
                         var _previousDay = previousDay(this.date);
                         debugPrint("${this.date} -> $_previousDay");
-
                         this.date = _previousDay;
                       })
                     },
                   ),
+                  Divider(color: Colors.grey.shade700, height: 1,),
                   CalorieMeter(
                     consumedCalorie: data,
                     objective: 1800,
                   ),
-                  MealCard(title: "Breakfast", date: this.date),
-                  MealCard(title: "Lunch", date: this.date),
-                  MealCard(title: "Diner", date: this.date),
-                  MealCard(title: "Snacks", date: this.date)
-                ], padding: EdgeInsets.fromLTRB(0, 0, 0, 8));
+                  Expanded(
+                      child: ListView(
+                          shrinkWrap: true,
+                          children: [
+                            MealCard(title: "Breakfast", date: this.date),
+                            MealCard(title: "Lunch", date: this.date),
+                            MealCard(title: "Diner", date: this.date),
+                            MealCard(title: "Snacks", date: this.date)
+                          ],
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 8))),
+                ]);
               });
         }));
   }

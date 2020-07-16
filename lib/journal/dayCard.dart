@@ -22,8 +22,8 @@ class DayCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        height: 55,
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        height: 50,
         color: Colors.white,
         child: Row(
           children: [
@@ -44,9 +44,6 @@ class DayCard extends StatelessWidget {
               iconSize: 45,
               icon: Icon(Icons.navigate_next, color: Colors.blue),
               onPressed: onTapNext,
-            ),
-            SizedBox(
-              width: 15,
             ),
           ],
         ));
