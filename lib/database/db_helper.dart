@@ -10,6 +10,13 @@ import 'dart:io';
 // but it's needed for moor to know about the generated code
 part 'db_helper.g.dart';
 
+class Objectives extends Table {
+  IntColumn get objective => integer()();
+  DateTimeColumn get date => dateTime()();
+  @override
+  Set<Column> get primaryKey => {date};
+}
+
 // This will generate a table called "Food" for us. The rows of that table will
 // be represented by a class called "Food".
 class Foods extends Table {
@@ -64,7 +71,7 @@ LazyDatabase _openConnection() {
 // this annotation tells moor to prepare a database class that uses both of the
 // tables we just defined. We'll see how to use that database class in a moment.
 @UseMoor(
-  tables: [Foods, ConsumedFoods],
+  tables: [Foods, ConsumedFoods, Objectives],
 )
 class MyDatabase extends _$MyDatabase {
   // we tell the database where to store the data with this constructor
@@ -109,7 +116,8 @@ class MyDatabase extends _$MyDatabase {
   }
 
   dynamic watchTotalDailyCalorieMeal(DateTime selectDate, String meal) {
-    return (select(consumedFoods)..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
+    return (select(consumedFoods)
+          ..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
         .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
         .watch()
         .map((rows) {
@@ -140,24 +148,29 @@ class MyDatabase extends _$MyDatabase {
         });
   }
 
-  // The stream will automatically emit new items whenever the underlying data changes.
-  // Stream<List<ConsumedFoodsWitFood>> watchTotalDailyCalories(DateTime selectDate) async {
-  //   var query = await (select(consumedFoods)
-  //         ..where((a) => a.date.equals(selectDate)))
-  //       .join([
-  //     leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))
-  //   ]).get();
-
-  //   var foodList = query.map((row) {
-  //     return ConsumedFoodsWitFood(
-  //         food: row.readTable(foods),
-  //         consumedFood: row.readTable(consumedFoods));
-  //   }).toList();
-  //   return foodList;
-  // }
-
   Future deleteFood(Food entry) {
     return delete(foods).delete(entry);
+  }
+
+  // Because we want to have only one objective per day (at most).
+  // On inserting, if the date already exists, we replace the previous row.
+  Future<void> createOrUpdateObjective(Objective entity) {
+    return into(objectives).insertOnConflictUpdate(entity);
+  }
+
+  /// It should not be possible to modify an objectives, it is only possible to add new objectives.
+  /// And only one objective is allowed per [date].
+  /// To get the objectives of a special [date], I get all objectives that are older than the given [date].
+  /// Then, I get the newest.
+  /// In other words, the objective of [date] is the lastly modified objective before this [date],
+  ///  or if it exists the objective of this [date].
+  getObjective(DateTime _date) {
+    return select(objectives)
+      ..where((tbl) {
+        final value = tbl.date;
+        Expression<DateTime> date = _date as Expression<DateTime>;
+        return value.isSmallerThan(date);
+      });
   }
 
   /// https://github.com/simolus3/moor/issues/188
@@ -175,8 +188,8 @@ class MyDatabase extends _$MyDatabase {
         final m = createMigrator(); // changed to this
         for (final table in allTables) {
           // debugPrint("remove table: ${table.actualTableName}");
-          // await m.deleteTable(table.actualTableName);
-          // await m.createTable(table);
+          await m.deleteTable(table.actualTableName);
+          await m.createTable(table);
         }
       }
     });
