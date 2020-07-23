@@ -6,7 +6,7 @@
 let
   allowUnfree = true;
   # flutterPkgs = (import (builtins.fetchTarball "https://github.com/babariviere/nixpkgs/archive/flutter-testing.tar.gz")  {});
-  unstablePkgs = (import (builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixpkgs-unstable.tar.gz")   {});
+  unstablePkgs = (import (builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/75717901da4b40ebc2667a0dca79b10304358a87.tar.gz")   {});
   extensions = (with unstablePkgs.vscode-extensions; [
       bbenoist.Nix
   ]) ++ unstablePkgs.vscode-utils.extensionsFromVscodeMarketplace [({
