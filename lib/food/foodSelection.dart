@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moor/moor.dart' hide Column;
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
+import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../database/db_helper.dart';
 
@@ -12,7 +16,11 @@ import '../database/db_helper.dart';
 /// TODO: find a way to remove this duplication.
 class SelectFood extends StatelessWidget {
   SelectFood(
-      {Key key, @required this.title, this.foodsItem, @required this.mealType, @required this.date})
+      {Key key,
+      @required this.title,
+      this.foodsItem,
+      @required this.mealType,
+      @required this.date})
       : super(key: key);
 
   final Stream<List<Food>> foodsItem;
@@ -132,7 +140,7 @@ class SelectFood extends StatelessWidget {
               ]),
             ],
           );
-        }).then((quantity) {
+        }).then((quantity) async {
       if (quantity != null) {
         var database = Provider.of<MyDatabase>(context, listen: false);
         database.addConsumedFood(ConsumedFoodsCompanion.insert(
@@ -140,7 +148,11 @@ class SelectFood extends StatelessWidget {
             food: selectedFood.id,
             mealType: title,
             date: this.date));
+
         Navigator.of(context).pop();
+        var objModel = Provider.of<ObjectiveModel>(context, listen: false);
+        objModel.addCurrentToDatabase();
+
       }
     });
   }

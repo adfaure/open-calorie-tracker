@@ -662,6 +662,205 @@ class $ConsumedFoodsTable extends ConsumedFoods
   }
 }
 
+class Objective extends DataClass implements Insertable<Objective> {
+  final int objective;
+  final DateTime date;
+  Objective({@required this.objective, @required this.date});
+  factory Objective.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
+    return Objective(
+      objective:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}objective']),
+      date:
+          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || objective != null) {
+      map['objective'] = Variable<int>(objective);
+    }
+    if (!nullToAbsent || date != null) {
+      map['date'] = Variable<DateTime>(date);
+    }
+    return map;
+  }
+
+  ObjectivesCompanion toCompanion(bool nullToAbsent) {
+    return ObjectivesCompanion(
+      objective: objective == null && nullToAbsent
+          ? const Value.absent()
+          : Value(objective),
+      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+    );
+  }
+
+  factory Objective.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Objective(
+      objective: serializer.fromJson<int>(json['objective']),
+      date: serializer.fromJson<DateTime>(json['date']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'objective': serializer.toJson<int>(objective),
+      'date': serializer.toJson<DateTime>(date),
+    };
+  }
+
+  Objective copyWith({int objective, DateTime date}) => Objective(
+        objective: objective ?? this.objective,
+        date: date ?? this.date,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Objective(')
+          ..write('objective: $objective, ')
+          ..write('date: $date')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(objective.hashCode, date.hashCode));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Objective &&
+          other.objective == this.objective &&
+          other.date == this.date);
+}
+
+class ObjectivesCompanion extends UpdateCompanion<Objective> {
+  final Value<int> objective;
+  final Value<DateTime> date;
+  const ObjectivesCompanion({
+    this.objective = const Value.absent(),
+    this.date = const Value.absent(),
+  });
+  ObjectivesCompanion.insert({
+    @required int objective,
+    @required DateTime date,
+  })  : objective = Value(objective),
+        date = Value(date);
+  static Insertable<Objective> custom({
+    Expression<int> objective,
+    Expression<DateTime> date,
+  }) {
+    return RawValuesInsertable({
+      if (objective != null) 'objective': objective,
+      if (date != null) 'date': date,
+    });
+  }
+
+  ObjectivesCompanion copyWith({Value<int> objective, Value<DateTime> date}) {
+    return ObjectivesCompanion(
+      objective: objective ?? this.objective,
+      date: date ?? this.date,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (objective.present) {
+      map['objective'] = Variable<int>(objective.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ObjectivesCompanion(')
+          ..write('objective: $objective, ')
+          ..write('date: $date')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ObjectivesTable extends Objectives
+    with TableInfo<$ObjectivesTable, Objective> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $ObjectivesTable(this._db, [this._alias]);
+  final VerificationMeta _objectiveMeta = const VerificationMeta('objective');
+  GeneratedIntColumn _objective;
+  @override
+  GeneratedIntColumn get objective => _objective ??= _constructObjective();
+  GeneratedIntColumn _constructObjective() {
+    return GeneratedIntColumn(
+      'objective',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  GeneratedDateTimeColumn _date;
+  @override
+  GeneratedDateTimeColumn get date => _date ??= _constructDate();
+  GeneratedDateTimeColumn _constructDate() {
+    return GeneratedDateTimeColumn(
+      'date',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [objective, date];
+  @override
+  $ObjectivesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'objectives';
+  @override
+  final String actualTableName = 'objectives';
+  @override
+  VerificationContext validateIntegrity(Insertable<Objective> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('objective')) {
+      context.handle(_objectiveMeta,
+          objective.isAcceptableOrUnknown(data['objective'], _objectiveMeta));
+    } else if (isInserting) {
+      context.missing(_objectiveMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date'], _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {date};
+  @override
+  Objective map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Objective.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $ObjectivesTable createAlias(String alias) {
+    return $ObjectivesTable(_db, alias);
+  }
+}
+
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $FoodsTable _foods;
@@ -669,8 +868,11 @@ abstract class _$MyDatabase extends GeneratedDatabase {
   $ConsumedFoodsTable _consumedFoods;
   $ConsumedFoodsTable get consumedFoods =>
       _consumedFoods ??= $ConsumedFoodsTable(this);
+  $ObjectivesTable _objectives;
+  $ObjectivesTable get objectives => _objectives ??= $ObjectivesTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [foods, consumedFoods];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [foods, consumedFoods, objectives];
 }

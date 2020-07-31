@@ -1,24 +1,39 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:open_weight/food/foodSelection.dart';
+import 'package:open_weight/common/helpers.dart';
+import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:open_weight/journal/journalView.dart';
 import 'database/db_helper.dart';
 
-void main() {
+// global variable, that can be accessed from anywhere
+SharedPreferences sharedPrefs;
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final database = MyDatabase();
+  sharedPrefs = await SharedPreferences.getInstance();
+  
   runApp(
-    Provider<MyDatabase>(
-      create: (context) => MyDatabase(),
-      child: MyApp(
-      ),
-      dispose: (context, db) => db.close(),
+    MultiProvider(
+      providers: [
+        Provider<MyDatabase>(
+            create: (context) => database,
+            dispose: (context, db) => db.close()),
+        Provider<ObjectiveModel>(
+            create: (context) => ObjectiveModel(
+                objective: 0,
+                date: today(),
+                database: database,
+                prefs: sharedPrefs),
+            dispose: (context, objModel) => objModel.close())
+      ],
+      child: MyApp(),
     ),
   );
-}
-
-void readUserProfile() async {
-  final prefs = await SharedPreferences.getInstance();
 }
 
 class MyApp extends StatelessWidget {
@@ -39,7 +54,6 @@ class MyApp extends StatelessWidget {
                   borderRadius: const BorderRadius.all(
                 Radius.circular(0.0),
               )))),
-     // home: JournalView(),
     );
   }
 }

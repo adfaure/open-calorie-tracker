@@ -62,7 +62,7 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    // file.delete();
+    file.delete();
     debugPrint("$file");
     return VmDatabase(file);
   });
@@ -115,7 +115,7 @@ class MyDatabase extends _$MyDatabase {
         });
   }
 
-  dynamic watchTotalDailyCalorieMeal(DateTime selectDate, String meal) {
+  watchTotalDailyCalorieMeal(DateTime selectDate, String meal) {
     return (select(consumedFoods)
           ..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
         .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
@@ -132,7 +132,7 @@ class MyDatabase extends _$MyDatabase {
         });
   }
 
-  dynamic watchTotalDailyCalorie(DateTime selectDate) {
+  Stream<int> watchTotalDailyCalorie(DateTime selectDate) {
     return (select(consumedFoods)..where((a) => a.date.equals(selectDate)))
         .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
         .watch()
@@ -159,18 +159,70 @@ class MyDatabase extends _$MyDatabase {
   }
 
   /// It should not be possible to modify an objectives, it is only possible to add new objectives.
+  /// It is only possible to modify the objective of the current day.
   /// And only one objective is allowed per [date].
   /// To get the objectives of a special [date], I get all objectives that are older than the given [date].
   /// Then, I get the newest.
   /// In other words, the objective of [date] is the lastly modified objective before this [date],
-  ///  or if it exists the objective of this [date].
+  /// or if it exists the objective of this [date].
+  /*getObjective(DateTime _date) {
+    return (select(objectives)
+          ..where((tbl) {
+            final value = tbl.date;
+            // Expression<DateTime> date =  Expression<DateTime>(_date);
+            return value.isSmallerOrEqualValue(_date);
+          })
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
+          ])
+          ..limit(1))
+        .getSingle();
+  }
+  */
+
   getObjective(DateTime _date) {
-    return select(objectives)
-      ..where((tbl) {
-        final value = tbl.date;
-        Expression<DateTime> date = _date as Expression<DateTime>;
-        return value.isSmallerThan(date);
-      });
+    return (select(objectives)
+          ..where((tbl) {
+            final value = tbl.date;
+            // Expression<DateTime> date =  Expression<DateTime>(_date);
+            return value.equals(_date);
+          }))
+        .getSingle();
+  }
+
+  watchObjective(DateTime _date) {
+    return (select(objectives)
+          ..where((tbl) {
+            final value = tbl.date;
+            // Expression<DateTime> date =  Expression<DateTime>(_date);
+            return value.equals(_date);
+          }))
+        .watchSingle();
+  }
+
+  /*
+  Stream<Objective> watchObjective(DateTime _date) {
+    return (select(objectives)
+          ..where((tbl) {
+            final value = tbl.date;
+            // Expression<DateTime> date =  Expression<DateTime>(_date);
+            return value.isSmallerOrEqualValue(_date);
+          })
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
+          ])
+          ..limit(1))
+        .watchSingle();
+  }
+  */
+
+  /// In the case we go to far in the past, I get the first value of the database.
+  getObjectiveUpper() {
+    return (select(objectives)
+          ..orderBy(
+              [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.asc)])
+          ..limit(1))
+        .getSingle();
   }
 
   /// https://github.com/simolus3/moor/issues/188
@@ -188,8 +240,8 @@ class MyDatabase extends _$MyDatabase {
         final m = createMigrator(); // changed to this
         for (final table in allTables) {
           // debugPrint("remove table: ${table.actualTableName}");
-          await m.deleteTable(table.actualTableName);
-          await m.createTable(table);
+          // await m.deleteTable(table.actualTableName);
+          // await m.createTable(table);
         }
       }
     });
