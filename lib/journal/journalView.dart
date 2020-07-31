@@ -11,7 +11,6 @@ import 'package:open_weight/application_drawer.dart';
 import 'package:open_weight/journal/dayCard.dart';
 import 'package:open_weight/journal/calorieMeter.dart';
 import 'package:open_weight/journal/mealCard.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../database/db_helper.dart';
 
 class JournalView extends StatefulWidget {
@@ -29,19 +28,12 @@ class _JournalViewState extends State<JournalView> {
   var inDatabase;
   var objective;
   var objectiveModel;
-  final _dialogKey = GlobalKey<FormState>();
 
   _JournalViewState(this.date);
 
   @override
   void initState() {
     this.objective = 0;
-    // At first, we get  the objective from the user preference
-    SharedPreferences.getInstance().then((prefs) {
-      this.setState(() {
-        objective = prefs.getInt("objective");
-      });
-    });
 
     // Finaly, if the date has a record of objective for this date, we use this one in priority
     var objModel = Provider.of<ObjectiveModel>(context, listen: false);
