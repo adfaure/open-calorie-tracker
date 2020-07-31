@@ -9,11 +9,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 } */
 
 ///
-/// The purpose of this class is to provide a common way to access to the objective that the application should dysplay.
+/// The purpose of this class is to provide a common way to access to the objective that the application should display.
 /// The rules are:
 /// 1. If an objective is already recorded into the database for the selected day, it should be the one displayed.
-/// 2. If no objective is in the database for the current day, we give the day in the shared preferences.
-/// 3. The [streamCtlr] gives displays the "good" objective to use. So only one subscription is required.
+/// 2. If no objective is in the database for the current day, we give the objective stored into the shared preferences.
+/// 3. The [streamCtlr] always gives the "good" objective to use. So only one subscription is required.
 /// 4. In case of modification by the user,
 ///    if an objective entry exists for the current day into the database, it should be modified.
 ///    The shared preferences entry is also updated.
