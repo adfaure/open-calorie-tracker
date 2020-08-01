@@ -16,25 +16,29 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
 import 'package:flutter/material.dart';
-import 'package:open_weight/database/db_helper.dart';
+import 'package:openfoodfacts/openfoodfacts.dart';
 
-class FoodCard extends Card {
-  final Food food;
+class OffProductCard extends Card {
+  final Product food;
   final actionButton;
-  FoodCard({Key key, @required this.food, this.actionButton}) : super(key:key);
+  OffProductCard({Key key, @required this.food, this.actionButton})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-          leading: CircleAvatar(
-            child: Text('${food.name[0]}'),
-            radius: 20,
-          ),
-          title: Text(food.name),
-          subtitle:
-              Text("Calories. ${food.calorie} (${food.portion}${food.unit})"),
-          trailing: actionButton),
+        leading: CircleAvatar(
+          child: Text('${food.productName[0]}'),
+          radius: 20,
+        ),
+        title: Text(food.productName),
+        subtitle: Text(
+            "Calories. ${food.nutriments.energy_kcal_100g} (100 ${food.nutriments.energyUnit.toString()})"),
+        trailing: Image.network(
+          food.imgSmallUrl,
+        ),
+      ),
     );
   }
 }
