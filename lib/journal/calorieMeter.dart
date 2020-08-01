@@ -18,14 +18,12 @@
 import 'package:flutter/material.dart';
 // Number formatting
 import 'package:intl/intl.dart';
-import 'package:open_weight/models/objective.dart';
-import 'package:provider/provider.dart';
+import 'package:open_weight/journal/objectiveDialog.dart';
 
 class CalorieMeter extends StatelessWidget {
   final consumedCalorie;
   final objective;
   final formater = NumberFormat("##.##");
-  final _dialogKey = GlobalKey<FormState>();
 
   final date;
 
@@ -61,7 +59,7 @@ class CalorieMeter extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
-                  onTap: () => {_setObjective(context)},
+                  onTap: () => {setObjectiveWithDial(context)},
                   child: _buildTextAndValue(
                       context, formater.format(objective), "Objective"),
                 ),
@@ -89,80 +87,11 @@ class CalorieMeter extends StatelessWidget {
 
   _buildTextAndValue(BuildContext context, value, text) {
     final sizeFactor = 2.0;
-
     return Column(
       children: [
         Text(value.toString(), textScaleFactor: sizeFactor),
         Text(text, textScaleFactor: sizeFactor / 3),
       ],
     );
-  }
-
-  /// Show dialog asking for the number of portion to add from selected food.
-  _setObjective(BuildContext context) async {
-    // Portion controller
-    final objectiveValueCtrl = TextEditingController();
-
-    await showDialog<int>(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Center(
-                child: Column(children: [
-              Text(
-                'Objective',
-              ),
-            ])),
-            children: <Widget>[
-              Row(children: [
-                SizedBox(
-                  width: 50,
-                ),
-                Expanded(
-                  child: Form(
-                      key: _dialogKey,
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        controller: objectiveValueCtrl,
-                        decoration: InputDecoration(
-                          hintText: "80",
-                        ),
-                        validator: (value) {
-                          var doubleString =
-                              objectiveValueCtrl.text.replaceAll(",", ".");
-                          var newObjective;
-                          try {
-                            newObjective = int.parse(doubleString);
-                          } catch (e) {
-                            return "Unvalid quantity.";
-                          }
-                          if (newObjective <= 0) {
-                            return "Require positive number.";
-                          }
-                          return null;
-                        },
-                        onFieldSubmitted: (newValue) {
-                          if (_dialogKey.currentState.validate()) {
-                            var doubleString =
-                                objectiveValueCtrl.text.replaceAll(",", ".");
-                            Navigator.pop(context, int.parse(doubleString));
-                          }
-                        },
-                      )),
-                ),
-                SizedBox(
-                  width: 50,
-                ),
-              ]),
-            ],
-          );
-        }).then((newObjective) async {
-      if (newObjective != null) {
-        var objectiveModel =
-            Provider.of<ObjectiveModel>(context, listen: false);
-        objectiveModel.updateSharedPrefs(newObjective);
-      }
-    });
   }
 }

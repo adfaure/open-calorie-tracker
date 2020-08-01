@@ -18,6 +18,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:open_weight/common/helpers.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -61,10 +62,12 @@ class ObjectiveModel {
     prefs.setInt("objective", newValue);
     changeObjective(newValue);
 
-    Objective obj = await database.getObjective(date);
-    if (obj != null)
+    Objective obj = await database.getObjective(today());
+    if (obj != null) {
+      debugPrint("Update obj entry for today");
       database
-          .createOrUpdateObjective(Objective(date: date, objective: objective));
+          .createOrUpdateObjective(Objective(date: today(), objective: newValue));
+    }
   }
 
   void changeObjective(int newValue) {

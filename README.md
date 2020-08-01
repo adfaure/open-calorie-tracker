@@ -28,7 +28,9 @@ Then start the emulator: `./result/bin/run-test-emulator`.
 
 # Todo
 
-- Use user preferences to be able to choose the calorie objective.
+- Create a first login page, to enter user informations such as the objective.
+    - The inititialisation of the appliacation allows to create the initialisation date.
+      The init date is then used as the first date the user can navigate from, and ensure the consistency of the objective data.
 - Create a foodView page to be able to modify a food.
 - Find a way to be able to modify/delete food that have been consumed (a visibility bool on the food table can do the trick).
 - Implement swapping gesture to change day in the journal.

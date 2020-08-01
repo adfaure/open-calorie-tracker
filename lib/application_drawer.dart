@@ -19,6 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moor_db_viewer/moor_db_viewer.dart';
 import 'package:open_weight/database/db_helper.dart';
+import 'package:open_weight/profile.dart';
 import 'package:provider/provider.dart';
 
 import 'food/food.dart';
@@ -47,6 +48,12 @@ class ApplicationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            title: Text('Your informations'),
+            onTap: () {
+              _navigateUserView(context);
+            },
+          ),
+          ListTile(
             title: Text('Debug data'),
             onTap: () {
               _debugShowDatabase(context);
@@ -65,12 +72,19 @@ class ApplicationDrawer extends StatelessWidget {
   }
 
   _navigateShowFoodPanel(BuildContext context) async {
-    final result = await Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => ListFood(
                 title: "Your foods",
               )),
+    );
+  }
+
+  _navigateUserView(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UserView()),
     );
   }
 }
