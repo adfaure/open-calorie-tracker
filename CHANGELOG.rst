@@ -12,7 +12,8 @@ Unreleased
 Added
 ~~~~~
 
-- Add a profile view, only the Objective paramater is available for the moment.
+- Can scan food directly from barcode to request openfoodfacts
+- Add a profile view, only the Objective parameter is available for the moment.
 - Objective can be changed either by clicking on its value on the journal or with the profile view.
 - Can change the date of the journal.
 - Add a way to add food to a meal on the current journal's date.
