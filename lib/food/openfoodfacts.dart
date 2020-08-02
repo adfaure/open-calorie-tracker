@@ -18,6 +18,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
@@ -44,34 +46,25 @@ class OpenFoodFacts extends StatelessWidget {
               Card(
                   child: Padding(
                       padding: EdgeInsets.all(15),
-                      child: TextField(
-                        controller: barcodeCtlr,
-                        onSubmitted: (barcode) async {
-                          Product product = await _getProduct(barcode);
+                      child: IconButton(
+                        icon: Icon(Icons.camera_alt),
+                        onPressed: () async {
+                          Product product = await _getProduct();
                           Navigator.pop(context, product);
                         },
                       ))),
-              StreamBuilder(
-                  stream: streamCtlr.stream,
-                  builder:
-                      (BuildContext context, AsyncSnapshot<Product> snapshot) {
-                    if (snapshot.data == null) {
-                      Text("No product found");
-                    }
-                    return OffProductCard(food: snapshot.data);
-                  })
             ],
           );
         }));
   }
 
-  _getProduct(String barcode) async {
-    String barcode = "3222477333987";
-    var bar = barcodeCtlr.value;
-    debugPrint(bar.toString());
+  _getProduct() async {
+    String _scanBarcode = "UNKNOW";
 
+    _scanBarcode = await scanBarcodeNormal();
+    debugPrint("barcode testing: $_scanBarcode");
     ProductQueryConfiguration configurations =
-        ProductQueryConfiguration(barcode,
+        ProductQueryConfiguration(_scanBarcode,
             // language: OpenFoodFactsLanguage.GERMAN,
             fields: [
           ProductField.BARCODE,
@@ -92,5 +85,24 @@ class OpenFoodFacts extends StatelessWidget {
       return;
     }
     return result.product;
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<String> scanBarcodeNormal() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          "#ff6666", "Cancel", true, ScanMode.BARCODE);
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    return barcodeScanRes;
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    // if (!mounted) return;
   }
 }

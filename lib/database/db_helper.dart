@@ -40,7 +40,7 @@ class FoodModels extends Table {
   // Uniq ID
   IntColumn get id => integer().autoIncrement()();
 
-  TextColumn get name => text().withLength(min: 1, max: 32)();
+  TextColumn get name => text()();
   IntColumn get portion => integer()();
   IntColumn get calorie => integer()();
   TextColumn get unit => text()();
@@ -54,7 +54,7 @@ class ConsumedFoods extends Table {
   DateTimeColumn get date => dateTime()();
   IntColumn get quantity => integer()();
   TextColumn get mealType => text()();
-  TextColumn get name => text().withLength(min: 1, max: 32)();
+  TextColumn get name => text()();
   IntColumn get portion => integer()();
   IntColumn get calorie => integer()();
   TextColumn get unit => text()();

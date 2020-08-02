@@ -18,12 +18,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moor_db_viewer/moor_db_viewer.dart';
-import 'package:open_weight/database/db_helper.dart';
-import 'package:open_weight/food/openfoodfacts.dart';
-import 'package:open_weight/profile.dart';
 import 'package:provider/provider.dart';
 
+import 'common/barcode.dart';
+import 'database/db_helper.dart';
 import 'food/food.dart';
+import 'food/openfoodfacts.dart';
+import 'profile.dart';
 
 class ApplicationDrawer extends StatelessWidget {
   @override
@@ -58,6 +59,12 @@ class ApplicationDrawer extends StatelessWidget {
             title: Text('Open Food Fact'),
             onTap: () {
               _navigateOpenFoodFactView(context);
+            },
+          ),
+          ListTile(
+            title: Text('Barcode debug'),
+            onTap: () {
+              _navigateBarcodeDebug(context);
             },
           ),
           ListTile(
@@ -99,6 +106,13 @@ class ApplicationDrawer extends StatelessWidget {
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => OpenFoodFacts()),
+    );
+  }
+
+  _navigateBarcodeDebug(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BarcodeTest()),
     );
   }
 }

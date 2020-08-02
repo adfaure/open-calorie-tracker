@@ -299,8 +299,11 @@ class $FoodModelsTable extends FoodModels
   @override
   GeneratedTextColumn get name => _name ??= _constructName();
   GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 32);
+    return GeneratedTextColumn(
+      'name',
+      $tableName,
+      false,
+    );
   }
 
   final VerificationMeta _portionMeta = const VerificationMeta('portion');
@@ -789,8 +792,11 @@ class $ConsumedFoodsTable extends ConsumedFoods
   @override
   GeneratedTextColumn get name => _name ??= _constructName();
   GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 32);
+    return GeneratedTextColumn(
+      'name',
+      $tableName,
+      false,
+    );
   }
 
   final VerificationMeta _portionMeta = const VerificationMeta('portion');
