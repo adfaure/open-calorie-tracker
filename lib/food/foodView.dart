@@ -23,7 +23,7 @@ import 'package:provider/provider.dart';
 
 /// Focus on a modifiable food entry.
 class FoodView extends StatelessWidget {
-  final Food food;
+  final FoodModel food;
 
   FoodView({@required this.food});
 

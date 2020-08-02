@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:open_weight/database/db_helper.dart';
 
 class FoodCard extends Card {
-  final Food food;
+  final FoodModel food;
   final actionButton;
   FoodCard({Key key, @required this.food, this.actionButton}) : super(key:key);
 

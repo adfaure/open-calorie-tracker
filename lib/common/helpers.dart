@@ -16,6 +16,8 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
 // Similar to DateTime.now(), but without hours/second precision
+import 'package:open_weight/database/db_helper.dart';
+
 DateTime today() {
   DateTime now = new DateTime.now();
   return new DateTime(now.year, now.month, now.day);
@@ -35,4 +37,10 @@ bool isSameDay(final DateTime time1, final DateTime time2) {
   return (time1.day == time2.day &&
       time1.month == time2.month &&
       time1.year == time2.year);
+}
+
+int consumedCalories(ConsumedFood consumedFood) {
+  var caloriesPerUnit = consumedFood.calorie / consumedFood.portion;
+  var total = consumedFood.quantity * caloriesPerUnit;
+  return total.round();
 }

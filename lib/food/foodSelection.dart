@@ -25,7 +25,6 @@ import 'package:open_weight/food/foodCard.dart';
 import 'package:open_weight/food/openfoodfacts.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import '../database/db_helper.dart';
@@ -42,7 +41,7 @@ class SelectFood extends StatelessWidget {
       @required this.date})
       : super(key: key);
 
-  final Stream<List<Food>> foodsItem;
+  final Stream<List<FoodModel>> foodsItem;
   final String title;
   final String mealType;
   final DateTime date;
@@ -64,22 +63,22 @@ class SelectFood extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => OpenFoodFacts()),
                 );
                 var database = Provider.of<MyDatabase>(build, listen: false);
-                database.addFood(FoodsCompanion.insert(
+/*                 database.addFood(FoodsCompanion.insert(
                     calorie: product.nutriments.energyKcal.round(),
                     name: product.productName,
                     unit: "g",
                     portion: 100,
-                    visible: true));
+                    visible: true)); */
               },
             )
           ],
         ),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           return StreamBuilder(
-              stream: database.watchVisibleEntriesInFoods(),
-              initialData: List<Food>(),
+              stream: database.watchEntriesInFoods(),
+              initialData: List<FoodModel>(),
               builder:
-                  (BuildContext context, AsyncSnapshot<List<Food>> snapshot) {
+                  (BuildContext context, AsyncSnapshot<List<FoodModel>> snapshot) {
                 return ListView.builder(
                   // When the widget is first initialize, the data is null.
                   // Tertiary operators prevent getting an error (It might be seen as a workaround, idk yet)
@@ -114,7 +113,7 @@ class SelectFood extends StatelessWidget {
   }
 
   /// Show dialog asking for the number of portion to add from selected food.
-  _getNumberOfPortion(BuildContext context, Food selectedFood) async {
+  _getNumberOfPortion(BuildContext context, FoodModel selectedFood) async {
     // Portion controller
     final numberOfPortionCtrl = TextEditingController();
 
@@ -181,8 +180,11 @@ class SelectFood extends StatelessWidget {
       if (quantity != null) {
         var database = Provider.of<MyDatabase>(context, listen: false);
         database.addConsumedFood(ConsumedFoodsCompanion.insert(
+            calorie: selectedFood.calorie,
+            name: selectedFood.name,
+            portion: selectedFood.portion,
+            unit: selectedFood.unit,
             quantity: quantity,
-            food: selectedFood.id,
             mealType: title,
             date: this.date));
 

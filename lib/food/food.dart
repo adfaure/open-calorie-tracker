@@ -28,7 +28,7 @@ class ListFood extends StatelessWidget {
   ListFood({Key key, @required this.title, this.foodsItem}) : super(key: key);
   final String title;
   final bgColor = Color(0xFFe3e3e3);
-  final Stream<List<Food>> foodsItem;
+  final Stream<List<FoodModel>> foodsItem;
 
   @override
   Widget build(BuildContext build) {
@@ -39,10 +39,10 @@ class ListFood extends StatelessWidget {
         ),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           return StreamBuilder(
-              stream: database.watchVisibleEntriesInFoods(),
-              initialData: List<Food>(),
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<Food>> snapshot) {
+              stream: database.watchEntriesInFoods(),
+              initialData: List<FoodModel>(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<FoodModel>> snapshot) {
                 return ListView.builder(
                   // When the widget is first initialize, the data is null.
                   // Tertiary operators prevent getting an error (It might be seen as a workaround, idk yet)
@@ -52,21 +52,21 @@ class ListFood extends StatelessWidget {
                         onTap: () =>
                             {_showFoodView(context, snapshot.data[index])},
                         child: FoodCard(
-                            food: snapshot.data[index],
-                            actionButton: IconButton(
+                          food: snapshot.data[index],
+                          /* actionButton: IconButton(
                               icon: Icon(Icons.delete_outline),
                               onPressed: () {
                                 var entry = snapshot.data[index];
-                                database.updtateFood(Food(
+                                database.updtateFood(ConsumedFood(
                                     id: entry.id,
-                                    visible: false,
                                     calorie: entry.calorie,
                                     name: entry.name,
                                     portion: entry.portion,
                                     unit: entry.unit));
                               },
                               color: Colors.red,
-                            )));
+                            ) */
+                        ));
                   },
                 );
               });
@@ -80,7 +80,7 @@ class ListFood extends StatelessWidget {
         ));
   }
 
-  _showFoodView(BuildContext context, Food food) async {
+  _showFoodView(BuildContext context, FoodModel food) async {
     await Navigator.push(
       context,
       MaterialPageRoute(

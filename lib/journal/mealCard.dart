@@ -20,6 +20,7 @@ import 'package:moor/moor.dart' hide Column;
 import 'package:open_weight/common/columnBuilder.dart';
 // Number formatting
 import 'package:intl/intl.dart';
+import 'package:open_weight/common/helpers.dart';
 
 //internal dependencies
 import 'package:open_weight/database/db_helper.dart';
@@ -46,7 +47,8 @@ class MealCard extends StatelessWidget {
               subtitle:
                   Consumer<MyDatabase>(builder: (builder, database, child) {
                 return StreamBuilder(
-                    stream: database.watchTotalDailyCalorieMeal(this.date, title),
+                    stream:
+                        database.watchTotalDailyCalorieMeal(this.date, title),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       var _totalCalorie = 0;
@@ -68,10 +70,10 @@ class MealCard extends StatelessWidget {
                   }))),
       Consumer<MyDatabase>(builder: (builder, database, child) {
         return StreamBuilder(
-            initialData: List<ConsumedFoodsWitFood>(),
+            initialData: List<ConsumedFood>(),
             stream: database.watchEntriesInDailyFoods(this.date, title),
             builder: (BuildContext context,
-                AsyncSnapshot<List<ConsumedFoodsWitFood>> snapshot) {
+                AsyncSnapshot<List<ConsumedFood>> snapshot) {
               var count = 0;
               if (snapshot.data != null) {
                 // Number of entry
@@ -85,9 +87,9 @@ class MealCard extends StatelessWidget {
                       color: Colors.white,
                       child: ListTile(
                         dense: true,
-                        title: Text(snapshot.data[index].food.name),
+                        title: Text(snapshot.data[index].name),
                         trailing: Text(formater.format(
-                                snapshot.data[index].consumedCalories()) +
+                                consumedCalories(snapshot.data[index])) +
                             " calories"),
                       ));
                 },
@@ -101,11 +103,8 @@ class MealCard extends StatelessWidget {
     await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => SelectFood(
-                title: title,
-                mealType: title,
-                date: this.date
-              )),
+          builder: (context) =>
+              SelectFood(title: title, mealType: title, date: this.date)),
     );
   }
 }

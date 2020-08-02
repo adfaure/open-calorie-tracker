@@ -34,55 +34,48 @@ class Objectives extends Table {
   Set<Column> get primaryKey => {date};
 }
 
-class OffToFood extends Table {
-  TextColumn get barcode => text()();
-  IntColumn get foodid => integer()();
-
-  @override
-  Set<Column> get primaryKey => {barcode};
-  @override
-  List<String> get customConstraints =>
-      ["FOREIGN KEY(food) REFERENCES foods(id)"];
-}
-
-// This will generate a table called "Food" for us. The rows of that table will
-// be represented by a class called "Food".
-class Foods extends Table {
+// Food Models contains the food that will be added.
+// It can be changed at any time without consequences on the database
+class FoodModels extends Table {
+  // Uniq ID
   IntColumn get id => integer().autoIncrement()();
+
   TextColumn get name => text().withLength(min: 1, max: 32)();
   IntColumn get portion => integer()();
   IntColumn get calorie => integer()();
   TextColumn get unit => text()();
-  BoolColumn get visible => boolean()();
+  TextColumn get source => text().nullable()();
+  // If set it is from openfoodfacts
+  TextColumn get barcode => text().nullable()();
 }
 
 class ConsumedFoods extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get date => dateTime()();
-  IntColumn get food => integer()();
   IntColumn get quantity => integer()();
   TextColumn get mealType => text()();
+  TextColumn get name => text().withLength(min: 1, max: 32)();
+  IntColumn get portion => integer()();
+  IntColumn get calorie => integer()();
+  TextColumn get unit => text()();
 
-  @override
-  List<String> get customConstraints =>
-      ["FOREIGN KEY(food) REFERENCES foods(id) ON DELETE RESTRICT"];
+  // I don't need these lines, but I don't want to loose how to create constrained foreign keys.
+  // @override
+  // List<String> get customConstraints =>
+  //    ["FOREIGN KEY(food) REFERENCES foods(id) ON DELETE RESTRICT"];
 }
 
-class ConsumedFoodsWitFood {
-  final Food food;
+/* class ConsumedFood {
   final ConsumedFood consumedFood;
 
-  ConsumedFoodsWitFood({@required this.food, @required this.consumedFood});
+  ConsumedFood({@required this.consumedFood});
 
   int consumedCalories() {
-    if (food == null) {
-      return 0;
-    }
-    var caloriesPerUnit = food.calorie / food.portion;
-    var total = consumedFood.quantity * caloriesPerUnit;
+    var caloriesPerUnit = this.consumedFood.calorie / this.consumedFood.portion;
+    var total = consumedFood.this * caloriesPerUnit;
     return total.round();
   }
-}
+}*/
 
 LazyDatabase _openConnection() {
   // the LazyDatabase util lets us find the right location for the file async.
@@ -100,7 +93,7 @@ LazyDatabase _openConnection() {
 // this annotation tells moor to prepare a database class that uses both of the
 // tables we just defined. We'll see how to use that database class in a moment.
 @UseMoor(
-  tables: [Foods, ConsumedFoods, Objectives],
+  tables: [FoodModels, ConsumedFoods, Objectives],
 )
 class MyDatabase extends _$MyDatabase {
   // we tell the database where to store the data with this constructor
@@ -112,8 +105,8 @@ class MyDatabase extends _$MyDatabase {
   int get schemaVersion => 1;
 
   // returns the generated id
-  Future<int> addFood(FoodsCompanion entry) {
-    return into(foods).insert(entry);
+  Future<int> addFoodModel(FoodModelsCompanion entry) {
+    return into(foodModels).insert(entry);
   }
 
   Future<int> addConsumedFood(ConsumedFoodsCompanion entry) {
@@ -121,73 +114,56 @@ class MyDatabase extends _$MyDatabase {
   }
 
   // loads all todo entries
-  Future<List<Food>> get allFoodEntries => select(foods).get();
+  Future<List<FoodModel>> get allFoodEntries => select(foodModels).get();
 
   // The stream will automatically emit new items whenever the underlying data changes.
-  Stream<List<Food>> watchEntriesInFoods() {
-    return (select(foods)).watch();
+  Stream<List<FoodModel>> watchEntriesInFoods() {
+    return (select(foodModels)).watch();
   }
 
   // The stream will automatically emit new items whenever the underlying data changes.
-  Stream<List<Food>> watchVisibleEntriesInFoods() {
-    return (select(foods)..where((tbl) => tbl.visible)).watch();
-  }
-
-  // The stream will automatically emit new items whenever the underlying data changes.
-  Stream<List<ConsumedFoodsWitFood>> watchEntriesInDailyFoods(
+  Stream<List<ConsumedFood>> watchEntriesInDailyFoods(
       DateTime selectDate, String meal) {
     return (select(consumedFoods)
           ..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
-        .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
-        .watch()
-        .map((rows) {
-          return rows.map((row) {
-            return ConsumedFoodsWitFood(
-                food: row.readTable(foods),
-                consumedFood: row.readTable(consumedFoods));
-          }).toList();
-        });
+        .watch();
   }
 
   watchTotalDailyCalorieMeal(DateTime selectDate, String meal) {
     return (select(consumedFoods)
           ..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
-        .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
         .watch()
         .map((rows) {
-          return rows.map((row) {
-            return ConsumedFoodsWitFood(
-                food: row.readTable(foods),
-                consumedFood: row.readTable(consumedFoods));
-          }).fold(
-              0,
-              (previousValue, element) =>
-                  previousValue + element.consumedCalories());
-        });
+      return rows.map((row) {
+        return row;
+      }).fold(0, (previousValue, consumedFood) {
+        var caloriesPerUnit = consumedFood.calorie / consumedFood.portion;
+        var total = consumedFood.quantity * caloriesPerUnit;
+        return total.round();
+      });
+    });
   }
 
   Stream<int> watchTotalDailyCalorie(DateTime selectDate) {
     return (select(consumedFoods)..where((a) => a.date.equals(selectDate)))
-        .join([leftOuterJoin(foods, foods.id.equalsExp(consumedFoods.food))])
         .watch()
         .map((rows) {
-          return rows.map((row) {
-            return ConsumedFoodsWitFood(
-                food: row.readTable(foods),
-                consumedFood: row.readTable(consumedFoods));
-          }).fold(
-              0,
-              (previousValue, element) =>
-                  previousValue + element.consumedCalories());
-        });
+      return rows.map((row) {
+        return row;
+      }).fold(0, (previousValue, consumedFood) {
+        var caloriesPerUnit = consumedFood.calorie / consumedFood.portion;
+        var total = consumedFood.quantity * caloriesPerUnit;
+        return total.round();
+      });
+    });
   }
 
-  Future deleteFood(Food entry) {
-    return delete(foods).delete(entry);
+  Future deleteFoodModel(FoodModel entry) {
+    return delete(foodModels).delete(entry);
   }
 
-  Future updtateFood(Food entry) {
-    return update(foods).replace(entry);
+  Future updtateFood(FoodModel entry) {
+    return update(foodModels).replace(entry);
   }
 
   // Because we want to have only one objective per day (at most).
@@ -284,4 +260,5 @@ class MyDatabase extends _$MyDatabase {
       }
     });
   }
+
 }
