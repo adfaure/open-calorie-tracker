@@ -114,6 +114,10 @@ class _JournalViewState extends State<JournalView> {
                           date: this.date,
                           objective: this.objective,
                         ),
+                        Divider(
+                          color: Colors.grey.shade50,
+                          height: 1,
+                        ),
                       ])),
                   Expanded(
                       child: Material(

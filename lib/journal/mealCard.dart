@@ -56,7 +56,8 @@ class MealCard extends StatelessWidget {
                         // Total calorie meal
                         _totalCalorie = snapshot.data;
                       }
-                      return Text("Total: ${formater.format(_totalCalorie)} kcal");
+                      return Text(
+                          "Total: ${formater.format(_totalCalorie)} kcal");
                     });
               }),
               trailing: IconButton(
@@ -68,6 +69,7 @@ class MealCard extends StatelessWidget {
                   onPressed: () {
                     _navigateAddFoodToMeal(context);
                   }))),
+      Divider(height: 1,),
       Consumer<MyDatabase>(builder: (builder, database, child) {
         return StreamBuilder(
             initialData: List<ConsumedFood>(),
@@ -91,6 +93,8 @@ class MealCard extends StatelessWidget {
                         trailing: Text(formater.format(
                                 consumedCalories(snapshot.data[index])) +
                             " kcal"),
+                        subtitle: Text(
+                            "${snapshot.data[index].quantity.toString()} g"),
                       ));
                 },
               );
