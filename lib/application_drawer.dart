@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:moor_db_viewer/moor_db_viewer.dart';
 import 'package:provider/provider.dart';
 
-import 'common/barcode.dart';
 import 'database/db_helper.dart';
 import 'food/food.dart';
 import 'food/openfoodfacts.dart';
@@ -62,12 +61,6 @@ class ApplicationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Barcode debug'),
-            onTap: () {
-              _navigateBarcodeDebug(context);
-            },
-          ),
-          ListTile(
             title: Text('Debug data'),
             onTap: () {
               _debugShowDatabase(context);
@@ -106,13 +99,6 @@ class ApplicationDrawer extends StatelessWidget {
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => OpenFoodFacts()),
-    );
-  }
-
-  _navigateBarcodeDebug(BuildContext context) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => BarcodeTest()),
     );
   }
 }
