@@ -1,3 +1,7 @@
+# Open Calorie Tracker
+
+![Screenshot](img/journal_demo.jpg)
+
 # Running the application on Nixos
 
 Enter into the shell.
