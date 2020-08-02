@@ -19,6 +19,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:moor/moor.dart' hide Column;
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
@@ -57,7 +58,7 @@ class SelectFood extends StatelessWidget {
           title: Text(title),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.camera),
+              icon:  FaIcon(FontAwesomeIcons.barcode),
               onPressed: () async {
                 scanAndAddProduct(build);
               },

@@ -19,6 +19,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:open_weight/common/helpers.dart';
+import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,7 +34,7 @@ Future<void> main() async {
 
   final database = MyDatabase();
   sharedPrefs = await SharedPreferences.getInstance();
-  
+
   runApp(
     MultiProvider(
       providers: [
@@ -56,6 +57,18 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Map<int, Color> color = {
+      50:  Color.fromRGBO(226, 28, 33, .1),
+      100: Color.fromRGBO(226, 28, 33, .2),
+      200: Color.fromRGBO(226, 28, 33, .3),
+      300: Color.fromRGBO(226, 28, 33, .4),
+      400: Color.fromRGBO(226, 28, 33, .5),
+      500: Color.fromRGBO(226, 28, 33, .6),
+      600: Color.fromRGBO(226, 28, 33, .7),
+      700: Color.fromRGBO(226, 28, 33, .8),
+      800: Color.fromRGBO(226, 28, 33, .9),
+      900: Color.fromRGBO(226, 28, 33, 1),
+    };
     return MaterialApp(
       initialRoute: '/',
       routes: {
@@ -64,7 +77,7 @@ class MyApp extends StatelessWidget {
       },
       title: 'OPT',
       theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: MaterialColor(0xFFe21c21, color),
           cardTheme: CardTheme(
               margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
               shape: RoundedRectangleBorder(

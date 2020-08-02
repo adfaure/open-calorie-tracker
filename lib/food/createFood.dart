@@ -102,7 +102,7 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
   List<Widget> _buildNewFood(BuildContext context) {
     return [
       Container(
-          color: Colors.blue,
+          color: redTheme,
           child: Row(
             children: [
               Padding(
@@ -153,7 +153,7 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
   List<Widget> _buildNewPortion(BuildContext context) {
     return [
       Container(
-          color: Colors.blue,
+          color: redTheme,
           child: Row(
             children: [
               Padding(

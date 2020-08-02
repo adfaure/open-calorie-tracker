@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 
 final appBgColor = Color(0xFFe3e3e3);
+final redTheme = Color(0xFFe21c21);
 
 class BoxedContainer extends StatelessWidget {
   final Widget child;

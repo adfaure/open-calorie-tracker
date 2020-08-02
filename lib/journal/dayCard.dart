@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:open_weight/common/helpers.dart';
+import 'package:open_weight/common/ui.dart';
 
 class DayCard extends StatelessWidget {
   final DateTime date;
@@ -49,7 +50,7 @@ class DayCard extends StatelessWidget {
             ),
             IconButton(
                 iconSize: 45,
-                icon: Icon(Icons.navigate_before, color: Colors.blue),
+                icon: Icon(Icons.navigate_before, color: redTheme),
                 onPressed: onTapPrevious),
             Expanded(
                 child: GestureDetector(
@@ -59,7 +60,7 @@ class DayCard extends StatelessWidget {
                         child: Text(dateFormat())))),
             IconButton(
               iconSize: 45,
-              icon: Icon(Icons.navigate_next, color: Colors.blue),
+              icon: Icon(Icons.navigate_next, color: redTheme),
               onPressed: onTapNext,
             ),
           ],

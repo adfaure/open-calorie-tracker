@@ -19,6 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moor_db_viewer/moor_db_viewer.dart';
 import 'package:open_weight/about.dart';
+import 'package:open_weight/common/ui.dart';
 import 'package:provider/provider.dart';
 
 import 'database/db_helper.dart';
@@ -40,7 +41,7 @@ class ApplicationDrawer extends StatelessWidget {
           DrawerHeader(
             child: Text("Menu"),
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: redTheme,
             ),
           ),
           ListTile(

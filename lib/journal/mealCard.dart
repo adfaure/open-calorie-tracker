@@ -21,6 +21,7 @@ import 'package:open_weight/common/columnBuilder.dart';
 // Number formatting
 import 'package:intl/intl.dart';
 import 'package:open_weight/common/helpers.dart';
+import 'package:open_weight/common/ui.dart';
 
 //internal dependencies
 import 'package:open_weight/database/db_helper.dart';
@@ -63,7 +64,7 @@ class MealCard extends StatelessWidget {
               trailing: IconButton(
                   icon: Icon(
                     Icons.add_circle,
-                    color: Colors.blue,
+                    color: redTheme,
                     size: 35,
                   ),
                   onPressed: () {
