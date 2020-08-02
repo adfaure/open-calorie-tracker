@@ -25,6 +25,7 @@ import 'package:open_weight/food/foodCard.dart';
 import 'package:open_weight/food/openfoodfacts.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import '../database/db_helper.dart';
@@ -58,24 +59,7 @@ class SelectFood extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.camera),
               onPressed: () async {
-                final Product product = await Navigator.push(
-                  build,
-                  MaterialPageRoute(builder: (context) => OpenFoodFacts()),
-                );
-                debugPrint("$product");
-                var database = Provider.of<MyDatabase>(build, listen: false);
-                List<FoodModel> foodModel =
-                    await database.getFoodModelByBarcode(product.barcode);
-                debugPrint("${foodModel.toString()}");
-                if (foodModel.length == 0) {
-                  database.addFoodModel(FoodModelsCompanion.insert(
-                      calorie: product.nutriments.energyKcal.round(),
-                      name: product.productName,
-                      barcode: Value<String>(product.barcode),
-                      source: Value<String>("OpenFoodFacts"),
-                      unit: "g",
-                      portion: 100));
-                }
+                scanAndAddProduct(build);
               },
             )
           ],
