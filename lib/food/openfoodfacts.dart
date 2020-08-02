@@ -74,6 +74,7 @@ class OpenFoodFacts extends StatelessWidget {
         ProductQueryConfiguration(barcode,
             // language: OpenFoodFactsLanguage.GERMAN,
             fields: [
+          ProductField.BARCODE,
           ProductField.NAME,
           ProductField.SERVING_SIZE,
           ProductField.QUANTITY,
@@ -90,11 +91,6 @@ class OpenFoodFacts extends StatelessWidget {
       print("Error retreiving the product : ${result.status}");
       return;
     }
-
-    debugPrint(result.status.toString());
-    debugPrint(result.product.nutrimentEnergyUnit);
-
-    this.streamCtlr.add(result.product);
     return result.product;
   }
 }

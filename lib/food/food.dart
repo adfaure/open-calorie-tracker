@@ -52,21 +52,15 @@ class ListFood extends StatelessWidget {
                         onTap: () =>
                             {_showFoodView(context, snapshot.data[index])},
                         child: FoodCard(
-                          food: snapshot.data[index],
-                          /* actionButton: IconButton(
+                            food: snapshot.data[index],
+                            actionButton: IconButton(
                               icon: Icon(Icons.delete_outline),
                               onPressed: () {
                                 var entry = snapshot.data[index];
-                                database.updtateFood(ConsumedFood(
-                                    id: entry.id,
-                                    calorie: entry.calorie,
-                                    name: entry.name,
-                                    portion: entry.portion,
-                                    unit: entry.unit));
+                                database.deleteFoodModel(entry);
                               },
                               color: Colors.red,
-                            ) */
-                        ));
+                            )));
                   },
                 );
               });

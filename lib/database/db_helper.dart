@@ -158,6 +158,12 @@ class MyDatabase extends _$MyDatabase {
     });
   }
 
+  Future getFoodModelByBarcode(String barcode) {
+    return (select(foodModels)
+          ..where((tbl) => tbl.barcode.equals(barcode)))
+        .get();
+  }
+
   Future deleteFoodModel(FoodModel entry) {
     return delete(foodModels).delete(entry);
   }
@@ -260,5 +266,4 @@ class MyDatabase extends _$MyDatabase {
       }
     });
   }
-
 }

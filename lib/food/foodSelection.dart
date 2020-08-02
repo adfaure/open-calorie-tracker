@@ -62,13 +62,20 @@ class SelectFood extends StatelessWidget {
                   build,
                   MaterialPageRoute(builder: (context) => OpenFoodFacts()),
                 );
+                debugPrint("$product");
                 var database = Provider.of<MyDatabase>(build, listen: false);
-/*                 database.addFood(FoodsCompanion.insert(
-                    calorie: product.nutriments.energyKcal.round(),
-                    name: product.productName,
-                    unit: "g",
-                    portion: 100,
-                    visible: true)); */
+                List<FoodModel> foodModel =
+                    await database.getFoodModelByBarcode(product.barcode);
+                debugPrint("${foodModel.toString()}");
+                if (foodModel.length == 0) {
+                  database.addFoodModel(FoodModelsCompanion.insert(
+                      calorie: product.nutriments.energyKcal.round(),
+                      name: product.productName,
+                      barcode: Value<String>(product.barcode),
+                      source: Value<String>("OpenFoodFacts"),
+                      unit: "g",
+                      portion: 100));
+                }
               },
             )
           ],
@@ -77,8 +84,8 @@ class SelectFood extends StatelessWidget {
           return StreamBuilder(
               stream: database.watchEntriesInFoods(),
               initialData: List<FoodModel>(),
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<FoodModel>> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<FoodModel>> snapshot) {
                 return ListView.builder(
                   // When the widget is first initialize, the data is null.
                   // Tertiary operators prevent getting an error (It might be seen as a workaround, idk yet)
