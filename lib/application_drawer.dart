@@ -18,6 +18,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moor_db_viewer/moor_db_viewer.dart';
+import 'package:open_weight/about.dart';
 import 'package:provider/provider.dart';
 
 import 'database/db_helper.dart';
@@ -55,15 +56,15 @@ class ApplicationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Open Food Fact'),
-            onTap: () {
-              _navigateOpenFoodFactView(context);
-            },
-          ),
-          ListTile(
             title: Text('Debug data'),
             onTap: () {
               _debugShowDatabase(context);
+            },
+          ),
+          ListTile(
+            title: Text('About'),
+            onTap: () {
+              _debugShowAbout(context);
             },
           ),
         ],
@@ -95,10 +96,10 @@ class ApplicationDrawer extends StatelessWidget {
     );
   }
 
-  _navigateOpenFoodFactView(BuildContext context) async {
+  void _debugShowAbout(BuildContext context) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => OpenFoodFacts()),
+      MaterialPageRoute(builder: (context) => AboutView()),
     );
   }
 }

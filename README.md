@@ -32,9 +32,8 @@ Then start the emulator: `./result/bin/run-test-emulator`.
     - The inititialisation of the appliacation allows to create the initialisation date.
       The init date is then used as the first date the user can navigate from, and ensure the consistency of the objective data.
 - Create a foodView page to be able to modify a food.
-- Find a way to be able to modify/delete food that have been consumed (a visibility bool on the food table can do the trick).
+- Find a way to be able to modify/delete food that have been consumed.
 - Implement swapping gesture to change day in the journal.
-- Make the connection with openfood fact to automatically get food's informations.
 - Find the best way to select aliments, portion or number of gramme etc
 - Localize the application eng/fr.
 - Add food details (lipid, iron etc)

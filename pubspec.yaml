@@ -34,8 +34,9 @@ dependencies:
   openfoodfacts:
      path: ../openfoodfacts-dart
   flutter_barcode_scanner: ^1.0.1
-
-
+  flutter_markdown: ^0.4.2
+  url_launcher: ^5.4.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
