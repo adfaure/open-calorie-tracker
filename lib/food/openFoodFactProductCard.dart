@@ -34,7 +34,7 @@ class OffProductCard extends Card {
         ),
         title: Text(food.productName),
         subtitle: Text(
-            "Calories. ${food.nutriments.energy_kcal_100g} (100 ${food.nutriments.energyUnit.toString()})"),
+            "Calories. ${food.nutriments.energyKcal}  ${food.nutriments.energyKcalUnit.toString()} (100 g)"),
         trailing: Image.network(
           food.imgSmallUrl,
         ),

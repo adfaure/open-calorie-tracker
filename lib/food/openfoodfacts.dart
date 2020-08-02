@@ -46,8 +46,9 @@ class OpenFoodFacts extends StatelessWidget {
                       padding: EdgeInsets.all(15),
                       child: TextField(
                         controller: barcodeCtlr,
-                        onSubmitted: (barcode) {
-                          _getProduct(barcode);
+                        onSubmitted: (barcode) async {
+                          Product product = await _getProduct(barcode);
+                          Navigator.pop(context, product);
                         },
                       ))),
               StreamBuilder(
@@ -74,6 +75,8 @@ class OpenFoodFacts extends StatelessWidget {
             // language: OpenFoodFactsLanguage.GERMAN,
             fields: [
           ProductField.NAME,
+          ProductField.SERVING_SIZE,
+          ProductField.QUANTITY,
           ProductField.BRANDS,
           ProductField.FRONT_IMAGE,
           ProductField.NUTRIMENTS,
@@ -92,5 +95,6 @@ class OpenFoodFacts extends StatelessWidget {
     debugPrint(result.product.nutrimentEnergyUnit);
 
     this.streamCtlr.add(result.product);
+    return result.product;
   }
 }

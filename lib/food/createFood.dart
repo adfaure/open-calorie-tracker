@@ -83,11 +83,12 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                   if (_createFoodFormKey.currentState.validate()) {
                     debugPrint(
                         "portion: ${portionFormCtrl.text}, calorie: ${calorieFormCtrl.text}");
-                    database.addTodo(FoodsCompanion.insert(
+                    database.addFood(FoodsCompanion.insert(
                         name: nameFormCtrl.text,
                         unit: unitFormCtrl.text,
                         calorie: int.parse(calorieFormCtrl.text),
-                        portion: int.parse(portionFormCtrl.text)));
+                        portion: int.parse(portionFormCtrl.text),
+                        visible: true));
 
                     Navigator.pop(context);
                   }

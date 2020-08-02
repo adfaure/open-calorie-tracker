@@ -34,6 +34,17 @@ class Objectives extends Table {
   Set<Column> get primaryKey => {date};
 }
 
+class OffToFood extends Table {
+  TextColumn get barcode => text()();
+  IntColumn get foodid => integer()();
+
+  @override
+  Set<Column> get primaryKey => {barcode};
+  @override
+  List<String> get customConstraints =>
+      ["FOREIGN KEY(food) REFERENCES foods(id)"];
+}
+
 // This will generate a table called "Food" for us. The rows of that table will
 // be represented by a class called "Food".
 class Foods extends Table {
@@ -42,6 +53,7 @@ class Foods extends Table {
   IntColumn get portion => integer()();
   IntColumn get calorie => integer()();
   TextColumn get unit => text()();
+  BoolColumn get visible => boolean()();
 }
 
 class ConsumedFoods extends Table {
@@ -79,7 +91,7 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    // file.delete();
+    file.delete();
     debugPrint("$file");
     return VmDatabase(file);
   });
@@ -100,7 +112,7 @@ class MyDatabase extends _$MyDatabase {
   int get schemaVersion => 1;
 
   // returns the generated id
-  Future<int> addTodo(FoodsCompanion entry) {
+  Future<int> addFood(FoodsCompanion entry) {
     return into(foods).insert(entry);
   }
 
@@ -114,6 +126,11 @@ class MyDatabase extends _$MyDatabase {
   // The stream will automatically emit new items whenever the underlying data changes.
   Stream<List<Food>> watchEntriesInFoods() {
     return (select(foods)).watch();
+  }
+
+  // The stream will automatically emit new items whenever the underlying data changes.
+  Stream<List<Food>> watchVisibleEntriesInFoods() {
+    return (select(foods)..where((tbl) => tbl.visible)).watch();
   }
 
   // The stream will automatically emit new items whenever the underlying data changes.
@@ -167,6 +184,10 @@ class MyDatabase extends _$MyDatabase {
 
   Future deleteFood(Food entry) {
     return delete(foods).delete(entry);
+  }
+
+  Future updtateFood(Food entry) {
+    return update(foods).replace(entry);
   }
 
   // Because we want to have only one objective per day (at most).

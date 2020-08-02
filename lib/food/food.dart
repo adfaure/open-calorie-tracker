@@ -39,7 +39,7 @@ class ListFood extends StatelessWidget {
         ),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           return StreamBuilder(
-              stream: database.watchEntriesInFoods(),
+              stream: database.watchVisibleEntriesInFoods(),
               initialData: List<Food>(),
               builder:
                   (BuildContext context, AsyncSnapshot<List<Food>> snapshot) {
@@ -56,7 +56,14 @@ class ListFood extends StatelessWidget {
                             actionButton: IconButton(
                               icon: Icon(Icons.delete_outline),
                               onPressed: () {
-                                  database.deleteFood(snapshot.data[index]);
+                                var entry = snapshot.data[index];
+                                database.updtateFood(Food(
+                                    id: entry.id,
+                                    visible: false,
+                                    calorie: entry.calorie,
+                                    name: entry.name,
+                                    portion: entry.portion,
+                                    unit: entry.unit));
                               },
                               color: Colors.red,
                             )));
@@ -89,5 +96,4 @@ class ListFood extends StatelessWidget {
       MaterialPageRoute(builder: (context) => CreateFoodForm()),
     );
   }
-
 }

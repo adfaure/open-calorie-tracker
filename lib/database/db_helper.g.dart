@@ -13,17 +13,20 @@ class Food extends DataClass implements Insertable<Food> {
   final int portion;
   final int calorie;
   final String unit;
+  final bool visible;
   Food(
       {@required this.id,
       @required this.name,
       @required this.portion,
       @required this.calorie,
-      @required this.unit});
+      @required this.unit,
+      @required this.visible});
   factory Food.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return Food(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
@@ -32,6 +35,8 @@ class Food extends DataClass implements Insertable<Food> {
       calorie:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}calorie']),
       unit: stringType.mapFromDatabaseResponse(data['${effectivePrefix}unit']),
+      visible:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}visible']),
     );
   }
   @override
@@ -52,6 +57,9 @@ class Food extends DataClass implements Insertable<Food> {
     if (!nullToAbsent || unit != null) {
       map['unit'] = Variable<String>(unit);
     }
+    if (!nullToAbsent || visible != null) {
+      map['visible'] = Variable<bool>(visible);
+    }
     return map;
   }
 
@@ -66,6 +74,9 @@ class Food extends DataClass implements Insertable<Food> {
           ? const Value.absent()
           : Value(calorie),
       unit: unit == null && nullToAbsent ? const Value.absent() : Value(unit),
+      visible: visible == null && nullToAbsent
+          ? const Value.absent()
+          : Value(visible),
     );
   }
 
@@ -78,6 +89,7 @@ class Food extends DataClass implements Insertable<Food> {
       portion: serializer.fromJson<int>(json['portion']),
       calorie: serializer.fromJson<int>(json['calorie']),
       unit: serializer.fromJson<String>(json['unit']),
+      visible: serializer.fromJson<bool>(json['visible']),
     );
   }
   @override
@@ -89,16 +101,24 @@ class Food extends DataClass implements Insertable<Food> {
       'portion': serializer.toJson<int>(portion),
       'calorie': serializer.toJson<int>(calorie),
       'unit': serializer.toJson<String>(unit),
+      'visible': serializer.toJson<bool>(visible),
     };
   }
 
-  Food copyWith({int id, String name, int portion, int calorie, String unit}) =>
+  Food copyWith(
+          {int id,
+          String name,
+          int portion,
+          int calorie,
+          String unit,
+          bool visible}) =>
       Food(
         id: id ?? this.id,
         name: name ?? this.name,
         portion: portion ?? this.portion,
         calorie: calorie ?? this.calorie,
         unit: unit ?? this.unit,
+        visible: visible ?? this.visible,
       );
   @override
   String toString() {
@@ -107,7 +127,8 @@ class Food extends DataClass implements Insertable<Food> {
           ..write('name: $name, ')
           ..write('portion: $portion, ')
           ..write('calorie: $calorie, ')
-          ..write('unit: $unit')
+          ..write('unit: $unit, ')
+          ..write('visible: $visible')
           ..write(')'))
         .toString();
   }
@@ -115,8 +136,12 @@ class Food extends DataClass implements Insertable<Food> {
   @override
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
-      $mrjc(name.hashCode,
-          $mrjc(portion.hashCode, $mrjc(calorie.hashCode, unit.hashCode)))));
+      $mrjc(
+          name.hashCode,
+          $mrjc(
+              portion.hashCode,
+              $mrjc(
+                  calorie.hashCode, $mrjc(unit.hashCode, visible.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -125,7 +150,8 @@ class Food extends DataClass implements Insertable<Food> {
           other.name == this.name &&
           other.portion == this.portion &&
           other.calorie == this.calorie &&
-          other.unit == this.unit);
+          other.unit == this.unit &&
+          other.visible == this.visible);
 }
 
 class FoodsCompanion extends UpdateCompanion<Food> {
@@ -134,12 +160,14 @@ class FoodsCompanion extends UpdateCompanion<Food> {
   final Value<int> portion;
   final Value<int> calorie;
   final Value<String> unit;
+  final Value<bool> visible;
   const FoodsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.portion = const Value.absent(),
     this.calorie = const Value.absent(),
     this.unit = const Value.absent(),
+    this.visible = const Value.absent(),
   });
   FoodsCompanion.insert({
     this.id = const Value.absent(),
@@ -147,16 +175,19 @@ class FoodsCompanion extends UpdateCompanion<Food> {
     @required int portion,
     @required int calorie,
     @required String unit,
+    @required bool visible,
   })  : name = Value(name),
         portion = Value(portion),
         calorie = Value(calorie),
-        unit = Value(unit);
+        unit = Value(unit),
+        visible = Value(visible);
   static Insertable<Food> custom({
     Expression<int> id,
     Expression<String> name,
     Expression<int> portion,
     Expression<int> calorie,
     Expression<String> unit,
+    Expression<bool> visible,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -164,6 +195,7 @@ class FoodsCompanion extends UpdateCompanion<Food> {
       if (portion != null) 'portion': portion,
       if (calorie != null) 'calorie': calorie,
       if (unit != null) 'unit': unit,
+      if (visible != null) 'visible': visible,
     });
   }
 
@@ -172,13 +204,15 @@ class FoodsCompanion extends UpdateCompanion<Food> {
       Value<String> name,
       Value<int> portion,
       Value<int> calorie,
-      Value<String> unit}) {
+      Value<String> unit,
+      Value<bool> visible}) {
     return FoodsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       portion: portion ?? this.portion,
       calorie: calorie ?? this.calorie,
       unit: unit ?? this.unit,
+      visible: visible ?? this.visible,
     );
   }
 
@@ -200,6 +234,9 @@ class FoodsCompanion extends UpdateCompanion<Food> {
     if (unit.present) {
       map['unit'] = Variable<String>(unit.value);
     }
+    if (visible.present) {
+      map['visible'] = Variable<bool>(visible.value);
+    }
     return map;
   }
 
@@ -210,7 +247,8 @@ class FoodsCompanion extends UpdateCompanion<Food> {
           ..write('name: $name, ')
           ..write('portion: $portion, ')
           ..write('calorie: $calorie, ')
-          ..write('unit: $unit')
+          ..write('unit: $unit, ')
+          ..write('visible: $visible')
           ..write(')'))
         .toString();
   }
@@ -274,8 +312,21 @@ class $FoodsTable extends Foods with TableInfo<$FoodsTable, Food> {
     );
   }
 
+  final VerificationMeta _visibleMeta = const VerificationMeta('visible');
+  GeneratedBoolColumn _visible;
   @override
-  List<GeneratedColumn> get $columns => [id, name, portion, calorie, unit];
+  GeneratedBoolColumn get visible => _visible ??= _constructVisible();
+  GeneratedBoolColumn _constructVisible() {
+    return GeneratedBoolColumn(
+      'visible',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, portion, calorie, unit, visible];
   @override
   $FoodsTable get asDslTable => this;
   @override
@@ -313,6 +364,12 @@ class $FoodsTable extends Foods with TableInfo<$FoodsTable, Food> {
           _unitMeta, unit.isAcceptableOrUnknown(data['unit'], _unitMeta));
     } else if (isInserting) {
       context.missing(_unitMeta);
+    }
+    if (data.containsKey('visible')) {
+      context.handle(_visibleMeta,
+          visible.isAcceptableOrUnknown(data['visible'], _visibleMeta));
+    } else if (isInserting) {
+      context.missing(_visibleMeta);
     }
     return context;
   }

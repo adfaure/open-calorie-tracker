@@ -22,9 +22,11 @@ import 'package:flutter/material.dart';
 import 'package:moor/moor.dart' hide Column;
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
+import 'package:open_weight/food/openfoodfacts.dart';
 import 'package:open_weight/models/objective.dart';
+import 'package:openfoodfacts/openfoodfacts.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../database/db_helper.dart';
 
@@ -53,10 +55,28 @@ class SelectFood extends StatelessWidget {
         backgroundColor: bgColor,
         appBar: AppBar(
           title: Text(title),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.camera),
+              onPressed: () async {
+                final Product product = await Navigator.push(
+                  build,
+                  MaterialPageRoute(builder: (context) => OpenFoodFacts()),
+                );
+                var database = Provider.of<MyDatabase>(build, listen: false);
+                database.addFood(FoodsCompanion.insert(
+                    calorie: product.nutriments.energyKcal.round(),
+                    name: product.productName,
+                    unit: "g",
+                    portion: 100,
+                    visible: true));
+              },
+            )
+          ],
         ),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           return StreamBuilder(
-              stream: database.watchEntriesInFoods(),
+              stream: database.watchVisibleEntriesInFoods(),
               initialData: List<Food>(),
               builder:
                   (BuildContext context, AsyncSnapshot<List<Food>> snapshot) {
@@ -169,7 +189,6 @@ class SelectFood extends StatelessWidget {
         Navigator.of(context).pop();
         var objModel = Provider.of<ObjectiveModel>(context, listen: false);
         objModel.addCurrentToDatabase();
-
       }
     });
   }
