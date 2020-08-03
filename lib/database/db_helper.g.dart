@@ -11,16 +11,20 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
   final int id;
   final String name;
   final int portion;
-  final int calorie;
   final String unit;
+  final int serving;
+  final String servingUnit;
+  final int calorie;
   final String source;
   final String barcode;
   FoodModel(
       {@required this.id,
       @required this.name,
       @required this.portion,
-      @required this.calorie,
       @required this.unit,
+      this.serving,
+      this.servingUnit,
+      @required this.calorie,
       this.source,
       this.barcode});
   factory FoodModel.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -33,9 +37,13 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       portion:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}portion']),
+      unit: stringType.mapFromDatabaseResponse(data['${effectivePrefix}unit']),
+      serving:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}serving']),
+      servingUnit: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}serving_unit']),
       calorie:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}calorie']),
-      unit: stringType.mapFromDatabaseResponse(data['${effectivePrefix}unit']),
       source:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}source']),
       barcode:
@@ -54,11 +62,17 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
     if (!nullToAbsent || portion != null) {
       map['portion'] = Variable<int>(portion);
     }
-    if (!nullToAbsent || calorie != null) {
-      map['calorie'] = Variable<int>(calorie);
-    }
     if (!nullToAbsent || unit != null) {
       map['unit'] = Variable<String>(unit);
+    }
+    if (!nullToAbsent || serving != null) {
+      map['serving'] = Variable<int>(serving);
+    }
+    if (!nullToAbsent || servingUnit != null) {
+      map['serving_unit'] = Variable<String>(servingUnit);
+    }
+    if (!nullToAbsent || calorie != null) {
+      map['calorie'] = Variable<int>(calorie);
     }
     if (!nullToAbsent || source != null) {
       map['source'] = Variable<String>(source);
@@ -76,10 +90,16 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
       portion: portion == null && nullToAbsent
           ? const Value.absent()
           : Value(portion),
+      unit: unit == null && nullToAbsent ? const Value.absent() : Value(unit),
+      serving: serving == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serving),
+      servingUnit: servingUnit == null && nullToAbsent
+          ? const Value.absent()
+          : Value(servingUnit),
       calorie: calorie == null && nullToAbsent
           ? const Value.absent()
           : Value(calorie),
-      unit: unit == null && nullToAbsent ? const Value.absent() : Value(unit),
       source:
           source == null && nullToAbsent ? const Value.absent() : Value(source),
       barcode: barcode == null && nullToAbsent
@@ -95,8 +115,10 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       portion: serializer.fromJson<int>(json['portion']),
-      calorie: serializer.fromJson<int>(json['calorie']),
       unit: serializer.fromJson<String>(json['unit']),
+      serving: serializer.fromJson<int>(json['serving']),
+      servingUnit: serializer.fromJson<String>(json['servingUnit']),
+      calorie: serializer.fromJson<int>(json['calorie']),
       source: serializer.fromJson<String>(json['source']),
       barcode: serializer.fromJson<String>(json['barcode']),
     );
@@ -108,8 +130,10 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'portion': serializer.toJson<int>(portion),
-      'calorie': serializer.toJson<int>(calorie),
       'unit': serializer.toJson<String>(unit),
+      'serving': serializer.toJson<int>(serving),
+      'servingUnit': serializer.toJson<String>(servingUnit),
+      'calorie': serializer.toJson<int>(calorie),
       'source': serializer.toJson<String>(source),
       'barcode': serializer.toJson<String>(barcode),
     };
@@ -119,16 +143,20 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
           {int id,
           String name,
           int portion,
-          int calorie,
           String unit,
+          int serving,
+          String servingUnit,
+          int calorie,
           String source,
           String barcode}) =>
       FoodModel(
         id: id ?? this.id,
         name: name ?? this.name,
         portion: portion ?? this.portion,
-        calorie: calorie ?? this.calorie,
         unit: unit ?? this.unit,
+        serving: serving ?? this.serving,
+        servingUnit: servingUnit ?? this.servingUnit,
+        calorie: calorie ?? this.calorie,
         source: source ?? this.source,
         barcode: barcode ?? this.barcode,
       );
@@ -138,8 +166,10 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('portion: $portion, ')
-          ..write('calorie: $calorie, ')
           ..write('unit: $unit, ')
+          ..write('serving: $serving, ')
+          ..write('servingUnit: $servingUnit, ')
+          ..write('calorie: $calorie, ')
           ..write('source: $source, ')
           ..write('barcode: $barcode')
           ..write(')'))
@@ -154,9 +184,13 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
           $mrjc(
               portion.hashCode,
               $mrjc(
-                  calorie.hashCode,
-                  $mrjc(unit.hashCode,
-                      $mrjc(source.hashCode, barcode.hashCode)))))));
+                  unit.hashCode,
+                  $mrjc(
+                      serving.hashCode,
+                      $mrjc(
+                          servingUnit.hashCode,
+                          $mrjc(calorie.hashCode,
+                              $mrjc(source.hashCode, barcode.hashCode)))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -164,8 +198,10 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
           other.id == this.id &&
           other.name == this.name &&
           other.portion == this.portion &&
-          other.calorie == this.calorie &&
           other.unit == this.unit &&
+          other.serving == this.serving &&
+          other.servingUnit == this.servingUnit &&
+          other.calorie == this.calorie &&
           other.source == this.source &&
           other.barcode == this.barcode);
 }
@@ -174,16 +210,20 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
   final Value<int> id;
   final Value<String> name;
   final Value<int> portion;
-  final Value<int> calorie;
   final Value<String> unit;
+  final Value<int> serving;
+  final Value<String> servingUnit;
+  final Value<int> calorie;
   final Value<String> source;
   final Value<String> barcode;
   const FoodModelsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.portion = const Value.absent(),
-    this.calorie = const Value.absent(),
     this.unit = const Value.absent(),
+    this.serving = const Value.absent(),
+    this.servingUnit = const Value.absent(),
+    this.calorie = const Value.absent(),
     this.source = const Value.absent(),
     this.barcode = const Value.absent(),
   });
@@ -191,20 +231,24 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
     this.id = const Value.absent(),
     @required String name,
     @required int portion,
-    @required int calorie,
     @required String unit,
+    this.serving = const Value.absent(),
+    this.servingUnit = const Value.absent(),
+    @required int calorie,
     this.source = const Value.absent(),
     this.barcode = const Value.absent(),
   })  : name = Value(name),
         portion = Value(portion),
-        calorie = Value(calorie),
-        unit = Value(unit);
+        unit = Value(unit),
+        calorie = Value(calorie);
   static Insertable<FoodModel> custom({
     Expression<int> id,
     Expression<String> name,
     Expression<int> portion,
-    Expression<int> calorie,
     Expression<String> unit,
+    Expression<int> serving,
+    Expression<String> servingUnit,
+    Expression<int> calorie,
     Expression<String> source,
     Expression<String> barcode,
   }) {
@@ -212,8 +256,10 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (portion != null) 'portion': portion,
-      if (calorie != null) 'calorie': calorie,
       if (unit != null) 'unit': unit,
+      if (serving != null) 'serving': serving,
+      if (servingUnit != null) 'serving_unit': servingUnit,
+      if (calorie != null) 'calorie': calorie,
       if (source != null) 'source': source,
       if (barcode != null) 'barcode': barcode,
     });
@@ -223,16 +269,20 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
       {Value<int> id,
       Value<String> name,
       Value<int> portion,
-      Value<int> calorie,
       Value<String> unit,
+      Value<int> serving,
+      Value<String> servingUnit,
+      Value<int> calorie,
       Value<String> source,
       Value<String> barcode}) {
     return FoodModelsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       portion: portion ?? this.portion,
-      calorie: calorie ?? this.calorie,
       unit: unit ?? this.unit,
+      serving: serving ?? this.serving,
+      servingUnit: servingUnit ?? this.servingUnit,
+      calorie: calorie ?? this.calorie,
       source: source ?? this.source,
       barcode: barcode ?? this.barcode,
     );
@@ -250,11 +300,17 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
     if (portion.present) {
       map['portion'] = Variable<int>(portion.value);
     }
-    if (calorie.present) {
-      map['calorie'] = Variable<int>(calorie.value);
-    }
     if (unit.present) {
       map['unit'] = Variable<String>(unit.value);
+    }
+    if (serving.present) {
+      map['serving'] = Variable<int>(serving.value);
+    }
+    if (servingUnit.present) {
+      map['serving_unit'] = Variable<String>(servingUnit.value);
+    }
+    if (calorie.present) {
+      map['calorie'] = Variable<int>(calorie.value);
     }
     if (source.present) {
       map['source'] = Variable<String>(source.value);
@@ -271,8 +327,10 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('portion: $portion, ')
-          ..write('calorie: $calorie, ')
           ..write('unit: $unit, ')
+          ..write('serving: $serving, ')
+          ..write('servingUnit: $servingUnit, ')
+          ..write('calorie: $calorie, ')
           ..write('source: $source, ')
           ..write('barcode: $barcode')
           ..write(')'))
@@ -318,18 +376,6 @@ class $FoodModelsTable extends FoodModels
     );
   }
 
-  final VerificationMeta _calorieMeta = const VerificationMeta('calorie');
-  GeneratedIntColumn _calorie;
-  @override
-  GeneratedIntColumn get calorie => _calorie ??= _constructCalorie();
-  GeneratedIntColumn _constructCalorie() {
-    return GeneratedIntColumn(
-      'calorie',
-      $tableName,
-      false,
-    );
-  }
-
   final VerificationMeta _unitMeta = const VerificationMeta('unit');
   GeneratedTextColumn _unit;
   @override
@@ -337,6 +383,44 @@ class $FoodModelsTable extends FoodModels
   GeneratedTextColumn _constructUnit() {
     return GeneratedTextColumn(
       'unit',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _servingMeta = const VerificationMeta('serving');
+  GeneratedIntColumn _serving;
+  @override
+  GeneratedIntColumn get serving => _serving ??= _constructServing();
+  GeneratedIntColumn _constructServing() {
+    return GeneratedIntColumn(
+      'serving',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _servingUnitMeta =
+      const VerificationMeta('servingUnit');
+  GeneratedTextColumn _servingUnit;
+  @override
+  GeneratedTextColumn get servingUnit =>
+      _servingUnit ??= _constructServingUnit();
+  GeneratedTextColumn _constructServingUnit() {
+    return GeneratedTextColumn(
+      'serving_unit',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _calorieMeta = const VerificationMeta('calorie');
+  GeneratedIntColumn _calorie;
+  @override
+  GeneratedIntColumn get calorie => _calorie ??= _constructCalorie();
+  GeneratedIntColumn _constructCalorie() {
+    return GeneratedIntColumn(
+      'calorie',
       $tableName,
       false,
     );
@@ -368,7 +452,7 @@ class $FoodModelsTable extends FoodModels
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, portion, calorie, unit, source, barcode];
+      [id, name, portion, unit, serving, servingUnit, calorie, source, barcode];
   @override
   $FoodModelsTable get asDslTable => this;
   @override
@@ -395,17 +479,27 @@ class $FoodModelsTable extends FoodModels
     } else if (isInserting) {
       context.missing(_portionMeta);
     }
-    if (data.containsKey('calorie')) {
-      context.handle(_calorieMeta,
-          calorie.isAcceptableOrUnknown(data['calorie'], _calorieMeta));
-    } else if (isInserting) {
-      context.missing(_calorieMeta);
-    }
     if (data.containsKey('unit')) {
       context.handle(
           _unitMeta, unit.isAcceptableOrUnknown(data['unit'], _unitMeta));
     } else if (isInserting) {
       context.missing(_unitMeta);
+    }
+    if (data.containsKey('serving')) {
+      context.handle(_servingMeta,
+          serving.isAcceptableOrUnknown(data['serving'], _servingMeta));
+    }
+    if (data.containsKey('serving_unit')) {
+      context.handle(
+          _servingUnitMeta,
+          servingUnit.isAcceptableOrUnknown(
+              data['serving_unit'], _servingUnitMeta));
+    }
+    if (data.containsKey('calorie')) {
+      context.handle(_calorieMeta,
+          calorie.isAcceptableOrUnknown(data['calorie'], _calorieMeta));
+    } else if (isInserting) {
+      context.missing(_calorieMeta);
     }
     if (data.containsKey('source')) {
       context.handle(_sourceMeta,

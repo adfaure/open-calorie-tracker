@@ -26,7 +26,6 @@ import 'package:open_weight/database/db_helper.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:openfoodfacts/utils/ProductQueryConfigurations.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 scanAndAddProduct(BuildContext build) async {
@@ -52,14 +51,37 @@ scanAndAddProduct(BuildContext build) async {
       await OpenFoodAPIClient.getProduct(configurations, user: null);
 
   if (result.status != 1) {
-    print("Error retreiving the product : ${result.status}");
+    final snackBar = SnackBar(
+      content: Text('Error: ${result.statusVerbose}'),
+    );
+
+    // Find the Scaffold in the widget tree and use
+    // it to show a SnackBar.
+    Scaffold.of(build).showSnackBar(snackBar);
     return;
   }
   var product = result.product;
+  var unitQuantity = "g";
+  var servingUnit;
+  var servingSize;
 
   if (product.nutriments.energyKcal == null &&
       product.nutriments.energy == null) {
-    debugPrint("Error, no energy informations.");
+    final snackBar = SnackBar(
+      content: Text('Error: No energy informations for ${product.productName}'),
+    );
+
+    // Find the Scaffold in the widget tree and use
+    // it to show a SnackBar.
+    Scaffold.of(build).showSnackBar(snackBar);
+    return;
+  }
+
+  if (product.quantity != null) {
+    debugPrint("Serving Size: ${product.servingSize}");
+    // AFAIK Serving is in form of: "number unit"  for example "54 ml"
+    var splitedServing = product.servingSize.split(new RegExp('\\s+'));
+    unitQuantity = splitedServing[1];
   }
 
   if (product.nutriments.energyKcal == null) {
@@ -67,6 +89,16 @@ scanAndAddProduct(BuildContext build) async {
     product.nutriments.energyKcal = product.nutriments.energy * kjoulesToKcal;
     debugPrint(
         "No kcal information (Converting from Joules) ${product.nutriments.energy} -> ${product.nutriments.energyKcal}");
+  }
+
+  if (product.servingSize != null) {
+    debugPrint("Serving Size: ${product.servingSize}");
+    // AFAIK Serving is in form of: "number unit"  for example "54 ml"
+    var splitedServing = product.servingSize.split(new RegExp('\\s+'));
+    // We try parsing the serving value, tryParse returns null on failure
+    servingSize = int.tryParse(splitedServing[0]);
+    // if it did not fail, we get the unit value
+    if (servingSize != null) servingUnit = splitedServing[1];
   }
 
   var database = Provider.of<MyDatabase>(build, listen: false);
@@ -80,8 +112,10 @@ scanAndAddProduct(BuildContext build) async {
         name: product.productName,
         barcode: Value<String>(product.barcode),
         source: Value<String>("OpenFoodFacts"),
-        unit: "g",
-        portion: 100));
+        unit: unitQuantity,
+        portion: 100,
+        serving: Value<int>(servingSize),
+        servingUnit: Value<String>(servingUnit)));
   }
 }
 

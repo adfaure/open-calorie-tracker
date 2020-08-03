@@ -57,12 +57,14 @@ class SelectFood extends StatelessWidget {
         appBar: AppBar(
           title: Text(title),
           actions: <Widget>[
-            IconButton(
-              icon:  FaIcon(FontAwesomeIcons.barcode),
-              onPressed: () async {
-                scanAndAddProduct(build);
-              },
-            )
+            Builder(builder: (_context) {
+              return IconButton(
+                icon: FaIcon(FontAwesomeIcons.barcode),
+                onPressed: () async {
+                  scanAndAddProduct(_context);
+                },
+              );
+            })
           ],
         ),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {

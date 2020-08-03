@@ -41,9 +41,19 @@ class FoodModels extends Table {
   IntColumn get id => integer().autoIncrement()();
 
   TextColumn get name => text()();
+  // Portion should be 100...
   IntColumn get portion => integer()();
-  IntColumn get calorie => integer()();
+  // The unit ml, g.
   TextColumn get unit => text()();
+
+  // In some cases products are distributed as one unit, or several unit per box.
+  // This is the case for chocolate bar for instance.
+  IntColumn get serving => integer().nullable()();
+  TextColumn get servingUnit => text().nullable()();
+
+  IntColumn get calorie => integer()();
+
+  // The source of the data (idk exactly yet...)
   TextColumn get source => text().nullable()();
   // If set it is from openfoodfacts
   TextColumn get barcode => text().nullable()();
@@ -84,7 +94,7 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    // file.delete();
+    file.delete();
     debugPrint("$file");
     return VmDatabase(file);
   });
@@ -159,8 +169,7 @@ class MyDatabase extends _$MyDatabase {
   }
 
   Future getFoodModelByBarcode(String barcode) {
-    return (select(foodModels)
-          ..where((tbl) => tbl.barcode.equals(barcode)))
+    return (select(foodModels)..where((tbl) => tbl.barcode.equals(barcode)))
         .get();
   }
 
