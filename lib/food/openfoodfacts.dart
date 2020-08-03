@@ -57,9 +57,22 @@ scanAndAddProduct(BuildContext build) async {
   }
   var product = result.product;
 
+  if (product.nutriments.energyKcal == null &&
+      product.nutriments.energy == null) {
+    debugPrint("Error, no energy informations.");
+  }
+
+  if (product.nutriments.energyKcal == null) {
+    var kjoulesToKcal = 0.239006;
+    product.nutriments.energyKcal = product.nutriments.energy * kjoulesToKcal;
+    debugPrint(
+        "No kcal information (Converting from Joules) ${product.nutriments.energy} -> ${product.nutriments.energyKcal}");
+  }
+
   var database = Provider.of<MyDatabase>(build, listen: false);
   List<FoodModel> foodModel =
       await database.getFoodModelByBarcode(product.barcode);
+
   debugPrint("${foodModel.toString()}");
   if (foodModel.length == 0) {
     database.addFoodModel(FoodModelsCompanion.insert(
