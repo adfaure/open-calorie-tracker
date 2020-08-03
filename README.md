@@ -15,7 +15,7 @@ NIXPKGS_ALLOW_UNFREE=1 ns shell_test.nix
 Launch the android server: `adb start-server`.
 Then to run the application on your phone, use in a terminal: `flutter run`
 
-## Start emulator with android-studio
+## Start emulator with android-studio
 
 launch android-studio and configure+lauch an emulator.
 
