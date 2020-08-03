@@ -81,59 +81,74 @@ class _JournalViewState extends State<JournalView> {
         drawer: ApplicationDrawer(),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           /// StreamBuilder to handle the date selection.
-          return StreamBuilder(
-              stream: database.watchTotalDailyCalorie(this.date),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                var totalCalorie = snapshot.data;
-                if (totalCalorie == null) {
-                  totalCalorie = 0;
+          return Dismissible(
+              key: new ValueKey(date),
+              onDismissed: (direction) {
+                var newDate;
+                if (direction == DismissDirection.endToStart) {
+                  newDate = nextDay(this.date);
+                  _changeDate(newDate, database);
                 }
-                return Column(children: <Widget>[
-                  Material(
-                      elevation: 10,
-                      shadowColor: Colors.black,
-                      child: Column(children: <Widget>[
-                        DayCard(
-                          date: this.date,
-                          onTapMiddle: () => _selectDate(context, database),
-                          onTapNext: () async {
-                            var _nextDay = nextDay(this.date);
-                            _changeDate(_nextDay, database);
-                          },
-                          onTapPrevious: () async {
-                            var _previousDay = previousDay(this.date);
-                            _changeDate(_previousDay, database);
-                          },
-                        ),
-                        Divider(
-                          color: Colors.grey.shade700,
-                          height: 1,
-                        ),
-                        CalorieMeter(
-                          consumedCalorie: totalCalorie,
-                          date: this.date,
-                          objective: this.objective,
-                        ),
-                        Divider(
-                          color: Colors.grey.shade50,
-                          height: 1,
-                        ),
-                      ])),
-                  Expanded(
-                      child: Material(
-                          elevation: 5,
-                          color: appBgColor,
-                          child: ListView(
-                              shrinkWrap: true,
-                              children: [
-                                MealCard(title: "Breakfast", date: this.date),
-                                MealCard(title: "Lunch", date: this.date),
-                                MealCard(title: "Diner", date: this.date),
-                                MealCard(title: "Snacks", date: this.date)
-                              ],
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 8)))),
-                ]);
-              });
+                if (direction == DismissDirection.startToEnd) {
+                  newDate = previousDay(this.date);
+                  _changeDate(newDate, database);
+                }
+              },
+              child: StreamBuilder(
+                  stream: database.watchTotalDailyCalorie(this.date),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    var totalCalorie = snapshot.data;
+                    if (totalCalorie == null) {
+                      totalCalorie = 0;
+                    }
+                    return Column(children: <Widget>[
+                      Material(
+                          elevation: 10,
+                          shadowColor: Colors.black,
+                          child: Column(children: <Widget>[
+                            DayCard(
+                              date: this.date,
+                              onTapMiddle: () => _selectDate(context, database),
+                              onTapNext: () async {
+                                var _nextDay = nextDay(this.date);
+                                _changeDate(_nextDay, database);
+                              },
+                              onTapPrevious: () async {
+                                var _previousDay = previousDay(this.date);
+                                _changeDate(_previousDay, database);
+                              },
+                            ),
+                            Divider(
+                              color: Colors.grey.shade700,
+                              height: 1,
+                            ),
+                            CalorieMeter(
+                              consumedCalorie: totalCalorie,
+                              date: this.date,
+                              objective: this.objective,
+                            ),
+                            Divider(
+                              color: Colors.grey.shade50,
+                              height: 1,
+                            ),
+                          ])),
+                      Expanded(
+                          child: Material(
+                              elevation: 5,
+                              color: appBgColor,
+                              child: ListView(
+                                  shrinkWrap: true,
+                                  children: [
+                                    MealCard(
+                                        title: "Breakfast", date: this.date),
+                                    MealCard(title: "Lunch", date: this.date),
+                                    MealCard(title: "Diner", date: this.date),
+                                    MealCard(title: "Snacks", date: this.date)
+                                  ],
+                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 8)))),
+                    ]);
+                  }));
         }));
   }
 
