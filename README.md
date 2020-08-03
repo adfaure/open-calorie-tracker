@@ -1,6 +1,12 @@
 # Open Calorie Tracker
 
-![Screenshot](img/journal_demo.jpg)
+OCT is a similar to my any calorie tracking applications.
+You can enter any food you eat, and get a daily summary of your calories.
+It is possible to create foods that you can reuse when you need it, or directly scan the barcode of your products.
+
+**All your data stays on your phone**, nothing is send to a tier server.
+
+![Screenshot](./img/journal_demo.jpg)
 
 # Running the application on Nixos
 
