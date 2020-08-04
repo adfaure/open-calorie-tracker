@@ -70,7 +70,9 @@ class MealCard extends StatelessWidget {
                   onPressed: () {
                     _navigateAddFoodToMeal(context);
                   }))),
-      Divider(height: 1,),
+      Divider(
+        height: 1,
+      ),
       Consumer<MyDatabase>(builder: (builder, database, child) {
         return StreamBuilder(
             initialData: List<ConsumedFood>(),

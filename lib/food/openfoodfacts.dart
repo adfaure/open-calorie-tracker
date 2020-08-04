@@ -80,7 +80,7 @@ scanAndAddProduct(BuildContext build) async {
   if (product.quantity != null) {
     debugPrint("Serving Size: ${product.servingSize}");
     // AFAIK Serving is in form of: "number unit"  for example "54 ml"
-    var splitedServing = product.servingSize.split(new RegExp('\\s+'));
+    var splitedServing = product.quantity.split(new RegExp('\\s+'));
     unitQuantity = splitedServing[1];
   }
 

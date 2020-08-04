@@ -30,47 +30,42 @@ import '../database/db_helper.dart';
 
 class JournalView extends StatefulWidget {
   final String title;
+  // Arbitrary date in the past.
+  final january2010 = DateTime(2020, 1, 1);
 
   JournalView({Key key, this.title}) : super(key: key);
 
   @override
-  _JournalViewState createState() => _JournalViewState(today());
+  _JournalViewState createState() => _JournalViewState();
 }
 
 class _JournalViewState extends State<JournalView> {
   var objectiveSubcription;
-  var date;
-  var inDatabase;
-  var objective;
   var objectiveModel;
+  var objective;
+  var dateIndex;
+  PageController _pageController;
 
-  _JournalViewState(this.date);
+  _JournalViewState();
 
   @override
   void initState() {
     this.objective = 0;
 
+    var idx = today().difference(widget.january2010).inDays + 1;
+    widget.january2010.add(Duration(days: idx));
+
     // Finaly, if the date has a record of objective for this date, we use this one in priority
     var objModel = Provider.of<ObjectiveModel>(context, listen: false);
-    objModel.changeDate(this.date);
 
     this.objective = objModel.getObjective();
     this.objectiveSubcription = objModel.getStream().listen(_listenObjective);
 
+    this.dateIndex = idx;
+    _pageController = PageController(initialPage: this.dateIndex, keepPage: true, viewportFraction: 0.96);
     super.initState();
   }
 
-  // const JournalView({Key key, this.allDailyFood}) : super(key: key);
-
-  // var database = Provider.of<MyDatabase>(context, listen: false);
-  // List<ConsumedFoodsWitFood> totalFood =
-  //     await database.getTotalDailyCalories(today());
-
-  // var total = totalFood.fold(
-  //     0,
-  //     (previousValue, element) =>
-  //         previousValue + element.consumedCalories());
-  // debugPrint("total: $total");
   @override
   Widget build(BuildContext build) {
     return Scaffold(
@@ -81,74 +76,24 @@ class _JournalViewState extends State<JournalView> {
         drawer: ApplicationDrawer(),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           /// StreamBuilder to handle the date selection.
-          return Dismissible(
-              key: new ValueKey(date),
-              onDismissed: (direction) {
-                var newDate;
-                if (direction == DismissDirection.endToStart) {
-                  newDate = nextDay(this.date);
-                  _changeDate(newDate, database);
-                }
-                if (direction == DismissDirection.startToEnd) {
-                  newDate = previousDay(this.date);
-                  _changeDate(newDate, database);
-                }
-              },
-              child: StreamBuilder(
-                  stream: database.watchTotalDailyCalorie(this.date),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                    var totalCalorie = snapshot.data;
-                    if (totalCalorie == null) {
-                      totalCalorie = 0;
-                    }
-                    return Column(children: <Widget>[
-                      Material(
-                          elevation: 10,
-                          shadowColor: Colors.black,
-                          child: Column(children: <Widget>[
-                            DayCard(
-                              date: this.date,
-                              onTapMiddle: () => _selectDate(context, database),
-                              onTapNext: () async {
-                                var _nextDay = nextDay(this.date);
-                                _changeDate(_nextDay, database);
-                              },
-                              onTapPrevious: () async {
-                                var _previousDay = previousDay(this.date);
-                                _changeDate(_previousDay, database);
-                              },
-                            ),
-                            Divider(
-                              color: Colors.grey.shade700,
-                              height: 1,
-                            ),
-                            CalorieMeter(
-                              consumedCalorie: totalCalorie,
-                              date: this.date,
-                              objective: this.objective,
-                            ),
-                            Divider(
-                              color: Colors.grey.shade50,
-                              height: 1,
-                            ),
-                          ])),
-                      Expanded(
-                          child: Material(
-                              elevation: 5,
-                              color: appBgColor,
-                              child: ListView(
-                                  shrinkWrap: true,
-                                  children: [
-                                    MealCard(
-                                        title: "Breakfast", date: this.date),
-                                    MealCard(title: "Lunch", date: this.date),
-                                    MealCard(title: "Diner", date: this.date),
-                                    MealCard(title: "Snacks", date: this.date)
-                                  ],
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 8)))),
-                    ]);
-                  }));
+          return PageView.builder(
+              controller: _pageController,
+              onPageChanged: (newIdx) {
+                this.setState(() {
+                  this.dateIndex = newIdx;
+                });
+              }, 
+              itemBuilder: (context, itemIndex) {
+                debugPrint("item: $itemIndex");
+                var newDate =
+                    widget.january2010.add(Duration(days: this.dateIndex));
+                return JournalPage(
+                    key: Key(newDate.toString()),
+                    objective: this.objective,
+                    date: newDate,
+                    dateCallback: _changeDate);
+              });
+          // key: new ValueKey(this.date));
         }));
   }
 
@@ -157,6 +102,8 @@ class _JournalViewState extends State<JournalView> {
     if (this.objectiveSubcription != null) {
       this.objectiveSubcription.cancel();
     }
+    this.objectiveSubcription = null;
+    this.objectiveModel = null;
     super.dispose();
   }
 
@@ -171,17 +118,90 @@ class _JournalViewState extends State<JournalView> {
   _changeDate(DateTime newDate, MyDatabase database) async {
     var objectiveModel = Provider.of<ObjectiveModel>(context, listen: false);
     objectiveModel.changeDate(newDate);
-    this.setState(() {
-      this.date = newDate;
+
+    var newIdx = newDate.difference(widget.january2010).inDays + 1;
+    this._pageController.animateToPage(newIdx,
+        curve: Curves.ease, duration: Duration(seconds: 1));
+  }
+}
+
+class JournalPage extends StatelessWidget {
+  final DateTime date;
+  final int objective;
+  var dateCallback;
+
+  JournalPage(
+      {Key key,
+      @required this.date,
+      @required this.objective,
+      this.dateCallback})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<MyDatabase>(builder: (context, database, child) {
+      return StreamBuilder(
+          stream: database.watchTotalDailyCalorie(date),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            var totalCalorie = snapshot.data;
+            if (totalCalorie == null) {
+              totalCalorie = 0;
+            }
+            return Column(children: <Widget>[
+              Material(
+                  elevation: 10,
+                  shadowColor: Colors.black,
+                  child: Column(children: <Widget>[
+                    DayCard(
+                      date: date,
+                      onTapMiddle: () => _selectDate(context, database, date),
+                      onTapNext: () async {
+                        var _nextDay = nextDay(date);
+                        dateCallback(_nextDay, database);
+                      },
+                      onTapPrevious: () async {
+                        var _previousDay = previousDay(date);
+                        dateCallback(_previousDay, database);
+                      },
+                    ),
+                    Divider(
+                      color: Colors.grey.shade700,
+                      height: 1,
+                    ),
+                    CalorieMeter(
+                      consumedCalorie: totalCalorie,
+                      date: date,
+                      objective: this.objective,
+                    ),
+                    Divider(
+                      color: Colors.grey.shade50,
+                      height: 1,
+                    ),
+                  ])),
+              Expanded(
+                  child: Material(
+                      elevation: 5,
+                      color: appBgColor,
+                      child: ListView(
+                          shrinkWrap: true,
+                          children: [
+                            MealCard(title: "Breakfast", date: date),
+                            MealCard(title: "Lunch", date: date),
+                            MealCard(title: "Diner", date: date),
+                            MealCard(title: "Snacks", date: date)
+                          ],
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 8)))),
+            ]);
+          });
     });
   }
 
-  _selectDate(BuildContext context, MyDatabase database) async {
+  _selectDate(BuildContext context, MyDatabase database, DateTime date) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: this.date,
+        initialDate: today(),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != this.date) _changeDate(picked, database);
+    if (picked != null && picked != date) dateCallback(picked, database);
   }
 }
