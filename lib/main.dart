@@ -41,13 +41,7 @@ Future<void> main() async {
         Provider<MyDatabase>(
             create: (context) => database,
             dispose: (context, db) => db.close()),
-        Provider<ObjectiveModel>(
-            create: (context) => ObjectiveModel(
-                objective: 0,
-                date: today(),
-                database: database,
-                prefs: sharedPrefs),
-            dispose: (context, objModel) => objModel.close())
+        Provider<SharedPreferences>(create: (context) => sharedPrefs)
       ],
       child: MyApp(),
     ),
@@ -58,7 +52,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<int, Color> color = {
-      50:  Color.fromRGBO(226, 28, 33, .1),
+      50: Color.fromRGBO(226, 28, 33, .1),
       100: Color.fromRGBO(226, 28, 33, .2),
       200: Color.fromRGBO(226, 28, 33, .3),
       300: Color.fromRGBO(226, 28, 33, .4),

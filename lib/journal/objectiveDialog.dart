@@ -20,7 +20,8 @@ import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 
 /// Show dialog asking for the number of portion to add from selected food.
-setObjectiveWithDial(BuildContext context) async {
+setObjectiveWithDial(
+    BuildContext context, ObjectiveModel objectiveModel) async {
   final _dialogKey = GlobalKey<FormState>();
 
   // Portion controller
@@ -82,7 +83,6 @@ setObjectiveWithDial(BuildContext context) async {
         );
       }).then((newObjective) async {
     if (newObjective != null) {
-      var objectiveModel = Provider.of<ObjectiveModel>(context, listen: false);
       objectiveModel.updateSharedPrefs(newObjective);
     }
   });

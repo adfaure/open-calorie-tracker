@@ -38,21 +38,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// 5. If the current date has no objective entry, only the user prefs is updated.
 class ObjectiveModel {
   MyDatabase database;
-  DateTime date;
   int objective;
   SharedPreferences prefs;
   bool inDb;
   StreamSubscription sub;
 
+  final DateTime date;
+
   ObjectiveModel(
       {@required this.objective,
-      @required this.date,
       @required this.database,
+      @required this.date,
       @required this.prefs}) {
     var prefObjective = prefs.getInt("objective");
-    if (prefObjective != null) {
-      this.objective = prefObjective;
-    }
+    this.objective = prefObjective ?? 0;
+
+    database.getObjective(date).then((obj) {
+      if (obj != null) {
+        this.objective = obj.objective;
+        this.streamCtlr.add(obj.objective);
+      }
+    });
+
     streamCtlr.add(objective);
   }
 
@@ -65,8 +72,8 @@ class ObjectiveModel {
     Objective obj = await database.getObjective(today());
     if (obj != null) {
       debugPrint("Update obj entry for today");
-      database
-          .createOrUpdateObjective(Objective(date: today(), objective: newValue));
+      database.createOrUpdateObjective(
+          Objective(date: today(), objective: newValue));
     }
   }
 
@@ -76,31 +83,12 @@ class ObjectiveModel {
   }
 
   void addCurrentToDatabase() async {
-    Objective obj = await database.getObjective(date);
-    if (obj == null)
-      database
-          .createOrUpdateObjective(Objective(date: date, objective: objective));
-  }
-
-  void changeDate(DateTime date) async {
-    this.date = date;
-    if (this.sub != null) this.sub.cancel();
-
-    Objective obj = await database.getObjective(date);
-
-    if (obj != null) {
-      changeObjective(obj.objective);
-      this.sub = database.watchObjective(date).listen((newValue) {
-        changeObjective(newValue.objective);
-      });
-    } else {
-      int intObj = prefs.getInt("objective");
-      changeObjective(intObj);
-    }
+    database.createOrUpdateObjective(
+        Objective(date: this.date, objective: objective));
   }
 
   int getObjective() {
-    return this.objective;
+    return objective;
   }
 
   Stream<int> getStream() {

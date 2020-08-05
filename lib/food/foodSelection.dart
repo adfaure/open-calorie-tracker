@@ -25,9 +25,8 @@ import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
 import 'package:open_weight/food/openfoodfacts.dart';
 import 'package:open_weight/models/objective.dart';
-import 'package:openfoodfacts/openfoodfacts.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../database/db_helper.dart';
 
@@ -173,6 +172,8 @@ class SelectFood extends StatelessWidget {
         }).then((quantity) async {
       if (quantity != null) {
         var database = Provider.of<MyDatabase>(context, listen: false);
+        var prefs = Provider.of<SharedPreferences>(context, listen: false);
+
         database.addConsumedFood(ConsumedFoodsCompanion.insert(
             calorie: selectedFood.calorie,
             name: selectedFood.name,
@@ -183,8 +184,14 @@ class SelectFood extends StatelessWidget {
             date: this.date));
 
         Navigator.of(context).pop();
-        var objModel = Provider.of<ObjectiveModel>(context, listen: false);
-        objModel.addCurrentToDatabase();
+
+        var objValue;
+        Objective obj = await database.getObjective(date);
+        if (obj == null) objValue = prefs.getInt("objective") ?? 0;
+        objValue = obj.objective;
+
+        database.createOrUpdateObjective(
+            Objective(date: this.date, objective: objValue));
       }
     });
   }

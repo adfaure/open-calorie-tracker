@@ -18,8 +18,10 @@
 import 'package:flutter/material.dart';
 import 'package:open_weight/common/helpers.dart';
 import 'package:open_weight/common/ui.dart';
+import 'package:open_weight/database/db_helper.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'journal/objectiveDialog.dart';
 
@@ -33,22 +35,21 @@ class UserView extends StatelessWidget {
         appBar: AppBar(
           title: Text("Personal informations"),
         ),
-        body: Consumer<ObjectiveModel>(builder: (builder, objModel, child) {
+        body: Consumer2<MyDatabase, SharedPreferences>(
+            builder: (builder, database, prefs, child) {
           return ListView(
-            children: <Widget>[_objectiveRow(context, objModel)],
+            children: <Widget>[_objectiveRow(context, prefs, database)],
           );
         }));
   }
 
-  _objectiveRow(BuildContext context, ObjectiveModel objModel) {
-    // Changing the date for today's date.
-    // This should prevent users to change the ojective of a oldday by accessing to this menu.
-    // If the objective is change using this menu, 
-    // the objective for the today (if already in the database) and in the shardePrefs is updated.
-    objModel.changeDate(today());
+  _objectiveRow(
+      BuildContext context, SharedPreferences prefs, MyDatabase database) {
+    var objModel = ObjectiveModel(
+        database: database, prefs: prefs, objective: 0, date: today());
 
     return GestureDetector(
-        onTap: () => {setObjectiveWithDial(context)},
+        onTap: () => {setObjectiveWithDial(context, objModel)},
         child: Card(
             child: Padding(
           padding: EdgeInsets.all(15),
@@ -64,7 +65,7 @@ class UserView extends StatelessWidget {
               StreamBuilder(
                   stream: objModel.getStream(),
                   initialData: objModel.getObjective(),
-                  builder: (BuildContext context,  AsyncSnapshot<int> snapshot) {
+                  builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                     debugPrint(snapshot.toString());
                     return Text(
                       snapshot.data.toString(),
