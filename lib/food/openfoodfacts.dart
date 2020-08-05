@@ -78,10 +78,16 @@ scanAndAddProduct(BuildContext build) async {
   }
 
   if (product.quantity != null) {
-    debugPrint("Serving Size: ${product.servingSize}");
+    debugPrint("Qantity: ${product.quantity}");
     // AFAIK Serving is in form of: "number unit"  for example "54 ml"
     var splitedServing = product.quantity.split(new RegExp('\\s+'));
-    unitQuantity = splitedServing[1];
+
+    // TODO: the quantity has inconsistent formating
+    // Here some anomalies: (barcode: 3111950215400)
+    // The second value should be the unit
+    if (splitedServing.length > 2) {
+      unitQuantity = splitedServing[1];
+    }
   }
 
   if (product.nutriments.energyKcal == null) {
