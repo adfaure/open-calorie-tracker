@@ -18,7 +18,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
-import 'package:open_weight/food/foodCard.dart';
 import 'package:provider/provider.dart';
 
 /// Focus on a modifiable food entry.
@@ -35,9 +34,74 @@ class FoodView extends StatelessWidget {
           title: Text(food.name),
         ),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
-          return FoodCard(
-            food: food,
-          );
+          return Form(
+              child: Container(
+                  color: Colors.white,
+                  child: ListView(
+                    children: <Widget>[
+                      _buildEditableRow("Name", this.food.name),
+                      _buildEditableRow("Calorie", this.food.calorie),
+                      _buildEditableRow("Portion", this.food.portion),
+                      _buildEditableRow("Unit", this.food.unit),
+                      _buildEditableRow("Serving", this.food.serving),
+                      _buildEditableRow("Serving unit", this.food.servingUnit),
+                      _buildRow("Source", this.food.source),
+                      _buildRow("barcode", this.food.barcode),
+                    ],
+                  )));
         }));
+  }
+
+  _buildRow(name, value) {
+    return Card(
+      elevation: 1,
+      child: Padding(
+          padding: EdgeInsets.all(15),
+          child: Row(
+            children: <Widget>[
+              Text(
+                name,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                  child: Text(
+                "$value",
+                textAlign: TextAlign.right,
+              ))
+            ],
+          )),
+    );
+  }
+
+  _buildEditableRow(name, value) {
+    return Card(
+      elevation: 1,
+      child: Padding(
+          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+          child: Row(
+            children: <Widget>[
+              Text(
+                name,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                  child: TextFormField(
+                textAlign: TextAlign.right,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(0),
+                ),
+                controller: TextEditingController(text: "$value"),
+              ))
+            ],
+          )),
+    );
   }
 }

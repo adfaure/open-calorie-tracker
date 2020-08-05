@@ -47,7 +47,6 @@ class UserView extends StatelessWidget {
       BuildContext context, SharedPreferences prefs, MyDatabase database) {
     var objModel = ObjectiveModel(
         database: database, prefs: prefs, objective: 0, date: today());
-
     return GestureDetector(
         onTap: () => {setObjectiveWithDial(context, objModel)},
         child: Card(
@@ -55,9 +54,7 @@ class UserView extends StatelessWidget {
           padding: EdgeInsets.all(15),
           child: Row(
             children: <Widget>[
-              Text(
-                "Objective",
-                textScaleFactor: this.scaleFactor,
+              Text("Objective", 
               ),
               Expanded(
                 child: Container(),
