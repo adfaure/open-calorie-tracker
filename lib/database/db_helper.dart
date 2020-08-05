@@ -148,7 +148,7 @@ class MyDatabase extends _$MyDatabase {
         return row;
       }).fold(0, (previousValue, consumedFood) {
         var caloriesPerUnit = consumedFood.calorie / consumedFood.portion;
-        var total = consumedFood.quantity * caloriesPerUnit;
+        var total = previousValue + (consumedFood.quantity * caloriesPerUnit);
         return total.round();
       });
     });
@@ -162,7 +162,7 @@ class MyDatabase extends _$MyDatabase {
         return row;
       }).fold(0, (previousValue, consumedFood) {
         var caloriesPerUnit = consumedFood.calorie / consumedFood.portion;
-        var total = consumedFood.quantity * caloriesPerUnit;
+        var total = previousValue + (consumedFood.quantity * caloriesPerUnit);
         return total.round();
       });
     });

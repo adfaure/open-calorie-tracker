@@ -143,6 +143,7 @@ class JournalPage extends StatelessWidget {
       return StreamBuilder(
           stream: database.watchTotalDailyCalorie(date),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            debugPrint("total calorie: ${snapshot.data.toString()}");
             var totalCalorie = snapshot.data;
             if (totalCalorie == null) {
               totalCalorie = 0;
