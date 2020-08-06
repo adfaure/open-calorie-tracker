@@ -119,6 +119,11 @@ class MyDatabase extends _$MyDatabase {
     return into(foodModels).insert(entry);
   }
 
+  // returns the generated id
+  Future<int> upsertFoodModel(FoodModelsCompanion entry) {
+    return into(foodModels).insertOnConflictUpdate(entry);
+  }
+
   Future<int> addConsumedFood(ConsumedFoodsCompanion entry) {
     return into(consumedFoods).insert(entry);
   }
