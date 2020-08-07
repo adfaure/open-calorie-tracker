@@ -89,21 +89,26 @@ class MealCard extends StatelessWidget {
                 itemCount: count,
                 itemBuilder: (_, index) {
                   // Passing by a builder so one can display a snackbar after the dialog ended.
-                  return GestureDetector(
-                      onTap: () {
-                        _editConsumedFood(context, snapshot.data[index]);
+                  return Dismissible(
+                      key: Key(snapshot.data[index].id.toString()),
+                      onDismissed: (direction) {
+                        database.deleteConsumedFood(snapshot.data[index]);
                       },
-                      child: Container(
-                          color: Colors.white,
-                          child: ListTile(
-                            dense: true,
-                            title: Text(snapshot.data[index].name),
-                            trailing: Text(formater.format(
-                                    consumedCalories(snapshot.data[index])) +
-                                " kcal"),
-                            subtitle: Text(
-                                "${snapshot.data[index].quantity.toString()} g"),
-                          )));
+                      child: GestureDetector(
+                          onTap: () {
+                            _editConsumedFood(context, snapshot.data[index]);
+                          },
+                          child: Container(
+                              color: Colors.white,
+                              child: ListTile(
+                                dense: true,
+                                title: Text(snapshot.data[index].name),
+                                trailing: Text(formater.format(consumedCalories(
+                                        snapshot.data[index])) +
+                                    " kcal"),
+                                subtitle: Text(
+                                    "${snapshot.data[index].quantity.toString()} g"),
+                              ))));
                 },
               );
             });
@@ -120,7 +125,7 @@ class MealCard extends StatelessWidget {
     );
   }
 
-    _editConsumedFood(BuildContext context, ConsumedFood food) async {
+  _editConsumedFood(BuildContext context, ConsumedFood food) async {
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -129,5 +134,4 @@ class MealCard extends StatelessWidget {
               )),
     );
   }
-
 }

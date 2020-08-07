@@ -157,6 +157,10 @@ class MyDatabase extends _$MyDatabase {
     return delete(foodModels).delete(entry);
   }
 
+  Future deleteConsumedFood(ConsumedFood entry) {
+    return delete(consumedFoods).delete(entry);
+  }
+
   Future updtateFood(FoodModel entry) {
     return update(foodModels).replace(entry);
   }
