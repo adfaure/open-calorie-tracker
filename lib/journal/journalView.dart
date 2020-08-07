@@ -31,7 +31,6 @@ class JournalView extends StatefulWidget {
   final String title;
   // Arbitrary date in the past.
   final january2010 = DateTime(2020, 1, 1);
-
   JournalView({Key key, this.title}) : super(key: key);
 
   @override

@@ -61,10 +61,10 @@ class FoodModels extends Table {
 
 class ConsumedFoods extends Table {
   IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text()();
   DateTimeColumn get date => dateTime()();
   IntColumn get quantity => integer()();
   TextColumn get mealType => text()();
-  TextColumn get name => text()();
   IntColumn get portion => integer()();
   IntColumn get calorie => integer()();
   TextColumn get unit => text()();
@@ -124,6 +124,10 @@ class MyDatabase extends _$MyDatabase {
     return into(foodModels).insertOnConflictUpdate(entry);
   }
 
+  Future upsertConsumedFood(ConsumedFoodsCompanion entry) {
+    return update(consumedFoods).replace(entry);
+  }
+
   Future<int> addConsumedFood(ConsumedFoodsCompanion entry) {
     return into(consumedFoods).insert(entry);
   }
@@ -142,6 +146,25 @@ class MyDatabase extends _$MyDatabase {
     return (select(consumedFoods)
           ..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
         .watch();
+  }
+
+  Future getFoodModelByBarcode(String barcode) {
+    return (select(foodModels)..where((tbl) => tbl.barcode.equals(barcode)))
+        .get();
+  }
+
+  Future deleteFoodModel(FoodModel entry) {
+    return delete(foodModels).delete(entry);
+  }
+
+  Future updtateFood(FoodModel entry) {
+    return update(foodModels).replace(entry);
+  }
+
+  // Because we want to have only one objective per day (at most).
+  // On inserting, if the date already exists, we replace the previous row.
+  Future<void> createOrUpdateObjective(Objective entity) {
+    return into(objectives).insertOnConflictUpdate(entity);
   }
 
   watchTotalDailyCalorieMeal(DateTime selectDate, String meal) {
@@ -171,25 +194,6 @@ class MyDatabase extends _$MyDatabase {
         return total.round();
       });
     });
-  }
-
-  Future getFoodModelByBarcode(String barcode) {
-    return (select(foodModels)..where((tbl) => tbl.barcode.equals(barcode)))
-        .get();
-  }
-
-  Future deleteFoodModel(FoodModel entry) {
-    return delete(foodModels).delete(entry);
-  }
-
-  Future updtateFood(FoodModel entry) {
-    return update(foodModels).replace(entry);
-  }
-
-  // Because we want to have only one objective per day (at most).
-  // On inserting, if the date already exists, we replace the previous row.
-  Future<void> createOrUpdateObjective(Objective entity) {
-    return into(objectives).insertOnConflictUpdate(entity);
   }
 
   /// It should not be possible to modify an objectives, it is only possible to add new objectives.

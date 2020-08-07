@@ -25,6 +25,7 @@ import 'package:open_weight/common/ui.dart';
 
 //internal dependencies
 import 'package:open_weight/database/db_helper.dart';
+import 'package:open_weight/food/consumedFoodView.dart';
 import 'package:open_weight/food/foodSelection.dart';
 import 'package:provider/provider.dart';
 
@@ -88,17 +89,21 @@ class MealCard extends StatelessWidget {
                 itemCount: count,
                 itemBuilder: (_, index) {
                   // Passing by a builder so one can display a snackbar after the dialog ended.
-                  return Container(
-                      color: Colors.white,
-                      child: ListTile(
-                        dense: true,
-                        title: Text(snapshot.data[index].name),
-                        trailing: Text(formater.format(
-                                consumedCalories(snapshot.data[index])) +
-                            " kcal"),
-                        subtitle: Text(
-                            "${snapshot.data[index].quantity.toString()} g"),
-                      ));
+                  return GestureDetector(
+                      onTap: () {
+                        _editConsumedFood(context, snapshot.data[index]);
+                      },
+                      child: Container(
+                          color: Colors.white,
+                          child: ListTile(
+                            dense: true,
+                            title: Text(snapshot.data[index].name),
+                            trailing: Text(formater.format(
+                                    consumedCalories(snapshot.data[index])) +
+                                " kcal"),
+                            subtitle: Text(
+                                "${snapshot.data[index].quantity.toString()} g"),
+                          )));
                 },
               );
             });
@@ -114,4 +119,15 @@ class MealCard extends StatelessWidget {
               SelectFood(title: title, mealType: title, date: this.date)),
     );
   }
+
+    _editConsumedFood(BuildContext context, ConsumedFood food) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ConsumedFoodView(
+                food: food,
+              )),
+    );
+  }
+
 }
