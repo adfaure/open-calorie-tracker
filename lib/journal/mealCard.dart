@@ -15,6 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:moor/moor.dart' hide Column;
 import 'package:open_weight/common/columnBuilder.dart';
@@ -41,79 +42,103 @@ class MealCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Card(
-          margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
-          child: ListTile(
-              title: Container(child: Text(title)),
-              subtitle:
-                  Consumer<MyDatabase>(builder: (builder, database, child) {
-                return StreamBuilder(
-                    stream:
-                        database.watchTotalDailyCalorieMeal(this.date, title),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot) {
-                      var _totalCalorie = 0;
-                      if (snapshot.data != null) {
-                        // Total calorie meal
-                        _totalCalorie = snapshot.data;
-                      }
-                      return Text(
-                          "Total: ${formater.format(_totalCalorie)} kcal");
-                    });
-              }),
-              trailing: IconButton(
-                  icon: Icon(
-                    Icons.add_circle,
-                    color: redTheme,
-                    size: 35,
-                  ),
-                  onPressed: () {
-                    _navigateAddFoodToMeal(context);
-                  }))),
-      Divider(
-        height: 1,
-      ),
-      Consumer<MyDatabase>(builder: (builder, database, child) {
-        return StreamBuilder(
-            initialData: List<ConsumedFood>(),
-            stream: database.watchEntriesInDailyFoods(this.date, title),
-            builder: (BuildContext context,
-                AsyncSnapshot<List<ConsumedFood>> snapshot) {
-              var count = 0;
-              if (snapshot.data != null) {
-                // Number of entry
-                count = snapshot.data.length;
-              }
-              return CustomColumnBuilder(
-                itemCount: count,
-                itemBuilder: (_, index) {
-                  // Passing by a builder so one can display a snackbar after the dialog ended.
-                  return Dismissible(
-                      key: Key(snapshot.data[index].id.toString()),
-                      onDismissed: (direction) {
-                        database.deleteConsumedFood(snapshot.data[index]);
-                      },
-                      child: GestureDetector(
-                          onTap: () {
-                            _editConsumedFood(context, snapshot.data[index]);
-                          },
-                          child: Container(
-                              color: Colors.white,
-                              child: ListTile(
-                                dense: true,
-                                title: Text(snapshot.data[index].name),
-                                trailing: Text(formater.format(consumedCalories(
-                                        snapshot.data[index])) +
-                                    " kcal"),
-                                subtitle: Text(
-                                    "${snapshot.data[index].quantity.toString()} g"),
-                              ))));
-                },
-              );
-            });
-      }),
-    ]);
+    return Consumer<MyDatabase>(builder: (contex, database, child) {
+      return DragTarget<ConsumedFood>(onAccept: (droped) {
+        database.updateConsumedFoodMealType(droped.id, this.title);
+      }, builder: (context, l1, l2) {
+        return Column(children: [
+          Card(
+              margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
+              child: ListTile(
+                  title: Container(child: Text(title)),
+                  subtitle:
+                      Consumer<MyDatabase>(builder: (builder, database, child) {
+                    return StreamBuilder(
+                        stream: database.watchTotalDailyCalorieMeal(
+                            this.date, title),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          var _totalCalorie = 0;
+                          if (snapshot.data != null) {
+                            // Total calorie meal
+                            _totalCalorie = snapshot.data;
+                          }
+                          return Text(
+                              "Total: ${formater.format(_totalCalorie)} kcal");
+                        });
+                  }),
+                  trailing: IconButton(
+                      icon: Icon(
+                        Icons.add_circle,
+                        color: redTheme,
+                        size: 35,
+                      ),
+                      onPressed: () {
+                        _navigateAddFoodToMeal(context);
+                      }))),
+          Divider(
+            height: 1,
+          ),
+          Consumer<MyDatabase>(builder: (builder, database, child) {
+            return StreamBuilder(
+                initialData: List<ConsumedFood>(),
+                stream: database.watchEntriesInDailyFoods(this.date, title),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<ConsumedFood>> snapshot) {
+                  var count = 0;
+                  if (snapshot.data != null) {
+                    // Number of entry
+                    count = snapshot.data.length;
+                  }
+                  return CustomColumnBuilder(
+                    itemCount: count,
+                    itemBuilder: (_, index) {
+                      // Passing by a builder so one can display a snackbar after the dialog ended.
+                      return Draggable(
+                          data: snapshot.data[index],
+                          // affinity: Axis.vertical,
+                          childWhenDragging: Container(),
+                          dragAnchor: DragAnchor.child,
+                          feedback: _buildDragFood(snapshot.data[index]),
+                          child: Dismissible(
+                              key: Key(snapshot.data[index].id.toString()),
+                              onDismissed: (direction) {
+                                database
+                                    .deleteConsumedFood(snapshot.data[index]);
+                              },
+                              child: _buildListTile(
+                                  context, snapshot.data[index])));
+                    },
+                  );
+                });
+          }),
+        ]);
+      });
+    });
+  }
+
+  _buildDragFood(data) {
+    return Card(
+        child: Container(
+      margin: EdgeInsets.all(5),
+      padding: EdgeInsets.all(5),
+      child: Text(data.name),
+    ));
+  }
+
+  _buildListTile(BuildContext context, data) {
+    return GestureDetector(
+        onTap: () {
+          _editConsumedFood(context, data);
+        },
+        child: Container(
+            color: Colors.white,
+            child: ListTile(
+              dense: true,
+              title: Text(data.name),
+              trailing: Text(formater.format(consumedCalories(data)) + " kcal"),
+              subtitle: Text("${data.quantity.toString()} g"),
+            )));
   }
 
   _navigateAddFoodToMeal(BuildContext context) async {

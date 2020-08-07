@@ -128,6 +128,11 @@ class MyDatabase extends _$MyDatabase {
     return update(consumedFoods).replace(entry);
   }
 
+  Future updateConsumedFoodMealType(int id, String mealType) {
+    return (update(consumedFoods)..where((t) => t.id.equals(id)))
+        .write(ConsumedFoodsCompanion(mealType: Value(mealType)));
+  }
+
   Future<int> addConsumedFood(ConsumedFoodsCompanion entry) {
     return into(consumedFoods).insert(entry);
   }
