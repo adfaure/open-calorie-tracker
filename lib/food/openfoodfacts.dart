@@ -16,12 +16,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:moor/moor.dart';
 import 'package:open_weight/common/ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
@@ -46,13 +48,26 @@ scanAndAddProduct(BuildContext build) async {
         ProductField.NUTRIMENTS,
         ProductField.NUTRIMENT_ENERGY_UNIT,
       ]);
+  ProductResult result;
+  try {
+    result = await OpenFoodAPIClient.getProduct(configurations, user: null);
+  } on SocketException catch (error) {
+    debugPrint("$error");
+    var snackBar = SnackBar(
+      content:
+          Text('Network Error: Have you checked your internet connection?'),
+    );
+    debugPrint("error: $error");
 
-  ProductResult result =
-      await OpenFoodAPIClient.getProduct(configurations, user: null);
+    // Find the Scaffold in the widget tree and use
+    // it to show a SnackBar.
+    Scaffold.of(build).showSnackBar(snackBar);
+    return;
+  }
 
   if (result.status != 1) {
     final snackBar = SnackBar(
-      content: Text('Error: ${result.statusVerbose}'),
+      content: Text('Error: ${result.statusVerbose}.'),
     );
 
     // Find the Scaffold in the widget tree and use
