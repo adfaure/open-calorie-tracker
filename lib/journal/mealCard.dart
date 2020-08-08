@@ -22,12 +22,13 @@ import 'package:open_weight/common/columnBuilder.dart';
 import 'package:intl/intl.dart';
 import 'package:open_weight/common/helpers.dart';
 import 'package:open_weight/common/ui.dart';
-
-//internal dependencies
 import 'package:open_weight/database/db_helper.dart';
-import 'package:open_weight/food/consumedFoodView.dart';
 import 'package:open_weight/food/foodSelection.dart';
 import 'package:provider/provider.dart';
+
+import 'consumedFoodView.dart';
+
+//internal dependencies
 
 class MealCard extends StatelessWidget {
   final date;

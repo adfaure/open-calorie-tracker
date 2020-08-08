@@ -21,25 +21,19 @@ import 'package:moor_db_viewer/moor_db_viewer.dart';
 import 'package:open_weight/about.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 
 import 'database/db_helper.dart';
 import 'food/food.dart';
-import 'food/openfoodfacts.dart';
 import 'profile.dart';
 
 class ApplicationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
-      child: ListView(
-        // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
-        children: <Widget>[
+
+    List<Widget> menu = List.from([
           DrawerHeader(
-            child: Text("Menu"),
+            child: Container(),
             decoration: BoxDecoration(
               color: redTheme,
             ),
@@ -57,18 +51,30 @@ class ApplicationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Debug data'),
-            onTap: () {
-              _debugShowDatabase(context);
-            },
-          ),
-          ListTile(
             title: Text('About'),
             onTap: () {
               _debugShowAbout(context);
             },
           ),
-        ],
+    ]);
+
+    if(kDebugMode) {
+      menu.add(          ListTile(
+            title: Text('Debug data'),
+            onTap: () {
+              _debugShowDatabase(context);
+            },
+          ));
+    }
+
+    return Drawer(
+      // Add a ListView to the drawer. This ensures the user can scroll
+      // through the options in the drawer if there isn't enough vertical
+      // space to fit everything.
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        children: menu,
       ),
     );
   }
@@ -97,7 +103,7 @@ class ApplicationDrawer extends StatelessWidget {
     );
   }
 
-  void _debugShowAbout(BuildContext context) async {
+  _debugShowAbout(BuildContext context) async {
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AboutView()),
