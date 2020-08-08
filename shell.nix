@@ -6,7 +6,8 @@
 let
   allowUnfree = true;
   # flutterPkgs = (import (builtins.fetchTarball "https://github.com/babariviere/nixpkgs/archive/flutter-testing.tar.gz")  {});
-  unstablePkgs = (import (builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/75717901da4b40ebc2667a0dca79b10304358a87.tar.gz")   {});
+  # unstablePkgs = (import (builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/75717901da4b40ebc2667a0dca79b10304358a87.tar.gz")   {});
+  unstablePkgs = (import (builtins.fetchTarball "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz")   {});
   extensions = (with unstablePkgs.vscode-extensions; [
       bbenoist.Nix
   ]) ++ unstablePkgs.vscode-utils.extensionsFromVscodeMarketplace [({
@@ -27,7 +28,7 @@ let
   };
 
   # This is an ugly workaround because the author of flutter's package rename
-  # flutter binary to flutter-variantname, which make flutter undetectable for
+  # flutter binary to flutter-variantname. It makes flutter undetectable for
   # editors which are looking for `flutter`.
   mkFlutter = opts: pkgs.callPackage
     (import "${unstablePkgs.path}/pkgs/development/compilers/flutter/flutter.nix" opts) { };
@@ -39,9 +40,9 @@ let
   flutter-dev = mkFlutter rec {
     pname = "flutter";
     channel = "stable";
-    version = "1.17.5";
+    version = "1.20.1";
     filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "sha256:0kapja3nh7dfhjbn2np02wghijrjnpzsv4hz10fj54hs8hdx19di";
+    sha256Hash = "sha256:0dpmi2c16s91ayfds1rqirs12jysjyqqh40n9v5h5xsizr7vzcx2";
     patches = getPatches "${unstablePkgs.path}/pkgs/development/compilers/flutter/patches/beta";
  };
 
@@ -52,12 +53,14 @@ pkgs.mkShell {
   buildInputs = with pkgs; [
     unstablePkgs.dart
     flutter-dev
+    # unstablePkgs.flutter
     vscode-with-extensions
     # unstablePkgs.flutterPackages.dev
     unstablePkgs.android-studio
 
     # androidSdk
-
+    # Includes aapt2
+    androidenv.androidPkgs_9_0.androidsdk
     androidenv.androidPkgs_9_0.platform-tools
     jdk
     git
@@ -70,7 +73,7 @@ pkgs.mkShell {
   shellHook=''
     export USE_CCACHE=1
     export ANDROID_JAVA_HOME=${pkgs.jdk.home}
-    # export ANDROID_SDK_ROOT=${androidSdk}/libexec/android-sdk
+    export ANDROID_SDK_ROOT=${androidSdk}/libexec/android-sdk
     # export ANDROID_HOME=$ANDROID_SDK_ROOT
     export FLUTTER_SDK=${unstablePkgs.flutter.unwrapped}
   '';
