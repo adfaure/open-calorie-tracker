@@ -65,16 +65,28 @@ androidSdk = pkgs.androidenv.androidPkgs_9_0.androidsdk;
 Once we got the path to the `aapt2` binary we can call the bundletool with the proper aapt2 path.
 
 ```
-java -jar bundletool-all-1.0.0.jar build-apks --bundle=build/app/outputs/bundle/release/app-release.aab --output=build/foodassistant/food_assistant.apks --aapt2=/nix/store/g91h4jyn5dj35xvlfch2z5h3d08mx7dh-androidsdk/libexec/android-sdk/build-tools/28.0.3/aapt2`
+java -jar bundletool-all-1.0.0.jar build-apks --bundle=build/app/outputs/bundle/release/app-release.aab --output=build/foodassistant/food_assistant.apks --aapt2=/nix/store/g91h4jyn5dj35xvlfch2z5h3d08mx7dh-androidsdk/libexec/android-sdk/build-tools/28.0.3/aapt2
+```
+
+or with the signing key:
+
+```
+java -jar bundletool-all-1.0.0.jar build-apks --bundle=build/app/outputs/bundle/release/app-release.aab --output=build/foodassistant/food_assistant.apks --aapt2=/nix/store/g91h4jyn5dj35xvlfch2z5h3d08mx7dh-androidsdk/libexec/android-sdk/build-tools/28.0.3/aapt2 --ks=../foodassistant.jks --ks-pass=pass:"password" --ks-key-alias=key
+```
+
+and then deploy the apk on a connected device:
+
+```
+ java -jar bundletool-all-1.0.0.jar install-apks --apks=build/foodassistant/food_assistant.apks
 ```
 
 # Todo
 
+- Localize the application eng/fr.
 - Create a first login page, to enter user informations such as the objective.
     - The inititialisation of the appliacation allows to create the initialisation date.
       The init date is then used as the first date the user can navigate from, and ensure the consistency of the objective data.
 - Find the best way to select aliments, portion or number of gramme etc
-- Localize the application eng/fr.
 - Add food details (lipid, iron etc)
 - Packages the application with Nix?
 - Check for internet connection before scanning product.
