@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:moor/moor.dart';
+import 'package:open_weight/common/dropdownFormField.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:provider/provider.dart';
@@ -94,8 +95,13 @@ class ConsumedFoodView extends StatelessWidget {
                       _buildRow("Date", formatter.format(this.food.date)),
                       _buildEditableRow("Quantity", "quantity",
                           validator: _intValidator),
-                      _buildEditableRow("Meal Type", "mealType",
-                          validator: _mealValidator),
+                      _buildDropdownRow(
+                          "Meal type",
+                          "mealType",
+                          List<String>.from(
+                              [ "Breackfast", "Lunch", "Diner", "Snacks" ])),
+                      //_buildEditableRow("Meal Type", "mealType",
+                      //   validator: _mealValidator),
                       _buildEditableRow("Portion", "portion"),
                       _buildEditableRow("Calorie per Portion", "calorie"),
                       _buildEditableRow("Unit", "unit"),
@@ -194,6 +200,46 @@ class ConsumedFoodView extends StatelessWidget {
                   contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
                 controller: controller,
+              ))
+            ],
+          )),
+    );
+  }
+
+  _buildDropdownRow(String name, String controllerName, List<String> items) {
+    var menuItems = items
+        .map((e) => DropdownMenuItem<String>(
+              child: Text(e),
+              value: e,
+            ))
+        .toList();
+    var controller = this.controllers[controllerName];
+    debugPrint("$name: ${controller.text}");
+    return Card(
+      elevation: 1,
+      child: Padding(
+          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                  child: Text(
+                name,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )),
+              Expanded(child: Container()),
+              Expanded(
+                  child: DropdownFormField<String>(
+                hint: Text(
+                  controller.text,
+                  textAlign: TextAlign.right,
+                ),
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                controller: controller,
+                items: menuItems,
               ))
             ],
           )),
