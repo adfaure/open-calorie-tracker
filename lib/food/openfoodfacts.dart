@@ -22,18 +22,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:moor/moor.dart';
-import 'package:open_weight/common/ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:open_weight/database/db_helper.dart';
-import 'package:open_weight/models/objective.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:openfoodfacts/utils/ProductQueryConfigurations.dart';
 import 'package:provider/provider.dart';
 
+import '../application_localization.dart';
+
 scanAndAddProduct(BuildContext build) async {
   String _scanBarcode = "UNKNOW";
 
-  _scanBarcode = await scanBarcodeNormal();
+  _scanBarcode = await scanBarcodeNormal(build);
   debugPrint("barcode testing: $_scanBarcode");
   ProductQueryConfiguration configurations =
       ProductQueryConfiguration(_scanBarcode,
@@ -52,12 +52,9 @@ scanAndAddProduct(BuildContext build) async {
   try {
     result = await OpenFoodAPIClient.getProduct(configurations, user: null);
   } on SocketException catch (error) {
-    debugPrint("$error");
     var snackBar = SnackBar(
-      content:
-          Text('Network Error: Have you checked your internet connection?'),
+      content: Text(AppLocalizations.of(build).networkErrorMessage),
     );
-    debugPrint("error: $error");
 
     // Find the Scaffold in the widget tree and use
     // it to show a SnackBar.
@@ -67,7 +64,8 @@ scanAndAddProduct(BuildContext build) async {
 
   if (result.status != 1) {
     final snackBar = SnackBar(
-      content: Text('Error: ${result.statusVerbose}.'),
+      content: Text(
+          '${AppLocalizations.of(build).networkErrorMessage}: ${result.statusVerbose}.'),
     );
 
     // Find the Scaffold in the widget tree and use
@@ -83,7 +81,8 @@ scanAndAddProduct(BuildContext build) async {
   if (product.nutriments.energyKcal == null &&
       product.nutriments.energy == null) {
     final snackBar = SnackBar(
-      content: Text('Error: No energy informations for ${product.productName}'),
+      content: Text(
+          '${AppLocalizations.of(build).networkErrorMessage}: ${AppLocalizations.of(build).noEnergyInformationsFor} ${product.productName}'),
     );
 
     // Find the Scaffold in the widget tree and use
@@ -93,7 +92,6 @@ scanAndAddProduct(BuildContext build) async {
   }
 
   if (product.quantity != null) {
-    debugPrint("Qantity: ${product.quantity}");
     // AFAIK Serving is in form of: "number unit"  for example "54 ml"
     var splitedServing = product.quantity.split(new RegExp('\\s+'));
 
@@ -141,7 +139,7 @@ scanAndAddProduct(BuildContext build) async {
 }
 
 // Platform messages are asynchronous, so we initialize in an async method.
-Future<String> scanBarcodeNormal() async {
+Future<String> scanBarcodeNormal(BuildContext context) async {
   String barcodeScanRes;
   // Platform messages may fail, so we use a try/catch PlatformException.
   try {
@@ -149,40 +147,8 @@ Future<String> scanBarcodeNormal() async {
         "#ff6666", "Cancel", true, ScanMode.BARCODE);
     print(barcodeScanRes);
   } on PlatformException {
-    barcodeScanRes = 'Failed to get platform version.';
+    barcodeScanRes = AppLocalizations.of(context).sancFailPlatformError;
   }
 
   return barcodeScanRes;
-}
-
-/// simple widget to debug the scan + add food function
-/// me disapear if useless.
-class OpenFoodFacts extends StatelessWidget {
-  final barcodeCtlr = TextEditingController();
-  final streamCtlr = StreamController<Product>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: appBgColor,
-        appBar: AppBar(
-          title: Text("Personal informations"),
-        ),
-        body: Consumer<ObjectiveModel>(builder: (builder, objModel, child) {
-          return ListView(
-            children: <Widget>[
-              Card(
-                  child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: IconButton(
-                        icon: Icon(Icons.camera_alt),
-                        onPressed: () async {
-                          Product product = await scanAndAddProduct(context);
-                          Navigator.pop(context, product);
-                        },
-                      ))),
-            ],
-          );
-        }));
-  }
 }

@@ -33,7 +33,7 @@ class FoodCard extends Card {
           ),
           title: Text(food.name),
           subtitle:
-              Text("Calories. ${food.calorie} (${food.portion}${food.unit})"),
+              Text("kcal. ${food.calorie} (${food.portion}${food.unit})"),
           trailing: actionButton),
     );
   }

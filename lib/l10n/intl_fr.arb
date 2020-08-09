@@ -13,6 +13,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "add": "Ajouter",
+  "@add": {
+    "description": "Word: add",
+    "type": "text",
+    "placeholders": {}
+  },
   "date": "Date",
   "@date": {
     "description": "Word: date",
@@ -46,6 +52,12 @@
   "portion": "Portion",
   "@portion": {
     "description": "Word: portion",
+    "type": "text",
+    "placeholders": {}
+  },
+  "error": "Erreur",
+  "@error": {
+    "description": "Word: error",
     "type": "text",
     "placeholders": {}
   },
@@ -222,6 +234,48 @@
   "portionFieldTitle": "Portion (champ requis)",
   "@portionFieldTitle": {
     "description": "Portion field title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "serving": "Service",
+  "@serving": {
+    "description": "Serving field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "servingUnit": "Servit par",
+  "@servingUnit": {
+    "description": "Serving field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "source": "Source",
+  "@source": {
+    "description": "Source field name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "barcode": "Code barre",
+  "@barcode": {
+    "description": "Barcode field name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "networkErrorMessage": "Erreur: veuillez vérifier vôtre connection internet",
+  "@networkErrorMessage": {
+    "description": "Network error",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noEnergyInformationsFor": "Données calorique manquantes pour",
+  "@noEnergyInformationsFor": {
+    "description": "No energy associated to product found in oof database",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sancFailPlatformError": "Impossible de récupérer le numéro de platform",
+  "@sancFailPlatformError": {
+    "description": "fail scan",
     "type": "text",
     "placeholders": {}
   }

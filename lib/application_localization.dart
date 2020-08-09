@@ -28,6 +28,10 @@ class AppLocalizations {
     return Intl.message('Name', name: 'name', desc: 'Word: name');
   }
 
+  String get add {
+    return Intl.message('Add', name: 'add', desc: 'Word: add');
+  }
+
   String get date {
     return Intl.message('Date', name: 'date', desc: 'Word: date');
   }
@@ -50,6 +54,10 @@ class AppLocalizations {
 
   String get portion {
     return Intl.message('Portion', name: 'portion', desc: 'Word: portion');
+  }
+
+  String get error {
+    return Intl.message('Error', name: 'error', desc: 'Word: error');
   }
 
   // Words
@@ -217,6 +225,43 @@ class AppLocalizations {
   String get portionFieldTitle {
     return Intl.message("Portion (Required)",
         name: 'portionFieldTitle', desc: 'Portion field title');
+  }
+
+  // Food view
+  String get serving {
+    return Intl.message("Serving", name: 'serving', desc: 'Serving field');
+  }
+
+  String get servingUnit {
+    return Intl.message("Serving unit",
+        name: 'servingUnit', desc: 'Serving field');
+  }
+
+  String get source {
+    return Intl.message("Source", name: 'source', desc: 'Source field name');
+  }
+
+  String get barcode {
+    return Intl.message("Barcode", name: 'barcode', desc: 'Barcode field name');
+  }
+
+  //Open food fact
+  String get networkErrorMessage {
+    return Intl.message(
+        'Network Error: Have you checked your internet connection?',
+        name: 'networkErrorMessage',
+        desc: 'Network error');
+  }
+
+  String get noEnergyInformationsFor {
+    return Intl.message('No energy informations for',
+        name: 'noEnergyInformationsFor',
+        desc: 'No energy associated to product found in oof database');
+  }
+
+  String get sancFailPlatformError {
+    return Intl.message('Failed to get platform version.',
+        name: 'sancFailPlatformError', desc: 'fail scan');
   }
 }
 

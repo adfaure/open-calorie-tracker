@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-09T23:31:30.013741",
+  "@@last_modified": "2020-08-10T00:24:39.358482",
   "title": "Food Assistant",
   "@title": {
     "description": "The application title",
@@ -9,6 +9,12 @@
   "name": "Name",
   "@name": {
     "description": "Word: name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add": "Add",
+  "@add": {
+    "description": "Word: add",
     "type": "text",
     "placeholders": {}
   },
@@ -45,6 +51,12 @@
   "portion": "Portion",
   "@portion": {
     "description": "Word: portion",
+    "type": "text",
+    "placeholders": {}
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Word: error",
     "type": "text",
     "placeholders": {}
   },
@@ -146,7 +158,7 @@
   },
   "invalidNumber": "Invalid number",
   "@invalidNumber": {
-    "description": "Invalid int formating",
+    "description": "Invalid int formatting",
     "type": "text",
     "placeholders": {}
   },
@@ -221,6 +233,48 @@
   "portionFieldTitle": "Portion (Required)",
   "@portionFieldTitle": {
     "description": "Portion field title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "serving": "Serving",
+  "@serving": {
+    "description": "Serving field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "servingUnit": "Serving unit",
+  "@servingUnit": {
+    "description": "Serving field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "source": "Source",
+  "@source": {
+    "description": "Source field name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "barcode": "Barcode",
+  "@barcode": {
+    "description": "Barcode field name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "networkErrorMessage": "Network Error: Have you checked your internet connection?",
+  "@networkErrorMessage": {
+    "description": "Network error",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noEnergyInformationsFor": "No energy informations for",
+  "@noEnergyInformationsFor": {
+    "description": "No energy associated to product found in oof database",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sancFailPlatformError": "Failed to get platform version.",
+  "@sancFailPlatformError": {
+    "description": "fail scan",
     "type": "text",
     "placeholders": {}
   }

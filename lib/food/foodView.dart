@@ -21,6 +21,8 @@ import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:provider/provider.dart';
 
+import '../application_localization.dart';
+
 /// Focus on a modifiable food entry.
 class FoodView extends StatelessWidget {
   final FoodModel food;
@@ -30,9 +32,7 @@ class FoodView extends StatelessWidget {
 
   FoodView({@required this.food}) {
     var json = this.food.toJson();
-    debugPrint(json.toString());
     json.forEach((k, value) {
-      debugPrint("init: $k, $value");
       var _value = "";
       if (value != null) {
         _value = value.toString();
@@ -86,18 +86,27 @@ class FoodView extends StatelessWidget {
                   color: Colors.white,
                   child: ListView(
                     children: <Widget>[
-                      _buildEditableRow("Name", "name",
+                      _buildEditableRow(
+                          AppLocalizations.of(context).name, "name",
                           validator: _requiredTextField),
-                      _buildEditableRow("Calorie", "calorie",
-                          validator: _intValidator),
-                      _buildEditableRow("Portion", "portion",
-                          validator: _intValidator),
-                      _buildEditableRow("Unit", "unit",
+                      _buildEditableRow(
+                          AppLocalizations.of(context).calorie, "calorie",
                           validator: _requiredTextField),
-                      _buildEditableRow("Serving", "serving"),
-                      _buildEditableRow("Serving unit", "servingUnit"),
-                      _buildRow("Source", this.food.source),
-                      _buildRow("Barcode", this.food.barcode),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).portion, "portion",
+                          validator: _intValidator),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).unit, "unit",
+                          validator: _requiredTextField),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).unit, "serving"),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).servingUnit,
+                          "servingUnit"),
+                      _buildRow(AppLocalizations.of(context).source,
+                          this.food.source),
+                      _buildRow(AppLocalizations.of(context).barcode,
+                          this.food.barcode),
                     ],
                   )));
         }));
@@ -165,6 +174,7 @@ class FoodView extends StatelessWidget {
     );
   }
 
+  //TODO: Localize these values, but I need to find out if I realy need to bring the context till here.
   String _intValidator(String value) {
     debugPrint("intval : $value");
     return int.tryParse(value) != null ? null : "Must be an integer number.";

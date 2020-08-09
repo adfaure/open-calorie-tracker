@@ -68,7 +68,6 @@ class ListFood extends StatelessWidget {
         floatingActionButton: Builder(
           builder: (context) => FloatingActionButton(
               onPressed: () => _navigateAndDisplaySelection(context),
-              tooltip: 'Increment',
               child: Icon(Icons
                   .add)), // This trailing comma makes auto-formatting nicer for build methods.
         ));

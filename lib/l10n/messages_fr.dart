@@ -23,8 +23,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "add" : MessageLookupByLibrary.simpleMessage("Ajouter"),
     "available" : MessageLookupByLibrary.simpleMessage("Disponibles"),
     "availableCalories" : MessageLookupByLibrary.simpleMessage("Calories disponibles:"),
+    "barcode" : MessageLookupByLibrary.simpleMessage("Code barre"),
     "brandField" : MessageLookupByLibrary.simpleMessage("Marque (optionnel):"),
     "brandFieldHint" : MessageLookupByLibrary.simpleMessage("Caco calo"),
     "breakfast" : MessageLookupByLibrary.simpleMessage("Petit déjeuner"),
@@ -43,7 +45,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "lunch" : MessageLookupByLibrary.simpleMessage("Déjeuner"),
     "mealType" : MessageLookupByLibrary.simpleMessage("Type de repas"),
     "name" : MessageLookupByLibrary.simpleMessage("Nom"),
+    "networkErrorMessage" : MessageLookupByLibrary.simpleMessage("Erreur internet: Veillez vérifier votre connection"),
     "newFood" : MessageLookupByLibrary.simpleMessage("Nouvel aliment"),
+    "noEnergyInformationsFor" : MessageLookupByLibrary.simpleMessage("Données calorique manquantes pour"),
     "objective" : MessageLookupByLibrary.simpleMessage("Objectif"),
     "portion" : MessageLookupByLibrary.simpleMessage("Portion"),
     "portionBoxTitle" : MessageLookupByLibrary.simpleMessage("Taille de la portion"),
@@ -51,7 +55,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "profile" : MessageLookupByLibrary.simpleMessage("Profil"),
     "quantity" : MessageLookupByLibrary.simpleMessage("Quantité"),
     "requirePositiveNumber" : MessageLookupByLibrary.simpleMessage("Nombre positif requis"),
+    "sancFailPlatformError" : MessageLookupByLibrary.simpleMessage("Impossible de récupérer le numéro de platform"),
+    "serving" : MessageLookupByLibrary.simpleMessage("Service"),
+    "servingUnit" : MessageLookupByLibrary.simpleMessage("Servit par"),
     "snacks" : MessageLookupByLibrary.simpleMessage("Collations"),
+    "source" : MessageLookupByLibrary.simpleMessage("Source"),
     "thisFoodWillBeDeleted" : MessageLookupByLibrary.simpleMessage("L\'aliment va être supprimé."),
     "title" : MessageLookupByLibrary.simpleMessage("Food Assistant"),
     "today" : MessageLookupByLibrary.simpleMessage("Aujourd\'hui"),

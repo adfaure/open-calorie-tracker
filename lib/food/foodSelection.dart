@@ -24,10 +24,10 @@ import 'package:moor/moor.dart' hide Column;
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
 import 'package:open_weight/food/openfoodfacts.dart';
-import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../application_localization.dart';
 import '../database/db_helper.dart';
 
 /// This widget should be called when one wishes to select a food, and a portion of it.
@@ -54,7 +54,7 @@ class SelectFood extends StatelessWidget {
     return Scaffold(
         backgroundColor: bgColor,
         appBar: AppBar(
-          title: Text(title),
+          title: Text(AppLocalizations.of(build).localizedMealtype(this.title)),
           actions: <Widget>[
             Builder(builder: (_context) {
               return IconButton(
@@ -92,7 +92,6 @@ class SelectFood extends StatelessWidget {
         floatingActionButton: Builder(
           builder: (context) => FloatingActionButton(
               onPressed: () => _navigateAndDisplaySelection(context),
-              tooltip: 'Increment',
               child: Icon(Icons
                   .add)), // This trailing comma makes auto-formatting nicer for build methods.
         ));
@@ -117,10 +116,11 @@ class SelectFood extends StatelessWidget {
             title: Center(
                 child: Column(children: [
               Text(
-                'Quantity: ${selectedFood.name}',
+                '${AppLocalizations.of(context).add}: ${selectedFood.name}',
               ),
               Text(
-                '(Unit: ' + "${selectedFood.unit})",
+                '(${AppLocalizations.of(context).unit}: ' +
+                    "${selectedFood.unit})",
                 textAlign: TextAlign.left,
                 textScaleFactor: 0.7,
               )
@@ -147,10 +147,11 @@ class SelectFood extends StatelessWidget {
                           try {
                             quantity = int.parse(doubleString);
                           } catch (e) {
-                            return "Unvalid quantity.";
+                            return AppLocalizations.of(context).invalidNumber;
                           }
                           if (quantity <= 0) {
-                            return "Require positive number.";
+                            return AppLocalizations.of(context)
+                                .requirePositiveNumber;
                           }
                           return null;
                         },
