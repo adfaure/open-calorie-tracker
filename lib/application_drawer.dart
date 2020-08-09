@@ -23,6 +23,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:open_weight/about.dart';
 import 'package:open_weight/common/ui.dart';
+import 'application_localization.dart';
 import 'database/db_helper.dart';
 import 'food/food.dart';
 import 'profile.dart';
@@ -39,19 +40,19 @@ class ApplicationDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text('My Foods'),
+            title: Text(AppLocalizations.of(context).drawerFood),
             onTap: () {
               _navigateShowFoodPanel(context);
             },
           ),
           ListTile(
-            title: Text('Your informations'),
+            title: Text(AppLocalizations.of(context).drawerProfile),
             onTap: () {
               _navigateUserView(context);
             },
           ),
           ListTile(
-            title: Text('About'),
+            title: Text(AppLocalizations.of(context).drawerAbout),
             onTap: () {
               _debugShowAbout(context);
             },

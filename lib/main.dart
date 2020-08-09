@@ -18,13 +18,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:open_weight/common/helpers.dart';
-import 'package:open_weight/common/ui.dart';
-import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:open_weight/journal/journalView.dart';
+import 'application_localization.dart';
+import 'common/ui.dart';
 import 'database/db_helper.dart';
 
 // global variable, that can be accessed from anywhere
@@ -51,27 +51,25 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Map<int, Color> color = {
-      50: Color.fromRGBO(226, 28, 33, .1),
-      100: Color.fromRGBO(226, 28, 33, .2),
-      200: Color.fromRGBO(226, 28, 33, .3),
-      300: Color.fromRGBO(226, 28, 33, .4),
-      400: Color.fromRGBO(226, 28, 33, .5),
-      500: Color.fromRGBO(226, 28, 33, .6),
-      600: Color.fromRGBO(226, 28, 33, .7),
-      700: Color.fromRGBO(226, 28, 33, .8),
-      800: Color.fromRGBO(226, 28, 33, .9),
-      900: Color.fromRGBO(226, 28, 33, 1),
-    };
     return MaterialApp(
+      localizationsDelegates: [
+        const AppLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      onGenerateTitle: (BuildContext context) => AppLocalizations.of(context).title,
+      supportedLocales: [
+        const Locale('en', ''), // English, no country code
+        const Locale('fr', ''), // fr, no country code
+      ],
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/': (context) => JournalView(),
       },
-      title: 'OPT',
+      // title: AppLocalizations.of(context).title,
       theme: ThemeData(
-          primarySwatch: MaterialColor(0xFFe21c21, color),
+          primarySwatch: MaterialColor(0xFFe21c21, appColor),
           cardTheme: CardTheme(
               margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
               shape: RoundedRectangleBorder(

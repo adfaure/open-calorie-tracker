@@ -23,7 +23,7 @@ Then to run the application on your phone, use in a terminal: `flutter run`
 
 ## Start emulator with android-studio
 
-launch android-studio and configure+lauch an emulator.
+launch android-studio and configure+launch an emulator.
 
 ## Launching on emulator  (**WIP**)
 
@@ -44,7 +44,26 @@ Update icon:
 To change the icon of the application:
 ```
 
+# Localization
 
+Localization is bit complicated.
+But when it is set up, it seems to works.
+
+To create new text input to be translated first add a new getter to the class: `lib/application_localization.dart`.
+
+Then one can use the command from the project's root:
+
+```
+flutter pub run intl_translation:extract_to_arb --output-dir=lib/l10n lib/application_localization.dart
+```
+
+This will generate a the file `lib/l10n/intl_messages.arb` which is basically a template containing the string to localize.
+Copy paste the new json entry that need localization into the files: `lib/l10n/intl_<local-code>`.
+Once localized use the following command to generate the dart classes containing the localized values.
+
+```
+flutter pub run intl_translation:generate_from_arb --output-dir=lib/l10n --no-use-deferred-loading lib/application_localization.dart lib/l10n/intl_*.arb
+```
 
 # Deploy
 
@@ -83,8 +102,8 @@ and then deploy the apk on a connected device:
 # Todo
 
 - Localize the application eng/fr.
-- Create a first login page, to enter user informations such as the objective.
-    - The inititialisation of the appliacation allows to create the initialisation date.
+- Create a first login page, to enter user information such as the objective.
+    - The initialization of the application allows to create the initialization date.
       The init date is then used as the first date the user can navigate from, and ensure the consistency of the objective data.
 - Find the best way to select aliments, portion or number of gramme etc
 - Add food details (lipid, iron etc)

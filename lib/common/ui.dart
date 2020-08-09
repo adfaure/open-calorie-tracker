@@ -20,6 +20,19 @@ import 'package:flutter/material.dart';
 final appBgColor = Color(0xFFe3e3e3);
 final redTheme = Color(0xFFe21c21);
 
+final Map<int, Color> appColor = {
+  50: Color.fromRGBO(226, 28, 33, .1),
+  100: Color.fromRGBO(226, 28, 33, .2),
+  200: Color.fromRGBO(226, 28, 33, .3),
+  300: Color.fromRGBO(226, 28, 33, .4),
+  400: Color.fromRGBO(226, 28, 33, .5),
+  500: Color.fromRGBO(226, 28, 33, .6),
+  600: Color.fromRGBO(226, 28, 33, .7),
+  700: Color.fromRGBO(226, 28, 33, .8),
+  800: Color.fromRGBO(226, 28, 33, .9),
+  900: Color.fromRGBO(226, 28, 33, 1),
+};
+
 class BoxedContainer extends StatelessWidget {
   final Widget child;
   BoxedContainer({this.child});

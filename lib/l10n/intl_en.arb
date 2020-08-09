@@ -1,0 +1,28 @@
+{
+  "@@locale": "en",
+  "@@last_modified": "2020-08-09T11:04:39.081186",
+  "title": "Food Assistant",
+  "@title": {
+    "description": "The application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "drawerProfile": "Profile",
+  "@drawerProfile": {
+    "description": "Drawer: profile",
+    "type": "text",
+    "placeholders": {}
+  },
+  "drawerFood": "Foods",
+  "@drawerFood": {
+    "description": "Drawer: food",
+    "type": "text",
+    "placeholders": {}
+  },
+  "drawerAbout": "About",
+  "@drawerAbout": {
+    "description": "Drawer: about",
+    "type": "text",
+    "placeholders": {}
+  }
+}
