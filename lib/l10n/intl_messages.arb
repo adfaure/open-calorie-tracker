@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-09T20:57:54.360779",
+  "@@last_modified": "2020-08-09T23:31:30.013741",
   "title": "Food Assistant",
   "@title": {
     "description": "The application title",
@@ -173,6 +173,54 @@
   "caloriePerPortion": "Calorie per Portion",
   "@caloriePerPortion": {
     "description": "Calorie per portion in consumed food view",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createNewFoodTtitle": "Create a new food",
+  "@createNewFoodTtitle": {
+    "description": "Title of the create food scafold",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newFood": "New Food",
+  "@newFood": {
+    "description": "New food box title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodNameRequired": "Food name (Required)",
+  "@foodNameRequired": {
+    "description": "food name field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "watermelon": "Watermelon",
+  "@watermelon": {
+    "description": "Food name hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "brandField": "Brand (Optional):",
+  "@brandField": {
+    "description": "Fodds brand field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "brandFieldHint": "Raw",
+  "@brandFieldHint": {
+    "description": "Fodds brand field hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "portionBoxTitle": "Enter portion size",
+  "@portionBoxTitle": {
+    "description": "Portion box title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "portionFieldTitle": "Portion (Required)",
+  "@portionFieldTitle": {
+    "description": "Portion field title",
     "type": "text",
     "placeholders": {}
   }

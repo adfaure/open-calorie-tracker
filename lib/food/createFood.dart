@@ -20,6 +20,8 @@ import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:provider/provider.dart';
 
+import '../application_localization.dart';
+
 class CreateFoodForm extends StatefulWidget {
   CreateFoodForm({Key key, this.title}) : super(key: key);
   final String title;
@@ -55,13 +57,13 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
   final portionPerContainerFormCtrl = TextEditingController();
 
   final bgColor = Color(0xFFe3e3e3);
-  final title = "Create new food";
   final scaleTextFieldDescription = 0.8;
   final scaleCategoryDescription = 0.9;
   final scaleTextField = 0.7;
 
   @override
   Widget build(BuildContext build) {
+    final title = AppLocalizations.of(context).createNewFoodTtitle;
     return Scaffold(
         backgroundColor: bgColor,
         appBar: AppBar(
@@ -77,12 +79,9 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                         _buildNewPortion(context)))),
         floatingActionButton: Consumer<MyDatabase>(
           builder: (builder, database, child) {
-            debugPrint('movieTitle: $database');
             return FloatingActionButton(
                 onPressed: () {
                   if (_createFoodFormKey.currentState.validate()) {
-                    debugPrint(
-                        "portion: ${portionFormCtrl.text}, calorie: ${calorieFormCtrl.text}");
                     database.addFoodModel(FoodModelsCompanion.insert(
                       name: nameFormCtrl.text,
                       unit: unitFormCtrl.text,
@@ -93,7 +92,6 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                     Navigator.pop(context);
                   }
                 },
-                tooltip: 'Increment',
                 child: Icon(Icons.check));
           },
         ));
@@ -108,7 +106,7 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
               Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    "New food",
+                    AppLocalizations.of(context).newFood,
                     textScaleFactor: scaleCategoryDescription,
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
@@ -120,7 +118,7 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
               padding: EdgeInsets.all(5),
               child: Column(children: [
                 Row(children: [
-                  Text("Food name (Required)",
+                  Text(AppLocalizations.of(context).foodNameRequired,
                       textScaleFactor: scaleTextFieldDescription,
                       style: TextStyle(fontWeight: FontWeight.bold))
                 ]),
@@ -129,14 +127,15 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                   validator: _requiredTextField,
                   textDirection: TextDirection.ltr,
                   controller: nameFormCtrl,
-                  decoration: InputDecoration(hintText: "Durian fruit"),
+                  decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).watermelon),
                 )),
                 SizedBox(
                   height: 15,
                 ),
                 // SizedBox(height: 15),
                 Row(children: [
-                  Text("Brand (Optional):",
+                  Text(AppLocalizations.of(context).brandField,
                       textScaleFactor: scaleTextFieldDescription,
                       style: TextStyle(fontWeight: FontWeight.bold))
                 ]),
@@ -144,7 +143,8 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                     child: TextFormField(
                   textDirection: TextDirection.ltr,
                   controller: brandFormCtrl,
-                  decoration: InputDecoration(hintText: "Raw"),
+                  decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).brandFieldHint),
                 )),
               ])))
     ];
@@ -159,7 +159,7 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
               Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    "Enter portion size",
+                    AppLocalizations.of(context).portionBoxTitle,
                     textScaleFactor: scaleCategoryDescription,
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
@@ -172,7 +172,8 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
               child: Column(children: [
                 Row(children: [
                   Expanded(
-                      child: Text("Portion (Required)",
+                      child: Text(
+                          AppLocalizations.of(context).portionFieldTitle,
                           textScaleFactor: scaleTextFieldDescription,
                           style: TextStyle(fontWeight: FontWeight.bold)))
                 ]),
@@ -183,6 +184,7 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                     textDirection: TextDirection.ltr,
                     validator: _requiredTextField,
                     controller: portionFormCtrl,
+                    decoration: InputDecoration(hintText: "100"),
                     keyboardType: TextInputType.number,
                   )),
                   SizedBox(width: 5),
@@ -191,7 +193,8 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                     textDirection: TextDirection.ltr,
                     controller: unitFormCtrl,
                     validator: _requiredTextField,
-                    decoration: InputDecoration(hintText: "Unit(s)"),
+                    decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context).unit),
                   )),
                 ])),
                 SizedBox(
@@ -199,7 +202,7 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                 ),
                 // SizedBox(height: 15),
                 Row(children: [
-                  Text("Calories per portion:",
+                  Text(AppLocalizations.of(context).caloriePerPortion,
                       textScaleFactor: scaleTextFieldDescription,
                       style: TextStyle(fontWeight: FontWeight.bold))
                 ]),

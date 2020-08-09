@@ -176,5 +176,53 @@
     "description": "Calorie per portion in consumed food view",
     "type": "text",
     "placeholders": {}
+  },
+  "createNewFoodTtitle": "Enregistrer un nouvel aliment",
+  "@createNewFoodTtitle": {
+    "description": "Title of the create food scafold",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newFood": "Nouvel aliment",
+  "@newFood": {
+    "description": "New food box title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodNameRequired": "Nom (champ requis)",
+  "@foodNameRequired": {
+    "description": "food name field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "watermelon": "Pastèque",
+  "@watermelon": {
+    "description": "Food name hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "brandField": "Marque (optionnel):",
+  "@brandField": {
+    "description": "Fodds brand field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "brandFieldHint": "Caco calo",
+  "@brandFieldHint": {
+    "description": "Fodds brand field hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "portionBoxTitle": "Taille de la portion",
+  "@portionBoxTitle": {
+    "description": "Portion box title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "portionFieldTitle": "Portion (champ requis)",
+  "@portionFieldTitle": {
+    "description": "Portion field title",
+    "type": "text",
+    "placeholders": {}
   }
 }

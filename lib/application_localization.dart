@@ -151,7 +151,7 @@ class AppLocalizations {
   // Objective dialog
   String get invalidNumber {
     return Intl.message('Invalid number',
-        name: 'invalidNumber', desc: 'Invalid int formating');
+        name: 'invalidNumber', desc: 'Invalid int formatting');
   }
 
   String get requirePositiveNumber {
@@ -172,10 +172,51 @@ class AppLocalizations {
   }
 
   //Consumed food view
-    String get caloriePerPortion {
+  String get caloriePerPortion {
     return Intl.message("Calorie per Portion",
         name: 'caloriePerPortion',
         desc: 'Calorie per portion in consumed food view');
+  }
+
+  //Create food
+  String get createNewFoodTtitle {
+    return Intl.message("Create a new food",
+        name: 'createNewFoodTtitle', desc: 'Title of the create food scafold');
+  }
+
+  String get newFood {
+    return Intl.message("New Food",
+        name: 'newFood', desc: 'New food box title');
+  }
+
+  String get foodNameRequired {
+    return Intl.message("Food name (Required)",
+        name: 'foodNameRequired', desc: 'food name field');
+  }
+
+  String get watermelon {
+    return Intl.message("Watermelon",
+        name: 'watermelon', desc: 'Food name hint');
+  }
+
+  String get brandField {
+    return Intl.message("Brand (Optional):",
+        name: 'brandField', desc: 'Fodds brand field');
+  }
+
+  String get brandFieldHint {
+    return Intl.message("Raw",
+        name: 'brandFieldHint', desc: 'Fodds brand field hint');
+  }
+
+  String get portionBoxTitle {
+    return Intl.message("Enter portion size",
+        name: 'portionBoxTitle', desc: 'Portion box title');
+  }
+
+  String get portionFieldTitle {
+    return Intl.message("Portion (Required)",
+        name: 'portionFieldTitle', desc: 'Portion field title');
   }
 }
 

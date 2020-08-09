@@ -1,8 +1,50 @@
 {
-  "@@last_modified": "2020-08-09T11:52:23.122784",
+  "@@last_modified": "2020-08-09T23:31:30.013741",
   "title": "Food Assistant",
   "@title": {
     "description": "The application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Word: name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "date": "Date",
+  "@date": {
+    "description": "Word: date",
+    "type": "text",
+    "placeholders": {}
+  },
+  "calorie": "Calorie",
+  "@calorie": {
+    "description": "Word: calorie",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unit": "Unit",
+  "@unit": {
+    "description": "Word: unit",
+    "type": "text",
+    "placeholders": {}
+  },
+  "quantity": "Quantity",
+  "@quantity": {
+    "description": "Word: quantity",
+    "type": "text",
+    "placeholders": {}
+  },
+  "mealType": "Meal type",
+  "@mealType": {
+    "description": "Meal type",
+    "type": "text",
+    "placeholders": {}
+  },
+  "portion": "Portion",
+  "@portion": {
+    "description": "Word: portion",
     "type": "text",
     "placeholders": {}
   },
@@ -39,6 +81,30 @@
   "available": "Available",
   "@available": {
     "description": "Calorie meter available",
+    "type": "text",
+    "placeholders": {}
+  },
+  "diner": "Diner",
+  "@diner": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "lunch": "Lunch",
+  "@lunch": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "breakfast": "Breakfast",
+  "@breakfast": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "snacks": "Snacks",
+  "@snacks": {
+    "description": "",
     "type": "text",
     "placeholders": {}
   },
@@ -107,6 +173,54 @@
   "caloriePerPortion": "Calorie per Portion",
   "@caloriePerPortion": {
     "description": "Calorie per portion in consumed food view",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createNewFoodTtitle": "Create a new food",
+  "@createNewFoodTtitle": {
+    "description": "Title of the create food scafold",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newFood": "New Food",
+  "@newFood": {
+    "description": "New food box title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodNameRequired": "Food name (Required)",
+  "@foodNameRequired": {
+    "description": "food name field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "watermelon": "Watermelon",
+  "@watermelon": {
+    "description": "Food name hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "brandField": "Brand (Optional):",
+  "@brandField": {
+    "description": "Fodds brand field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "brandFieldHint": "Raw",
+  "@brandFieldHint": {
+    "description": "Fodds brand field hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "portionBoxTitle": "Enter portion size",
+  "@portionBoxTitle": {
+    "description": "Portion box title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "portionFieldTitle": "Portion (Required)",
+  "@portionFieldTitle": {
+    "description": "Portion field title",
     "type": "text",
     "placeholders": {}
   }

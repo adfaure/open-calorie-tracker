@@ -17,7 +17,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:moor/moor.dart';
-import 'package:open_weight/common/dropdownFormField.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +46,9 @@ class ConsumedFoodView extends StatelessWidget {
     });
   }
 
-  _getFormFood() {
+  _getFormFood(BuildContext context) {
+    // var localizedToMealType = Intl.withLocale(controllers["mealType"].text, locale: "en");
+    // debugPrint("localized: $localizedToMealType");
     return ConsumedFoodsCompanion.insert(
       name: controllers["name"].text,
       portion: int.parse(controllers["portion"].text),
@@ -72,8 +73,8 @@ class ConsumedFoodView extends StatelessWidget {
               return IconButton(
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
-                    debugPrint(_getFormFood().toString());
-                    database.upsertConsumedFood(_getFormFood());
+                    debugPrint(_getFormFood(context).toString());
+                    database.upsertConsumedFood(_getFormFood(context));
                     Navigator.pop(context);
                   }
                 },
@@ -99,6 +100,7 @@ class ConsumedFoodView extends StatelessWidget {
                           AppLocalizations.of(context).quantity, "quantity",
                           validator: _intValidator),
                       _buildDropdownRow(
+                          context,
                           AppLocalizations.of(context).mealType,
                           "mealType",
                           List<String>.from(
@@ -108,7 +110,8 @@ class ConsumedFoodView extends StatelessWidget {
                       _buildEditableRow(
                           AppLocalizations.of(context).portion, "portion"),
                       _buildEditableRow(
-                          AppLocalizations.of(context).caloriePerPortion, "calorie"),
+                          AppLocalizations.of(context).caloriePerPortion,
+                          "calorie"),
                       _buildEditableRow(
                           AppLocalizations.of(context).unit, "unit"),
                     ],
@@ -130,9 +133,6 @@ class ConsumedFoodView extends StatelessWidget {
               Text(
                 name,
                 style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 10,
               ),
               Expanded(
                   child: Text(
@@ -203,7 +203,7 @@ class ConsumedFoodView extends StatelessWidget {
                   errorStyle: TextStyle(),
                   fillColor: Colors.white,
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  contentPadding: EdgeInsets.fromLTRB(0, 0, 15, 0),
                 ),
                 controller: controller,
               ))
@@ -212,15 +212,27 @@ class ConsumedFoodView extends StatelessWidget {
     );
   }
 
-  _buildDropdownRow(String name, String controllerName, List<String> items) {
+  _buildDropdownRow(BuildContext context, String name, String controllerName,
+      List<String> items) {
     var menuItems = items
         .map((e) => DropdownMenuItem<String>(
-              child: Text(e),
+              child: Text(
+                AppLocalizations.of(context).localizedMealtype(e),
+                textAlign: TextAlign.right,
+              ),
               value: e,
             ))
         .toList();
+
+    var buildedItem = items
+        .map((e) => Text(
+              AppLocalizations.of(context).localizedMealtype(e),
+              textAlign: TextAlign.right,
+            ))
+        .toList();
+
     var controller = this.controllers[controllerName];
-    debugPrint("$name: ${controller.text}");
+
     return Card(
       elevation: 1,
       child: Padding(
@@ -232,21 +244,20 @@ class ConsumedFoodView extends StatelessWidget {
                 name,
                 style: TextStyle(fontWeight: FontWeight.bold),
               )),
-              Expanded(child: Container()),
               Expanded(
-                  child: DropdownFormField<String>(
-                hint: Text(
-                  controller.text,
-                  textAlign: TextAlign.right,
-                ),
-                decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                ),
-                controller: controller,
-                items: menuItems,
-              ))
+                  child: DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField<String>(
+                          isExpanded: true,
+                          icon: Icon(Icons.arrow_drop_down_circle),
+                          value: controller.text,
+                          isDense: true,
+                          selectedItemBuilder: (context) {
+                            return buildedItem;
+                          },
+                          onChanged: (value) {
+                            controller.text = value.toString();
+                          },
+                          items: menuItems))),
             ],
           )),
     );
