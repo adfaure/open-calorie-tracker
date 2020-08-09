@@ -28,6 +28,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "drawerFood" : MessageLookupByLibrary.simpleMessage("Foods"),
     "objective" : MessageLookupByLibrary.simpleMessage("Objective"),
     "profile" : MessageLookupByLibrary.simpleMessage("Profile"),
-    "title" : MessageLookupByLibrary.simpleMessage("Food Assistant")
+    "title" : MessageLookupByLibrary.simpleMessage("Food Assistant"),
+    "today" : MessageLookupByLibrary.simpleMessage("Today"),
+    "tomorrow" : MessageLookupByLibrary.simpleMessage("Tomorrow"),
+    "yesterday" : MessageLookupByLibrary.simpleMessage("Yesterday")
   };
 }

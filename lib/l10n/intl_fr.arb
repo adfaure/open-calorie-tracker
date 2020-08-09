@@ -31,6 +31,24 @@
     "type": "text",
     "placeholders": {}
   },
+  "tomorrow": "Demain",
+  "@tomorrow": {
+    "description": "Demain",
+    "type": "text",
+    "placeholders": {}
+  },
+  "yesterday": "Hier",
+  "@yesterday": {
+    "description": "Hier",
+    "type": "text",
+    "placeholders": {}
+  },
+  "today": "Aujourd'hui",
+  "@today": {
+    "description": "Aujourd'hui",
+    "type": "text",
+    "placeholders": {}
+  },
   "drawerFood": "Aliments",
   "@drawerFood": {
     "description": "Drawer: food",

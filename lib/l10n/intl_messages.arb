@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-09T11:52:23.122784",
+  "@@last_modified": "2020-08-09T12:17:20.801024",
   "title": "Food Assistant",
   "@title": {
     "description": "The application title",
@@ -30,6 +30,24 @@
     "type": "text",
     "placeholders": {}
   },
+  "tomorrow": "Tomorrow",
+  "@tomorrow": {
+    "description": "tomorrow",
+    "type": "text",
+    "placeholders": {}
+  },
+  "yesterday": "Yesterday",
+  "@yesterday": {
+    "description": "yesterday",
+    "type": "text",
+    "placeholders": {}
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Today",
+    "type": "text",
+    "placeholders": {}
+  },
   "drawerFood": "Foods",
   "@drawerFood": {
     "description": "Drawer: foods",
@@ -42,7 +60,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "availableCalories": "Available calories",
+  "availableCalories": "Available calories:",
   "@availableCalories": {
     "description": "Calorie meter available calories",
     "type": "text",

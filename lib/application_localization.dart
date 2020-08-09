@@ -46,6 +46,21 @@ class AppLocalizations {
         name: 'available', desc: 'Calorie meter available');
   }
 
+  String get tomorrow {
+    return Intl.message('Tomorrow',
+        name: 'tomorrow', desc: 'tomorrow');
+  }
+
+  String get yesterday {
+    return Intl.message('Yesterday',
+        name: 'yesterday', desc: 'yesterday');
+  }
+
+  String get today {
+    return Intl.message('Today',
+        name: 'today', desc: 'Today');
+  }
+
   // Drawer menu titles
   String get drawerFood {
     return Intl.message('Foods', name: 'drawerFood', desc: 'Drawer: foods');

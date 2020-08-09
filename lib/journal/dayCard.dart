@@ -20,6 +20,8 @@ import 'package:intl/intl.dart';
 import 'package:open_weight/common/helpers.dart';
 import 'package:open_weight/common/ui.dart';
 
+import '../application_localization.dart';
+
 class DayCard extends StatelessWidget {
   final DateTime date;
   DayCard(
@@ -57,7 +59,7 @@ class DayCard extends StatelessWidget {
                     onTap: onTapMiddle,
                     child: Container(
                         alignment: Alignment.center,
-                        child: Text(dateFormat())))),
+                        child: Text(dateFormat(context))))),
             IconButton(
               iconSize: 45,
               icon: Icon(Icons.navigate_next, color: redTheme),
@@ -67,7 +69,7 @@ class DayCard extends StatelessWidget {
         ));
   }
 
-  String dateFormat() {
+  String dateFormat(BuildContext context) {
     final now = DateTime.now();
     final _today = today();
     final yesterday = DateTime(now.year, now.month, now.day - 1);
@@ -81,10 +83,10 @@ class DayCard extends StatelessWidget {
       text += ". ${date.year}";
     }
     if (aDate == _today)
-      return text + " (Today)";
+      return text + " (${AppLocalizations.of(context).today})";
     else if (aDate == yesterday)
-      return text + " (Yesterday)";
-    else if (aDate == tomorrow) return text + " (Tomorrow)";
+      return text + " (${AppLocalizations.of(context).yesterday})";
+    else if (aDate == tomorrow) return text + " (${AppLocalizations.of(context).tomorrow})";
 
     return text;
   }
