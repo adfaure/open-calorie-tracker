@@ -1,6 +1,5 @@
 {
-  "@@locale": "en",
-  "@@last_modified": "2020-08-09T11:04:39.081186",
+  "@@last_modified": "2020-08-09T11:52:23.122784",
   "title": "Food Assistant",
   "@title": {
     "description": "The application title",
@@ -13,9 +12,27 @@
     "type": "text",
     "placeholders": {}
   },
+  "objective": "Objective",
+  "@objective": {
+    "description": "objective (starts with a caps)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "consumed": "Consumed",
+  "@consumed": {
+    "description": "Calorie meter consumed food",
+    "type": "text",
+    "placeholders": {}
+  },
+  "available": "Available",
+  "@available": {
+    "description": "Calorie meter available",
+    "type": "text",
+    "placeholders": {}
+  },
   "drawerFood": "Foods",
   "@drawerFood": {
-    "description": "Drawer: food",
+    "description": "Drawer: foods",
     "type": "text",
     "placeholders": {}
   },
@@ -25,9 +42,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "objective": "Objective",
-  "@objective": {
-    "description": "objective (starts with a caps)",
+  "availableCalories": "Available calories:",
+  "@availableCalories": {
+    "description": "Calorie meter available calories",
     "type": "text",
     "placeholders": {}
   }

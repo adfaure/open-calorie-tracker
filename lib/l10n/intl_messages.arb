@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-09T11:43:43.648134",
+  "@@last_modified": "2020-08-09T11:52:23.122784",
   "title": "Food Assistant",
   "@title": {
     "description": "The application title",
@@ -9,6 +9,24 @@
   "profile": "Profile",
   "@profile": {
     "description": "profile (with a caps)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "objective": "Objective",
+  "@objective": {
+    "description": "objective (starts with a caps)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "consumed": "Consumed",
+  "@consumed": {
+    "description": "Calorie meter consumed food",
+    "type": "text",
+    "placeholders": {}
+  },
+  "available": "Available",
+  "@available": {
+    "description": "Calorie meter available",
     "type": "text",
     "placeholders": {}
   },
@@ -24,9 +42,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "objective": "Objective",
-  "@objective": {
-    "description": "objective (starts with a caps)",
+  "availableCalories": "Available calories",
+  "@availableCalories": {
+    "description": "Calorie meter available calories",
     "type": "text",
     "placeholders": {}
   }

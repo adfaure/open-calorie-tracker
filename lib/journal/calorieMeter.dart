@@ -24,6 +24,8 @@ import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../application_localization.dart';
+
 class CalorieMeter extends StatelessWidget {
   final consumedCalorie;
   final formater = NumberFormat("##.##");
@@ -35,8 +37,8 @@ class CalorieMeter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<MyDatabase, SharedPreferences>(
         builder: (builder, database, prefs, child) {
-      var objModel =
-          ObjectiveModel(database: database, prefs: prefs, objective: 0, date: date);
+      var objModel = ObjectiveModel(
+          database: database, prefs: prefs, objective: 0, date: date);
 
       return StreamBuilder(
           initialData: objModel.getObjective() ?? 0,
@@ -54,7 +56,7 @@ class CalorieMeter extends StatelessWidget {
                     Row(children: [
                       SizedBox(width: 5),
                       Text(
-                        "Available calories:",
+                       AppLocalizations.of(context).availableCalories,
                         textAlign: TextAlign.right,
                       )
                     ]),
@@ -66,16 +68,23 @@ class CalorieMeter extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         GestureDetector(
-                          onTap: () => {setObjectiveWithDial(context, objModel)},
+                          onTap: () =>
+                              {setObjectiveWithDial(context, objModel)},
                           child: _buildTextAndValue(
-                              context, formater.format(objective), "Objective"),
+                              context,
+                              formater.format(objective),
+                              AppLocalizations.of(context).objective),
                         ),
                         Text("-", textScaleFactor: sizeFactor),
-                        _buildTextAndValue(context,
-                            formater.format(consumedCalorie), "Consumed"),
+                        _buildTextAndValue(
+                            context,
+                            formater.format(consumedCalorie),
+                            AppLocalizations.of(context).consumed),
                         Text("=", textScaleFactor: sizeFactor),
-                        _buildTextAndValue(context,
-                            formater.format(availableCalories), "Available"),
+                        _buildTextAndValue(
+                            context,
+                            formater.format(availableCalories),
+                            AppLocalizations.of(context).available),
                       ],
                     ),
                     SizedBox(height: 25)

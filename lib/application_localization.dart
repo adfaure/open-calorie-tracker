@@ -25,26 +25,41 @@ class AppLocalizations {
         name: 'title', desc: 'The application title');
   }
 
+  // Words
   String get profile {
     return Intl.message('Profile',
         name: 'profile', desc: 'profile (with a caps)');
   }
 
-  String get drawerFood {
-    return Intl.message('Foods',
-        name: 'drawerFood', desc: 'Drawer: foods');
-  }
-
-  String get drawerAbout {
-    return Intl.message('About',
-        name: 'drawerAbout', desc: 'Drawer: about');
-  }
-  
   String get objective {
     return Intl.message('Objective',
         name: 'objective', desc: 'objective (starts with a caps)');
   }
 
+  String get consumed {
+    return Intl.message('Consumed',
+        name: 'consumed', desc: 'Calorie meter consumed food');
+  }
+
+  String get available {
+    return Intl.message('Available',
+        name: 'available', desc: 'Calorie meter available');
+  }
+
+  // Drawer menu titles
+  String get drawerFood {
+    return Intl.message('Foods', name: 'drawerFood', desc: 'Drawer: foods');
+  }
+
+  String get drawerAbout {
+    return Intl.message('About', name: 'drawerAbout', desc: 'Drawer: about');
+  }
+
+  // Calorie meter
+  String get availableCalories {
+    return Intl.message('Available calories:',
+        name: 'availableCalories', desc: 'Calorie meter available calories');
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

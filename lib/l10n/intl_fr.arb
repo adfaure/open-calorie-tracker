@@ -13,6 +13,24 @@
     "type": "text",
     "placeholders": {}
   },
+  "objective": "Objectif",
+  "@objective": {
+    "description": "Objectif (avec majuscule)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "consumed": "Consomées",
+  "@consumed": {
+    "description": "Calorie metter calories consomées",
+    "type": "text",
+    "placeholders": {}
+  },
+  "available": "Disponibles",
+  "@available": {
+    "description": "Calories disponibles",
+    "type": "text",
+    "placeholders": {}
+  },
   "drawerFood": "Aliments",
   "@drawerFood": {
     "description": "Drawer: food",
@@ -25,9 +43,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "objective": "Objectif",
-  "@objective": {
-    "description": "objective (starts with a caps)",
+  "availableCalories": "Calories disponibles:",
+  "@availableCalories": {
+    "description": "Calorie meter available calories",
     "type": "text",
     "placeholders": {}
   }
