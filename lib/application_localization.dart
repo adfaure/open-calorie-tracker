@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:open_weight/database/db_helper.dart';
 
 import 'l10n/messages_all.dart';
 
@@ -24,9 +25,9 @@ class AppLocalizations {
         name: 'title', desc: 'The application title');
   }
 
-  String get drawerProfile {
+  String get profile {
     return Intl.message('Profile',
-        name: 'drawerProfile', desc: 'Drawer: profile');
+        name: 'profile', desc: 'profile (with a caps)');
   }
 
   String get drawerFood {
@@ -37,6 +38,11 @@ class AppLocalizations {
   String get drawerAbout {
     return Intl.message('About',
         name: 'drawerAbout', desc: 'Drawer: about');
+  }
+  
+  String get objective {
+    return Intl.message('Objective',
+        name: 'objective', desc: 'objective (starts with a caps)');
   }
 
 }

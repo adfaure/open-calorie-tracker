@@ -7,9 +7,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "drawerProfile": "Profil",
-  "@drawerProfile": {
-    "description": "Drawer: profile",
+  "profile": "Profil",
+  "@profile": {
+    "description": "profile (with a caps)",
     "type": "text",
     "placeholders": {}
   },
@@ -22,6 +22,12 @@
   "drawerAbout": "À propos",
   "@drawerAbout": {
     "description": "Drawer: about",
+    "type": "text",
+    "placeholders": {}
+  },
+  "objective": "Objectif",
+  "@objective": {
+    "description": "objective (starts with a caps)",
     "type": "text",
     "placeholders": {}
   }

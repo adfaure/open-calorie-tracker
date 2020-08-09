@@ -46,7 +46,7 @@ class ApplicationDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text(AppLocalizations.of(context).drawerProfile),
+            title: Text(AppLocalizations.of(context).profile),
             onTap: () {
               _navigateUserView(context);
             },

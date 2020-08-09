@@ -23,6 +23,7 @@ import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'application_localization.dart';
 import 'journal/objectiveDialog.dart';
 
 /// Focus on a modifiable food entry.
@@ -33,7 +34,7 @@ class UserView extends StatelessWidget {
     return Scaffold(
         backgroundColor: appBgColor,
         appBar: AppBar(
-          title: Text("Personal informations"),
+          title: Text(AppLocalizations.of(context).profile),
         ),
         body: Consumer2<MyDatabase, SharedPreferences>(
             builder: (builder, database, prefs, child) {
@@ -54,7 +55,7 @@ class UserView extends StatelessWidget {
           padding: EdgeInsets.all(15),
           child: Row(
             children: <Widget>[
-              Text("Objective", 
+              Text(AppLocalizations.of(context).objective, 
               ),
               Expanded(
                 child: Container(),

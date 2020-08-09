@@ -23,7 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "drawerAbout" : MessageLookupByLibrary.simpleMessage("À propos"),
     "drawerFood" : MessageLookupByLibrary.simpleMessage("Aliments"),
-    "drawerProfile" : MessageLookupByLibrary.simpleMessage("Profil"),
+    "objective" : MessageLookupByLibrary.simpleMessage("Objectif"),
+    "profile" : MessageLookupByLibrary.simpleMessage("Profil"),
     "title" : MessageLookupByLibrary.simpleMessage("Food Assistant")
   };
 }
