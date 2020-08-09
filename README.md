@@ -38,10 +38,11 @@ Then start the emulator: `./result/bin/run-test-emulator`.
 
 # Icon
 
-Update icon:
+
+To change the icon of the application:
 
 ```
-To change the icon of the application:
+flutter pub run flutter_launcher_icons:main
 ```
 
 # Localization
