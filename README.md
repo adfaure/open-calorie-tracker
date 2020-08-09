@@ -103,6 +103,7 @@ and then deploy the apk on a connected device:
 # Todo
 
 - Localize the application eng/fr.
+  - Almost done, find a way to localize the error form's error messages.
 - Create a first login page, to enter user information such as the objective.
     - The initialization of the application allows to create the initialization date.
       The init date is then used as the first date the user can navigate from, and ensure the consistency of the objective data.
