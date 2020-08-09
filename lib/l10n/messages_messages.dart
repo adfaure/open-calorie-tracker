@@ -19,24 +19,38 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'messages';
 
+  static m0(total) => "Total: ${total} kcal";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "available" : MessageLookupByLibrary.simpleMessage("Available"),
     "availableCalories" : MessageLookupByLibrary.simpleMessage("Available calories:"),
     "breakfast" : MessageLookupByLibrary.simpleMessage("Breakfast"),
+    "calorie" : MessageLookupByLibrary.simpleMessage("Calorie"),
+    "caloriePerPortion" : MessageLookupByLibrary.simpleMessage("Calorie per Portion"),
+    "cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "consumed" : MessageLookupByLibrary.simpleMessage("Consumed"),
+    "continueWord" : MessageLookupByLibrary.simpleMessage("Continue"),
+    "date" : MessageLookupByLibrary.simpleMessage("Date"),
     "diner" : MessageLookupByLibrary.simpleMessage("Diner"),
     "drawerAbout" : MessageLookupByLibrary.simpleMessage("About"),
     "drawerFood" : MessageLookupByLibrary.simpleMessage("Foods"),
     "invalidNumber" : MessageLookupByLibrary.simpleMessage("Invalid number"),
     "lunch" : MessageLookupByLibrary.simpleMessage("Lunch"),
+    "mealType" : MessageLookupByLibrary.simpleMessage("Meal type"),
+    "name" : MessageLookupByLibrary.simpleMessage("Name"),
     "objective" : MessageLookupByLibrary.simpleMessage("Objective"),
+    "portion" : MessageLookupByLibrary.simpleMessage("Portion"),
     "profile" : MessageLookupByLibrary.simpleMessage("Profile"),
+    "quantity" : MessageLookupByLibrary.simpleMessage("Quantity"),
     "requirePositiveNumber" : MessageLookupByLibrary.simpleMessage("Require positive number"),
     "snacks" : MessageLookupByLibrary.simpleMessage("Snacks"),
+    "thisFoodWillBeDeleted" : MessageLookupByLibrary.simpleMessage("This food will be deleted."),
     "title" : MessageLookupByLibrary.simpleMessage("Food Assistant"),
     "today" : MessageLookupByLibrary.simpleMessage("Today"),
     "tomorrow" : MessageLookupByLibrary.simpleMessage("Tomorrow"),
+    "totalKcal" : m0,
+    "unit" : MessageLookupByLibrary.simpleMessage("Unit"),
     "yesterday" : MessageLookupByLibrary.simpleMessage("Yesterday")
   };
 }

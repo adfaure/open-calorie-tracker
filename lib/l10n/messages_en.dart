@@ -19,20 +19,27 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static m0(total) => "Total: ${total} kcal";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "available" : MessageLookupByLibrary.simpleMessage("Available"),
     "availableCalories" : MessageLookupByLibrary.simpleMessage("Available calories:"),
+    "caloriePerPortion" : MessageLookupByLibrary.simpleMessage("Calorie per Portion"),
+    "cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "consumed" : MessageLookupByLibrary.simpleMessage("Consumed"),
+    "continueWord" : MessageLookupByLibrary.simpleMessage("Continue"),
     "drawerAbout" : MessageLookupByLibrary.simpleMessage("About"),
     "drawerFood" : MessageLookupByLibrary.simpleMessage("Foods"),
     "invalidNumber" : MessageLookupByLibrary.simpleMessage("Invalid number"),
     "objective" : MessageLookupByLibrary.simpleMessage("Objective"),
     "profile" : MessageLookupByLibrary.simpleMessage("Profile"),
     "requirePositiveNumber" : MessageLookupByLibrary.simpleMessage("Require positive number"),
+    "thisFoodWillBeDeleted" : MessageLookupByLibrary.simpleMessage("This food will be deleted."),
     "title" : MessageLookupByLibrary.simpleMessage("Food Assistant"),
     "today" : MessageLookupByLibrary.simpleMessage("Today"),
     "tomorrow" : MessageLookupByLibrary.simpleMessage("Tomorrow"),
+    "totalKcal" : m0,
     "yesterday" : MessageLookupByLibrary.simpleMessage("Yesterday")
   };
 }

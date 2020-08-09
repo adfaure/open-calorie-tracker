@@ -24,6 +24,34 @@ class AppLocalizations {
         name: 'title', desc: 'The application title');
   }
 
+  String get name {
+    return Intl.message('Name', name: 'name', desc: 'Word: name');
+  }
+
+  String get date {
+    return Intl.message('Date', name: 'date', desc: 'Word: date');
+  }
+
+  String get calorie {
+    return Intl.message('Calorie', name: 'calorie', desc: 'Word: calorie');
+  }
+
+  String get unit {
+    return Intl.message('Unit', name: 'unit', desc: 'Word: unit');
+  }
+
+  String get quantity {
+    return Intl.message('Quantity', name: 'quantity', desc: 'Word: quantity');
+  }
+
+  String get mealType {
+    return Intl.message('Meal type', name: 'mealType', desc: 'Meal type');
+  }
+
+  String get portion {
+    return Intl.message('Portion', name: 'portion', desc: 'Word: portion');
+  }
+
   // Words
   String get profile {
     return Intl.message('Profile',
@@ -33,6 +61,16 @@ class AppLocalizations {
   String get objective {
     return Intl.message('Objective',
         name: 'objective', desc: 'objective (starts with a caps)');
+  }
+
+  String get cancel {
+    return Intl.message('Cancel', name: 'cancel', desc: 'Dialog cancel button');
+  }
+
+  // continue is a dart keyword
+  String get continueWord {
+    return Intl.message('Continue',
+        name: 'continueWord', desc: 'Dialog continue button');
   }
 
   String get consumed {
@@ -119,6 +157,25 @@ class AppLocalizations {
   String get requirePositiveNumber {
     return Intl.message('Require positive number',
         name: 'requirePositiveNumber', desc: '');
+  }
+
+  totalKcal(total) => Intl.message("Total: $total kcal",
+      name: "totalKcal",
+      args: [total],
+      desc: "Display the total calorie consumed");
+
+  // Mealcard
+  String get thisFoodWillBeDeleted {
+    return Intl.message('This food will be deleted.',
+        name: 'thisFoodWillBeDeleted',
+        desc: 'Ask confirmation to delete a consumed food');
+  }
+
+  //Consumed food view
+    String get caloriePerPortion {
+    return Intl.message("Calorie per Portion",
+        name: 'caloriePerPortion',
+        desc: 'Calorie per portion in consumed food view');
   }
 }
 

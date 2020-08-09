@@ -23,6 +23,8 @@ import 'package:open_weight/database/db_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+import '../application_localization.dart';
+
 /// Focus on a modifiable food entry.
 class ConsumedFoodView extends StatelessWidget {
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -88,21 +90,27 @@ class ConsumedFoodView extends StatelessWidget {
                   color: Colors.white,
                   child: ListView(
                     children: <Widget>[
-                      _buildEditableRow("Name", "name",
+                      _buildEditableRow(
+                          AppLocalizations.of(context).name, "name",
                           validator: _requiredTextField),
-                      _buildRow("Date", formatter.format(this.food.date)),
-                      _buildEditableRow("Quantity", "quantity",
+                      _buildRow(AppLocalizations.of(context).date,
+                          formatter.format(this.food.date)),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).quantity, "quantity",
                           validator: _intValidator),
                       _buildDropdownRow(
-                          "Meal type",
+                          AppLocalizations.of(context).mealType,
                           "mealType",
                           List<String>.from(
-                              [ "Breackfast", "Lunch", "Diner", "Snacks" ])),
+                              ["Breakfast", "Lunch", "Diner", "Snacks"])),
                       //_buildEditableRow("Meal Type", "mealType",
                       //   validator: _mealValidator),
-                      _buildEditableRow("Portion", "portion"),
-                      _buildEditableRow("Calorie per Portion", "calorie"),
-                      _buildEditableRow("Unit", "unit"),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).portion, "portion"),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).caloriePerPortion, "calorie"),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).unit, "unit"),
                     ],
                   )));
         }));

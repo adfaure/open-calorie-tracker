@@ -62,8 +62,8 @@ class MealCard extends StatelessWidget {
                         // Total calorie meal
                         _totalCalorie = snapshot.data;
                       }
-                      return Text(
-                          "Total: ${formater.format(_totalCalorie)} kcal");
+                      return Text(AppLocalizations.of(context)
+                          .totalKcal(formater.format(_totalCalorie)));
                     });
               }),
               trailing: IconButton(
@@ -151,24 +151,27 @@ class MealCard extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Center(child: Text("Delete food?")),
+            title: Center(
+                child:
+                    Text(AppLocalizations.of(context).thisFoodWillBeDeleted)),
             children: <Widget>[
               Row(children: [
                 Expanded(
                     child: FlatButton(
-                  child: Text(
-                    "Continue",
-                    style: TextStyle(color: Colors.blue),
-                  ),
+                  child: Text(AppLocalizations.of(context).cancel,
+                      style: TextStyle(color: Colors.red)),
                   onPressed: () {
-                    Navigator.pop(context, true);
+                    Navigator.pop(context, false);
                   },
                 )),
                 Expanded(
                     child: FlatButton(
-                  child: Text("Cancel", style: TextStyle(color: Colors.red)),
+                  child: Text(
+                    AppLocalizations.of(context).continueWord,
+                    style: TextStyle(color: Colors.blue),
+                  ),
                   onPressed: () {
-                    Navigator.pop(context, false);
+                    Navigator.pop(context, true);
                   },
                 )),
               ]),

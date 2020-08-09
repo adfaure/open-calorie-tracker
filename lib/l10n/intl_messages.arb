@@ -1,8 +1,50 @@
 {
-  "@@last_modified": "2020-08-09T20:01:45.760821",
+  "@@last_modified": "2020-08-09T20:57:54.360779",
   "title": "Food Assistant",
   "@title": {
     "description": "The application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Word: name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "date": "Date",
+  "@date": {
+    "description": "Word: date",
+    "type": "text",
+    "placeholders": {}
+  },
+  "calorie": "Calorie",
+  "@calorie": {
+    "description": "Word: calorie",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unit": "Unit",
+  "@unit": {
+    "description": "Word: unit",
+    "type": "text",
+    "placeholders": {}
+  },
+  "quantity": "Quantity",
+  "@quantity": {
+    "description": "Word: quantity",
+    "type": "text",
+    "placeholders": {}
+  },
+  "mealType": "Meal type",
+  "@mealType": {
+    "description": "Meal type",
+    "type": "text",
+    "placeholders": {}
+  },
+  "portion": "Portion",
+  "@portion": {
+    "description": "Word: portion",
     "type": "text",
     "placeholders": {}
   },
@@ -15,6 +57,18 @@
   "objective": "Objective",
   "@objective": {
     "description": "objective (starts with a caps)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Dialog cancel button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "continueWord": "Continue",
+  "@continueWord": {
+    "description": "Dialog continue button",
     "type": "text",
     "placeholders": {}
   },
@@ -99,6 +153,26 @@
   "requirePositiveNumber": "Require positive number",
   "@requirePositiveNumber": {
     "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "totalKcal": "Total: {total} kcal",
+  "@totalKcal": {
+    "description": "Display the total calorie consumed",
+    "type": "text",
+    "placeholders": {
+      "total": {}
+    }
+  },
+  "thisFoodWillBeDeleted": "This food will be deleted.",
+  "@thisFoodWillBeDeleted": {
+    "description": "Ask confirmation to delete a consumed food",
+    "type": "text",
+    "placeholders": {}
+  },
+  "caloriePerPortion": "Calorie per Portion",
+  "@caloriePerPortion": {
+    "description": "Calorie per portion in consumed food view",
     "type": "text",
     "placeholders": {}
   }

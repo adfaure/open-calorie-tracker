@@ -18,6 +18,18 @@
     "type": "text",
     "placeholders": {}
   },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Dialog cancel button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "continueWord": "Continue",
+  "@continueWord": {
+    "description": "Dialog continue button",
+    "type": "text",
+    "placeholders": {}
+  },
   "consumed": "Consumed",
   "@consumed": {
     "description": "Calorie meter consumed food",
@@ -75,6 +87,26 @@
   "requirePositiveNumber": "Require positive number",
   "@requirePositiveNumber": {
     "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "totalKcal": "Total: {total} kcal",
+  "@totalKcal": {
+    "description": "Display the total calorie consumed",
+    "type": "text",
+    "placeholders": {
+      "total": {}
+    }
+  },
+  "thisFoodWillBeDeleted": "This food will be deleted.",
+  "@thisFoodWillBeDeleted": {
+    "description": "Ask confirmation to delete a consumed food",
+    "type": "text",
+    "placeholders": {}
+  },
+  "caloriePerPortion": "Calorie per Portion",
+  "@caloriePerPortion": {
+    "description": "Calorie per portion in consumed food view",
     "type": "text",
     "placeholders": {}
   }
