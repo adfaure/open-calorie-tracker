@@ -1,10 +1,10 @@
-# Open Calorie Tracker
+# Food Assistant
 
-OCT is a similar to my any calorie tracking applications.
-You can enter any food you eat, and get a daily summary of your calories.
+FoodAssistant is a similar to any calorie tracking applications.
+You can enter the foods you eat, and get a daily summary of your calories.
 It is possible to create foods that you can reuse when you need it, or directly scan the barcode of your products.
 
-**All your data stays on your phone**, nothing is send to a tier server.
+**All your data stays on your phone**, nothing is send to a server.
 
 ![Screenshot](./img/journal_demo.jpg)
 
@@ -13,7 +13,7 @@ It is possible to create foods that you can reuse when you need it, or directly 
 Enter into the shell.
 
 ```
-NIXPKGS_ALLOW_UNFREE=1 ns shell_test.nix
+NIXPKGS_ALLOW_UNFREE=1 ns shell.nix
 ```
 
 ## Run on your phone
@@ -23,21 +23,22 @@ Then to run the application on your phone, use in a terminal: `flutter run`
 
 ## Start emulator with android-studio
 
-launch android-studio and configure+launch an emulator.
+launch android-studio and configure+launch an emulator. (Currently broken...)
 
 ## Launching on emulator  (**WIP**)
 
 To build the emulator use: `nix-build emulate.nix`.
 Then start the emulator: `./result/bin/run-test-emulator`.
 
+The emulator is launched, however flutter doesn't find as a connected device.
+
 # Notes
 
-- For some reasons, accepting android license causes `allowUnfree = true`, one quick workaround is to run the shell with: `NIXPKGS_ALLOW_UNFREE=1 nix-shell shell_test.nix`.
+- For some reasons, accepting android license causes `allowUnfree = true`, one quick workaround is to run the shell with: `NIXPKGS_ALLOW_UNFREE=1 nix-shell shell.nix`.
 - If database not working with dlopen failing this link might fix it: https://stackoverflow.com/a/62308661
 - I am interested to learn about the Bloc pattern. Looks like this article is a good entry point: https://www.didierboelens.com/2018/08/reactive-programming-streams-bloc/.
 
 # Icon
-
 
 To change the icon of the application:
 
