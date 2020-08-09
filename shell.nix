@@ -7,6 +7,8 @@ let
   allowUnfree = true;
   # flutterPkgs = (import (builtins.fetchTarball "https://github.com/babariviere/nixpkgs/archive/flutter-testing.tar.gz")  {});
   # unstablePkgs = (import (builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/75717901da4b40ebc2667a0dca79b10304358a87.tar.gz")   {});
+  
+  # Git revision of the channel: be42a66cd30e6bc957d919a9afbb0eb83adb6c26
   unstablePkgs = (import (builtins.fetchTarball "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz")   {});
   extensions = (with unstablePkgs.vscode-extensions; [
       bbenoist.Nix
@@ -21,7 +23,20 @@ let
       publisher = "dart-code";
       version = "3.11.0";
       sha256 = "sha256:0rgszz5iw6ja2cjmg3vl1m1a4392rkykcw2n7xskf1pgc73kf1h0";
-  })];
+  })
+  ({
+      name = "flutter-intl";
+      publisher = "localizely";
+      version = "1.9.1";
+      sha256 = "sha256:14a2lawvh5hzzcdxwxamjd25wzjc7d20a31zvjzn88zk3syj7i65";
+  })
+  ({
+      name = "code-spell-checker";
+      publisher = "streetsidesoftware";
+      version = "1.9.0";
+      sha256 = "sha256:0ic0zbv4pja5k4hlixmi6mikk8nzwr8l5w2jigdwx9hc4zhkf713";
+  })
+  ];
 
   vscode-with-extensions = unstablePkgs.vscode-with-extensions.override {
       vscodeExtensions = extensions;
