@@ -65,5 +65,17 @@
     "description": "Calorie meter available calories",
     "type": "text",
     "placeholders": {}
+  },
+  "invalidNumber": "Invalid number",
+  "@invalidNumber": {
+    "description": "Invalid int formatting",
+    "type": "text",
+    "placeholders": {}
+  },
+  "requirePositiveNumber": "Require positive number",
+  "@requirePositiveNumber": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
   }
 }

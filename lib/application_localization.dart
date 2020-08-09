@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:open_weight/database/db_helper.dart';
 
 import 'l10n/messages_all.dart';
 
@@ -46,19 +45,54 @@ class AppLocalizations {
         name: 'available', desc: 'Calorie meter available');
   }
 
+  String get diner {
+    return Intl.message('Diner', name: 'diner', desc: '');
+  }
+
+  String get lunch {
+    return Intl.message('Lunch', name: 'lunch', desc: '');
+  }
+
+  String get breakfast {
+    return Intl.message('Breakfast', name: 'breakfast', desc: '');
+  }
+
+  String get snacks {
+    return Intl.message('Snacks', name: 'snacks', desc: '');
+  }
+
+  String localizedMealtype(String mealType) {
+    switch (mealType) {
+      case "Diner":
+        {
+          return this.diner;
+        }
+      case "Breakfast":
+        {
+          return this.breakfast;
+        }
+
+      case "Lunch":
+        {
+          return this.lunch;
+        }
+      case "Snacks":
+        {
+          return this.snacks;
+        }
+    }
+  }
+
   String get tomorrow {
-    return Intl.message('Tomorrow',
-        name: 'tomorrow', desc: 'tomorrow');
+    return Intl.message('Tomorrow', name: 'tomorrow', desc: 'tomorrow');
   }
 
   String get yesterday {
-    return Intl.message('Yesterday',
-        name: 'yesterday', desc: 'yesterday');
+    return Intl.message('Yesterday', name: 'yesterday', desc: 'yesterday');
   }
 
   String get today {
-    return Intl.message('Today',
-        name: 'today', desc: 'Today');
+    return Intl.message('Today', name: 'today', desc: 'Today');
   }
 
   // Drawer menu titles
@@ -74,6 +108,17 @@ class AppLocalizations {
   String get availableCalories {
     return Intl.message('Available calories:',
         name: 'availableCalories', desc: 'Calorie meter available calories');
+  }
+
+  // Objective dialog
+  String get invalidNumber {
+    return Intl.message('Invalid number',
+        name: 'invalidNumber', desc: 'Invalid int formating');
+  }
+
+  String get requirePositiveNumber {
+    return Intl.message('Require positive number',
+        name: 'requirePositiveNumber', desc: '');
   }
 }
 

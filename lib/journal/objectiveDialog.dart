@@ -17,7 +17,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:open_weight/models/objective.dart';
-import 'package:provider/provider.dart';
+
+import '../application_localization.dart';
 
 /// Show dialog asking for the number of portion to add from selected food.
 setObjectiveWithDial(
@@ -34,7 +35,7 @@ setObjectiveWithDial(
           title: Center(
               child: Column(children: [
             Text(
-              'Objective',
+              AppLocalizations.of(context).objective,
             ),
           ])),
           children: <Widget>[
@@ -59,10 +60,10 @@ setObjectiveWithDial(
                         try {
                           newObjective = int.parse(doubleString);
                         } catch (e) {
-                          return "Unvalid quantity.";
+                          return AppLocalizations.of(context).invalidNumber;
                         }
                         if (newObjective <= 0) {
-                          return "Require positive number.";
+                          return AppLocalizations.of(context).requirePositiveNumber;
                         }
                         return null;
                       },

@@ -26,6 +26,7 @@ import 'package:open_weight/database/db_helper.dart';
 import 'package:open_weight/food/foodSelection.dart';
 import 'package:provider/provider.dart';
 
+import '../application_localization.dart';
 import 'consumedFoodView.dart';
 
 //internal dependencies
@@ -46,7 +47,9 @@ class MealCard extends StatelessWidget {
       Card(
           margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
           child: ListTile(
-              title: Container(child: Text(title)),
+              title: Container(
+                  child: Text(AppLocalizations.of(context)
+                      .localizedMealtype(this.title))),
               subtitle:
                   Consumer<MyDatabase>(builder: (builder, database, child) {
                 return StreamBuilder(
@@ -92,7 +95,6 @@ class MealCard extends StatelessWidget {
                   // Passing by a builder so one can display a snackbar after the dialog ended.
                   return Dismissible(
                       confirmDismiss: (direction) {
-                        debugPrint("Ask something here");
                         return _getConfirm(context);
                       },
                       background: Container(color: Colors.red.shade100),

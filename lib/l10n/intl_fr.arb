@@ -31,6 +31,30 @@
     "type": "text",
     "placeholders": {}
   },
+  "diner": "Diner",
+  "@diner": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "lunch": "Déjeuner",
+  "@lunch": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "breakfast": "Petit déjeuner",
+  "@breakfast": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "snacks": "Collation",
+  "@snacks": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
   "tomorrow": "Demain",
   "@tomorrow": {
     "description": "Demain",
@@ -64,6 +88,18 @@
   "availableCalories": "Calories disponibles:",
   "@availableCalories": {
     "description": "Calorie meter available calories",
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidNumber": "Nombre invalide",
+  "@invalidNumber": {
+    "description": "Invalid int formatting",
+    "type": "text",
+    "placeholders": {}
+  },
+  "requirePositiveNumber": "Nombre positif requis",
+  "@requirePositiveNumber": {
+    "description": "",
     "type": "text",
     "placeholders": {}
   }

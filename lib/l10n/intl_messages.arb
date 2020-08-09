@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-09T12:17:20.801024",
+  "@@last_modified": "2020-08-09T20:01:45.760821",
   "title": "Food Assistant",
   "@title": {
     "description": "The application title",
@@ -27,6 +27,30 @@
   "available": "Available",
   "@available": {
     "description": "Calorie meter available",
+    "type": "text",
+    "placeholders": {}
+  },
+  "diner": "Diner",
+  "@diner": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "lunch": "Lunch",
+  "@lunch": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "breakfast": "Breakfast",
+  "@breakfast": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "snacks": "Snacks",
+  "@snacks": {
+    "description": "",
     "type": "text",
     "placeholders": {}
   },
@@ -63,6 +87,18 @@
   "availableCalories": "Available calories:",
   "@availableCalories": {
     "description": "Calorie meter available calories",
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidNumber": "Invalid number",
+  "@invalidNumber": {
+    "description": "Invalid int formating",
+    "type": "text",
+    "placeholders": {}
+  },
+  "requirePositiveNumber": "Require positive number",
+  "@requirePositiveNumber": {
+    "description": "",
     "type": "text",
     "placeholders": {}
   }
