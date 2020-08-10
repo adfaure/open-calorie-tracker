@@ -105,10 +105,8 @@ and then deploy the apk on a connected device:
 
 - Localize the application eng/fr.
   - Almost done, find a way to localize the error form's error messages.
+- Add food details (lipid, iron etc)
 - Create a first login page, to enter user information such as the objective.
     - The initialization of the application allows to create the initialization date.
       The init date is then used as the first date the user can navigate from, and ensure the consistency of the objective data.
-- Find the best way to select aliments, portion or number of gramme etc
-- Add food details (lipid, iron etc)
 - Packages the application with Nix?
-- Check for internet connection before scanning product.

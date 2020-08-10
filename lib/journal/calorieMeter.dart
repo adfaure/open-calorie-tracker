@@ -15,6 +15,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 // Number formatting
 import 'package:intl/intl.dart';
@@ -23,8 +25,10 @@ import 'package:open_weight/journal/objectiveDialog.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 import '../application_localization.dart';
+import '../chartViewDebug.dart';
 
 class CalorieMeter extends StatelessWidget {
   final consumedCalorie;
@@ -49,14 +53,14 @@ class CalorieMeter extends StatelessWidget {
             final sizeFactor = 2.0;
             return Container(
                 child: Card(
-                  margin: EdgeInsets.all(0),
+                  elevation: 0,
+                  margin: EdgeInsets.all(10),
                   child: Column(children: [
-                    SizedBox(height: 25),
                     // I use a row, so the text is placed to the right of the screen
                     Row(children: [
                       SizedBox(width: 5),
                       Text(
-                       AppLocalizations.of(context).availableCalories,
+                        AppLocalizations.of(context).availableCalories,
                         textAlign: TextAlign.right,
                       )
                     ]),
@@ -93,8 +97,8 @@ class CalorieMeter extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                        spreadRadius: 1,
-                        color: Colors.black54,
+                        spreadRadius: 0,
+                        color: Colors.white,
                         blurRadius: 1.0,
                         offset: Offset(3, 1))
                   ],

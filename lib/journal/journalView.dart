@@ -25,6 +25,7 @@ import 'package:open_weight/application_drawer.dart';
 import 'package:open_weight/journal/dayCard.dart';
 import 'package:open_weight/journal/calorieMeter.dart';
 import 'package:open_weight/journal/mealCard.dart';
+import '../chartViewDebug.dart';
 import '../database/db_helper.dart';
 
 class JournalView extends StatefulWidget {
@@ -50,7 +51,7 @@ class _JournalViewState extends State<JournalView> {
 
     this.dateIndex = idx;
     _pageController = PageController(
-        initialPage: this.dateIndex, keepPage: true, viewportFraction: 0.96);
+        initialPage: this.dateIndex, keepPage: true, viewportFraction: 1);
 
     super.initState();
   }
@@ -116,7 +117,7 @@ class JournalPage extends StatelessWidget {
             }
             return Column(children: <Widget>[
               Material(
-                  elevation: 10,
+                  elevation: 1,
                   shadowColor: Colors.black,
                   child: Column(children: <Widget>[
                     DayCard(
@@ -132,8 +133,8 @@ class JournalPage extends StatelessWidget {
                       },
                     ),
                     Divider(
-                      color: Colors.grey.shade700,
-                      height: 1,
+                      color: Colors.grey.shade50,
+                      height: 5,
                     ),
                     CalorieMeter(
                       consumedCalorie: totalCalorie,
@@ -141,6 +142,10 @@ class JournalPage extends StatelessWidget {
                     ),
                     Divider(
                       color: Colors.grey.shade50,
+                      height: 5,
+                    ),
+                    Divider(
+                      color: Colors.grey,
                       height: 1,
                     ),
                   ])),
@@ -154,7 +159,16 @@ class JournalPage extends StatelessWidget {
                             MealCard(title: "Breakfast", date: date),
                             MealCard(title: "Lunch", date: date),
                             MealCard(title: "Diner", date: date),
-                            MealCard(title: "Snacks", date: date)
+                            MealCard(title: "Snacks", date: date),
+                            Card(
+                                color: Colors.white,
+                                elevation: 0,
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 150,
+                                  child:
+                                      GaugeChart(GaugeChart.createSampleData()),
+                                )),
                           ],
                           padding: EdgeInsets.fromLTRB(0, 0, 0, 8)))),
             ]);

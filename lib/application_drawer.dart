@@ -24,6 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:open_weight/about.dart';
 import 'package:open_weight/common/ui.dart';
 import 'application_localization.dart';
+import 'chartViewDebug.dart';
 import 'database/db_helper.dart';
 import 'food/food.dart';
 import 'profile.dart';
@@ -31,41 +32,46 @@ import 'profile.dart';
 class ApplicationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     List<Widget> menu = List.from([
-          DrawerHeader(
-            child: Container(),
-            decoration: BoxDecoration(
-              color: redTheme,
-            ),
-          ),
-          ListTile(
-            title: Text(AppLocalizations.of(context).drawerFood),
-            onTap: () {
-              _navigateShowFoodPanel(context);
-            },
-          ),
-          ListTile(
-            title: Text(AppLocalizations.of(context).profile),
-            onTap: () {
-              _navigateUserView(context);
-            },
-          ),
-          ListTile(
-            title: Text(AppLocalizations.of(context).drawerAbout),
-            onTap: () {
-              _debugShowAbout(context);
-            },
-          ),
+      DrawerHeader(
+        child: Container(),
+        decoration: BoxDecoration(
+          color: redTheme,
+        ),
+      ),
+      ListTile(
+        title: Text(AppLocalizations.of(context).drawerFood),
+        onTap: () {
+          _navigateShowFoodPanel(context);
+        },
+      ),
+      ListTile(
+        title: Text(AppLocalizations.of(context).profile),
+        onTap: () {
+          _navigateUserView(context);
+        },
+      ),
+      ListTile(
+        title: Text(AppLocalizations.of(context).drawerAbout),
+        onTap: () {
+          _debugShowAbout(context);
+        },
+      ),
     ]);
 
-    if(kDebugMode) {
-      menu.add(          ListTile(
-            title: Text('Debug data'),
-            onTap: () {
-              _debugShowDatabase(context);
-            },
-          ));
+    if (kDebugMode) {
+      menu.add(ListTile(
+        title: Text('Debug data'),
+        onTap: () {
+          _debugShowDatabase(context);
+        },
+      ));
+      menu.add(ListTile(
+        title: Text('Chart'),
+        onTap: () {
+          _debugChartDebug(context);
+        },
+      ));
     }
 
     return Drawer(
@@ -85,6 +91,13 @@ class ApplicationDrawer extends StatelessWidget {
 
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => MoorDbViewer(database)));
+  }
+
+  _debugChartDebug(BuildContext context) async {
+    final database = Provider.of<MyDatabase>(context, listen: false);
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => ChartView()));
   }
 
   _navigateShowFoodPanel(BuildContext context) async {

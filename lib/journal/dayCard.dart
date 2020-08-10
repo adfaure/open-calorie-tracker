@@ -41,9 +41,9 @@ class DayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Card(
         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        height: 50,
+        // height: 50,
         color: Colors.white,
         child: Row(
           children: [
