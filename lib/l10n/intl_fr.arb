@@ -61,6 +61,24 @@
     "type": "text",
     "placeholders": {}
   },
+  "lipids": "Lipides",
+  "@lipids": {
+    "description": "Word: lipids",
+    "type": "text",
+    "placeholders": {}
+  },
+  "carbohydrates": "Glucides",
+  "@carbohydrates": {
+    "description": "Word: carbohydrates",
+    "type": "text",
+    "placeholders": {}
+  },
+  "proteins": "Protéines",
+  "@proteins": {
+    "description": "Word: proteins",
+    "type": "text",
+    "placeholders": {}
+  },
   "profile": "Profil",
   "@profile": {
     "description": "profile (with a caps)",
@@ -276,6 +294,12 @@
   "sancFailPlatformError": "Impossible de récupérer le numéro de platform",
   "@sancFailPlatformError": {
     "description": "fail scan",
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodListTitle": "Liste des aliments",
+  "@foodListTitle": {
+    "description": "",
     "type": "text",
     "placeholders": {}
   }

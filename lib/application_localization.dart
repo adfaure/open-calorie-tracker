@@ -60,6 +60,37 @@ class AppLocalizations {
     return Intl.message('Error', name: 'error', desc: 'Word: error');
   }
 
+  String get lipids {
+    return Intl.message('Lipids', name: 'lipids', desc: 'Word: lipids');
+  }
+
+  String get carbohydrates {
+    return Intl.message('Carbohydrates',
+        name: 'carbohydrates', desc: 'Word: carbohydrates');
+  }
+
+  String get proteins {
+    return Intl.message('Proteins', name: 'proteins', desc: 'Word: proteins');
+  }
+
+  String dynamicNutriment(String mealType) {
+    switch (mealType) {
+      case "Lipids":
+        {
+          return this.lipids;
+        }
+      case "Carbohydrates":
+        {
+          return this.carbohydrates;
+        }
+
+      case "Proteins":
+        {
+          return this.proteins;
+        }
+    }
+  }
+
   // Words
   String get profile {
     return Intl.message('Profile',
@@ -259,9 +290,14 @@ class AppLocalizations {
         desc: 'No energy associated to product found in oof database');
   }
 
-  String get sancFailPlatformError {
+  String get scanFailPlatformError {
     return Intl.message('Failed to get platform version.',
-        name: 'sancFailPlatformError', desc: 'fail scan');
+        name: 'scanFailPlatformError', desc: 'fail scan');
+  }
+
+  // Food list
+  String get foodListTitle {
+    return Intl.message('Food list', name: 'foodListTitle', desc: '');
   }
 }
 

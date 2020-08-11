@@ -22,6 +22,7 @@ import 'package:open_weight/food/foodCard.dart';
 import 'package:open_weight/food/foodView.dart';
 import 'package:provider/provider.dart';
 
+import '../application_localization.dart';
 import '../database/db_helper.dart';
 
 class ListFood extends StatelessWidget {
@@ -35,7 +36,7 @@ class ListFood extends StatelessWidget {
     return Scaffold(
         backgroundColor: bgColor,
         appBar: AppBar(
-          title: Text(title),
+          title: Text(AppLocalizations.of(build).foodListTitle),
         ),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           return StreamBuilder(

@@ -15,20 +15,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-// Number formatting
 import 'package:intl/intl.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:open_weight/journal/objectiveDialog.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 import '../application_localization.dart';
-import '../chartViewDebug.dart';
 
 class CalorieMeter extends StatelessWidget {
   final consumedCalorie;

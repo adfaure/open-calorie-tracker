@@ -134,7 +134,10 @@ scanAndAddProduct(BuildContext build) async {
         unit: unitQuantity,
         portion: 100,
         serving: Value<int>(servingSize),
-        servingUnit: Value<String>(servingUnit)));
+        servingUnit: Value<String>(servingUnit),
+        lipids: Value<int>(product.nutriments.fat.round()),
+        carbohydrates: Value<int>(product.nutriments.carbohydrates.round()),
+        proteins: Value<int>(product.nutriments.proteins.round())));
   }
 }
 
@@ -147,7 +150,7 @@ Future<String> scanBarcodeNormal(BuildContext context) async {
         "#ff6666", "Cancel", true, ScanMode.BARCODE);
     print(barcodeScanRes);
   } on PlatformException {
-    barcodeScanRes = AppLocalizations.of(context).sancFailPlatformError;
+    barcodeScanRes = AppLocalizations.of(context).scanFailPlatformError;
   }
 
   return barcodeScanRes;

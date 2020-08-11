@@ -19,9 +19,11 @@ import 'package:flutter/material.dart';
 import 'package:moor/moor.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
+import 'package:open_weight/food/gpl_chart.dart';
 import 'package:provider/provider.dart';
 
 import '../application_localization.dart';
+import 'gpl_chart.dart';
 
 /// Focus on a modifiable food entry.
 class FoodView extends StatelessWidget {
@@ -54,6 +56,18 @@ class FoodView extends StatelessWidget {
       serving: Value<int>(int.tryParse(controllers["serving"].text)),
       source: Value<String>(this.food.source),
       barcode: Value<String>(controllers["barcode"].text),
+      proteins: Value<int>(int.tryParse(controllers["proteins"].text)),
+      carbohydrates:
+          Value<int>(int.tryParse(controllers["carbohydrates"].text)),
+      lipids: Value<int>(int.tryParse(controllers["lipids"].text)),
+    );
+  }
+
+  _getItemsDivider({double height: 5}) {
+    return Divider(
+      color: appBgColor,
+      height: height,
+      thickness: height,
     );
   }
 
@@ -89,22 +103,52 @@ class FoodView extends StatelessWidget {
                       _buildEditableRow(
                           AppLocalizations.of(context).name, "name",
                           validator: _requiredTextField),
+                      _getItemsDivider(),
                       _buildEditableRow(
                           AppLocalizations.of(context).calorie, "calorie",
                           validator: _requiredTextField),
+                      _getItemsDivider(),
                       _buildEditableRow(
                           AppLocalizations.of(context).portion, "portion",
                           validator: _intValidator),
+                      _getItemsDivider(),
                       _buildEditableRow(
                           AppLocalizations.of(context).unit, "unit",
                           validator: _requiredTextField),
+                      _getItemsDivider(),
+                      Card(
+                          color: Colors.white,
+                          elevation: 0,
+                          child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 150,
+                              child: GPLChart(
+                                context: context,
+                                carbohydrates: this.food.carbohydrates,
+                                lipids: this.food.lipids,
+                                proteins: this.food.proteins,
+                              ))),
+                      _getItemsDivider(height: 1),
                       _buildEditableRow(
-                          AppLocalizations.of(context).unit, "serving"),
+                          AppLocalizations.of(context).lipids, "lipids"),
+                      _getItemsDivider(height: 1),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).proteins, "proteins"),
+                      _getItemsDivider(height: 1),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).carbohydrates,
+                          "carbohydrates"),
+                      _getItemsDivider(),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).serving, "serving"),
+                      _getItemsDivider(),
                       _buildEditableRow(
                           AppLocalizations.of(context).servingUnit,
                           "servingUnit"),
+                      _getItemsDivider(),
                       _buildRow(AppLocalizations.of(context).source,
                           this.food.source),
+                      _getItemsDivider(),
                       _buildRow(AppLocalizations.of(context).barcode,
                           this.food.barcode),
                     ],
@@ -118,7 +162,7 @@ class FoodView extends StatelessWidget {
       _value = value.toString();
     }
     return Card(
-      elevation: 1,
+      elevation: 0,
       child: Padding(
           padding: EdgeInsets.fromLTRB(15, 15, 30, 15),
           child: Row(
@@ -145,7 +189,7 @@ class FoodView extends StatelessWidget {
     var controller = this.controllers[controllerName];
     debugPrint("$name: ${controller.text}");
     return Card(
-      elevation: 1,
+      elevation: 0,
       child: Padding(
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: Row(

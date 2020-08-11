@@ -57,22 +57,29 @@ class FoodModels extends Table {
   TextColumn get source => text().nullable()();
   // If set it is from openfoodfacts
   TextColumn get barcode => text().nullable()();
+
+  IntColumn get lipids => integer().nullable()();
+  IntColumn get carbohydrates => integer().nullable()();
+  IntColumn get proteins => integer().nullable()();
 }
 
 class ConsumedFoods extends Table {
   IntColumn get id => integer().autoIncrement()();
+
+  // Informations
   TextColumn get name => text()();
   DateTimeColumn get date => dateTime()();
-  IntColumn get quantity => integer()();
   TextColumn get mealType => text()();
-  IntColumn get portion => integer()();
-  IntColumn get calorie => integer()();
-  TextColumn get unit => text()();
+  IntColumn get quantity => integer()();
 
-  // I don't need these lines, but I don't want to loose how to create constrained foreign keys.
-  // @override
-  // List<String> get customConstraints =>
-  //    ["FOREIGN KEY(food) REFERENCES foods(id) ON DELETE RESTRICT"];
+  // Calorie
+  IntColumn get portion => integer()();
+  TextColumn get unit => text()();
+  IntColumn get calorie => integer()();
+  // Nutriment
+  IntColumn get lipids => integer().nullable()();
+  IntColumn get carbohydrates => integer().nullable()();
+  IntColumn get proteins => integer().nullable()();
 }
 
 /* class ConsumedFood {
@@ -94,7 +101,7 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    // file.delete();
+    file.delete();
     debugPrint("$file");
     return VmDatabase(file);
   });
