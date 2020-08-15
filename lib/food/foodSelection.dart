@@ -176,23 +176,29 @@ class SelectFood extends StatelessWidget {
         var prefs = Provider.of<SharedPreferences>(context, listen: false);
 
         database.addConsumedFood(ConsumedFoodsCompanion.insert(
-            calorie: selectedFood.calorie,
-            name: selectedFood.name,
-            portion: selectedFood.portion,
-            unit: selectedFood.unit,
-            quantity: quantity,
-            mealType: title,
-            date: this.date));
-
-        Navigator.of(context).pop();
+          calorie: selectedFood.calorie,
+          name: selectedFood.name,
+          portion: selectedFood.portion,
+          unit: selectedFood.unit,
+          quantity: quantity,
+          mealType: title,
+          date: this.date,
+          proteins: Value<int>(selectedFood.proteins),
+          carbohydrates: Value<int>(selectedFood.carbohydrates),
+          lipids: Value<int>(selectedFood.lipids),
+        ));
 
         var objValue;
         Objective obj = await database.getObjective(date);
-        if (obj == null) objValue = prefs.getInt("objective") ?? 0;
-        objValue = obj.objective;
+        if (obj == null)
+          objValue = prefs.getInt("objective") ?? 0;
+        else
+          objValue = obj.objective;
 
         database.createOrUpdateObjective(
             Objective(date: this.date, objective: objValue));
+
+        Navigator.of(context).pop();
       }
     });
   }

@@ -24,6 +24,7 @@ import 'package:provider/provider.dart';
 
 import '../application_localization.dart';
 import 'gpl_chart.dart';
+import 'gpl_chart2.dart';
 
 /// Focus on a modifiable food entry.
 class FoodView extends StatelessWidget {
@@ -56,10 +57,10 @@ class FoodView extends StatelessWidget {
       serving: Value<int>(int.tryParse(controllers["serving"].text)),
       source: Value<String>(this.food.source),
       barcode: Value<String>(controllers["barcode"].text),
-      proteins: Value<int>(int.tryParse(controllers["proteins"].text)),
+      proteins: Value<int>(int.tryParse(controllers["proteins"].text) ?? 0),
       carbohydrates:
-          Value<int>(int.tryParse(controllers["carbohydrates"].text)),
-      lipids: Value<int>(int.tryParse(controllers["lipids"].text)),
+          Value<int>(int.tryParse(controllers["carbohydrates"].text) ?? 0),
+      lipids: Value<int>(int.tryParse(controllers["lipids"].text) ?? 0),
     );
   }
 
@@ -121,8 +122,8 @@ class FoodView extends StatelessWidget {
                           elevation: 0,
                           child: SizedBox(
                               width: MediaQuery.of(context).size.width,
-                              height: 150,
-                              child: GPLChart(
+                              height: 200,
+                              child: GPLChart2(
                                 context: context,
                                 carbohydrates: this.food.carbohydrates,
                                 lipids: this.food.lipids,

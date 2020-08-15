@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
 import '../application_localization.dart';
+import 'package:charts_flutter_cf/charts_flutter_cf.dart' as charts;
 
 class GPLChart extends StatefulWidget {
   int carbohydrates;
@@ -33,7 +33,7 @@ class _GPLChartState extends State<GPLChart> {
   int lipids;
   int proteins;
 
-  _GPLChartState(this.carbohydrates, this.lipids, this.proteins,
+  _GPLChartState(this.proteins, this.carbohydrates, this.lipids,
       {this.animate});
 
   @override
@@ -46,8 +46,8 @@ class _GPLChartState extends State<GPLChart> {
   @override
   Widget build(BuildContext context) {
     return charts.PieChart(seriesList,
-        behaviors: [charts.DatumLegend()],
-
+        behaviors: [charts.DatumLegend(showMeasures: true)],
+        // behaviors: [],
         // animate: animate,
         // Configure the width of the pie slices to 30px. The remaining space in
         // the chart will be left as a hole in the center. Adjust the start
@@ -64,16 +64,17 @@ class _GPLChartState extends State<GPLChart> {
       BuildContext context, int proteins, int lipids, int carbohydrates) {
     final data = [
       GaugeSegment('Lipids', lipids),
-      GaugeSegment('Proteins', proteins),
       GaugeSegment('Carbohydrates', carbohydrates),
+      GaugeSegment('Proteins', proteins),
     ];
+    debugPrint("ddata: ${data}");
 
     return [
       charts.Series<GaugeSegment, String>(
         id: 'Segments',
-        labelAccessorFn: (elem, i) => elem.segment,
+        labelAccessorFn: (elem, i) =>
+            AppLocalizations.of(context).dynamicNutriment(elem.segment),
         colorFn: (elem, value) {
-          debugPrint("${elem.segment}");
           switch (elem.segment) {
             case "Lipids":
               return charts.Color.fromHex(code: "#fde725");
@@ -91,12 +92,6 @@ class _GPLChartState extends State<GPLChart> {
         data: data,
       )
     ];
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
   }
 }
 

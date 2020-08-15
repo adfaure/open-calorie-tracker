@@ -101,7 +101,7 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    file.delete();
+    // file.delete();
     debugPrint("$file");
     return VmDatabase(file);
   });
@@ -208,6 +208,21 @@ class MyDatabase extends _$MyDatabase {
         var caloriesPerUnit = consumedFood.calorie / consumedFood.portion;
         var total = previousValue + (consumedFood.quantity * caloriesPerUnit);
         return total.round();
+      });
+    });
+  }
+
+  Stream<List<int>> watchTotalDailyNutriments(DateTime selectDate) {
+    return (select(consumedFoods)..where((a) => a.date.equals(selectDate)))
+        .watch()
+        .map((rows) {
+      return rows.map((row) {
+        return row;
+      }).fold(List<int>.from([0, 0, 0]), (previousValue, consumedFood) {
+        previousValue[0] += consumedFood.proteins;
+        previousValue[1] += consumedFood.carbohydrates;
+        previousValue[2] += consumedFood.lipids;
+        return previousValue;
       });
     });
   }

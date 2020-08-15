@@ -18,6 +18,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:open_weight/common/helpers.dart';
+import 'package:open_weight/food/gpl_chart.dart';
+import 'package:open_weight/food/gpl_chart2.dart';
 import 'package:provider/provider.dart';
 // Internal dependencies
 import 'package:open_weight/common/ui.dart';
@@ -25,7 +27,6 @@ import 'package:open_weight/application_drawer.dart';
 import 'package:open_weight/journal/dayCard.dart';
 import 'package:open_weight/journal/calorieMeter.dart';
 import 'package:open_weight/journal/mealCard.dart';
-import '../chartViewDebug.dart';
 import '../database/db_helper.dart';
 
 class JournalView extends StatefulWidget {
@@ -84,11 +85,6 @@ class _JournalViewState extends State<JournalView> {
               });
           // key: new ValueKey(this.date));
         }));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   _changeDate(DateTime newDate, MyDatabase database) async {
@@ -151,26 +147,41 @@ class JournalPage extends StatelessWidget {
                   ])),
               Expanded(
                   child: Material(
-                      elevation: 5,
+                      elevation: 1,
                       color: appBgColor,
                       child: ListView(
-                          shrinkWrap: true,
+                          // shrinkWrap: true,
                           children: [
                             MealCard(title: "Breakfast", date: date),
                             MealCard(title: "Lunch", date: date),
                             MealCard(title: "Diner", date: date),
                             MealCard(title: "Snacks", date: date),
                             Card(
-                                color: Colors.white,
-                                elevation: 0,
-                                child: SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 150,
-                                  child:
-                                      GaugeChart(GaugeChart.createSampleData()),
-                                )),
-                          ],
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 8)))),
+                                elevation: 1,
+                                child: StreamBuilder(
+                                    initialData: List<int>.from([1, 1, 1]),
+                                    stream: database
+                                        .watchTotalDailyNutriments(date),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<List<int>> nutrientSnapshot) {
+                                          debugPrint("snap: ${nutrientSnapshot.data}");
+                                      return Container(
+                                          // elevation: 0,
+                                          color: Colors.white,
+                                          padding: EdgeInsets.all(15),
+                                          child: SizedBox(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              height: 200,
+                                              child: GPLChart2(
+                                                context: context,
+                                                proteins: nutrientSnapshot.data[0],
+                                                carbohydrates: nutrientSnapshot.data[1],
+                                                lipids: nutrientSnapshot.data[2],
+                                              )));
+                                    })),
+                          ], padding: EdgeInsets.fromLTRB(0, 0, 0, 8)))),
             ]);
           });
     });

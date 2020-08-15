@@ -73,8 +73,8 @@ class AppLocalizations {
     return Intl.message('Proteins', name: 'proteins', desc: 'Word: proteins');
   }
 
-  String dynamicNutriment(String mealType) {
-    switch (mealType) {
+  String dynamicNutriment(String nutriment) {
+    switch (nutriment) {
       case "Lipids":
         {
           return this.lipids;

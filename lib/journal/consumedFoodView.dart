@@ -19,6 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:moor/moor.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
+import 'package:open_weight/food/gpl_chart.dart';
+import 'package:open_weight/food/gpl_chart2.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -46,6 +48,14 @@ class ConsumedFoodView extends StatelessWidget {
     });
   }
 
+  _getItemsDivider({double height: 5}) {
+    return Divider(
+      color: appBgColor,
+      height: height,
+      thickness: height,
+    );
+  }
+
   _getFormFood(BuildContext context) {
     // var localizedToMealType = Intl.withLocale(controllers["mealType"].text, locale: "en");
     // debugPrint("localized: $localizedToMealType");
@@ -59,6 +69,10 @@ class ConsumedFoodView extends StatelessWidget {
           int.parse(controllers["date"].text)),
       mealType: controllers["mealType"].text,
       quantity: int.parse(controllers["quantity"].text),
+      proteins: Value<int>(int.tryParse(controllers["proteins"].text) ?? 0),
+      carbohydrates:
+          Value<int>(int.tryParse(controllers["carbohydrates"].text) ?? 0),
+      lipids: Value<int>(int.tryParse(controllers["lipids"].text) ?? 0),
     );
   }
 
@@ -94,26 +108,56 @@ class ConsumedFoodView extends StatelessWidget {
                       _buildEditableRow(
                           AppLocalizations.of(context).name, "name",
                           validator: _requiredTextField),
+                      _getItemsDivider(),
                       _buildRow(AppLocalizations.of(context).date,
                           formatter.format(this.food.date)),
+                      _getItemsDivider(),
                       _buildEditableRow(
                           AppLocalizations.of(context).quantity, "quantity",
                           validator: _intValidator),
+                      _getItemsDivider(),
                       _buildDropdownRow(
                           context,
                           AppLocalizations.of(context).mealType,
                           "mealType",
                           List<String>.from(
                               ["Breakfast", "Lunch", "Diner", "Snacks"])),
+                      _getItemsDivider(),
                       //_buildEditableRow("Meal Type", "mealType",
                       //   validator: _mealValidator),
                       _buildEditableRow(
                           AppLocalizations.of(context).portion, "portion"),
+                      _getItemsDivider(),
                       _buildEditableRow(
                           AppLocalizations.of(context).caloriePerPortion,
                           "calorie"),
+                      _getItemsDivider(),
                       _buildEditableRow(
                           AppLocalizations.of(context).unit, "unit"),
+                      _getItemsDivider(),
+                      Card(
+                          color: Colors.white,
+                          elevation: 0,
+                          child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 150,
+                              child: GPLChart2(
+                                context: context,
+                                carbohydrates: this.food.carbohydrates,
+                                lipids: this.food.lipids,
+                                proteins: this.food.proteins,
+                              ))),
+                      _getItemsDivider(height: 1),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).lipids, "lipids"),
+                      _getItemsDivider(height: 1),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).proteins, "proteins"),
+                      _getItemsDivider(height: 1),
+                      _buildEditableRow(
+                          AppLocalizations.of(context).carbohydrates,
+                          "carbohydrates"),
+                      _getItemsDivider(),
                     ],
                   )));
         }));
@@ -125,7 +169,7 @@ class ConsumedFoodView extends StatelessWidget {
       _value = value.toString();
     }
     return Card(
-      elevation: 1,
+      elevation: 0,
       child: Padding(
           padding: EdgeInsets.fromLTRB(15, 15, 30, 15),
           child: Row(
@@ -149,7 +193,7 @@ class ConsumedFoodView extends StatelessWidget {
     var controller = this.controllers[controllerName];
 
     return Card(
-      elevation: 1,
+      elevation: 0,
       child: Padding(
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: Row(
@@ -183,7 +227,7 @@ class ConsumedFoodView extends StatelessWidget {
     var controller = this.controllers[controllerName];
     debugPrint("$name: ${controller.text}");
     return Card(
-      elevation: 1,
+      elevation: 0,
       child: Padding(
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: Row(
@@ -234,7 +278,7 @@ class ConsumedFoodView extends StatelessWidget {
     var controller = this.controllers[controllerName];
 
     return Card(
-      elevation: 1,
+      elevation: 0,
       child: Padding(
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: Row(

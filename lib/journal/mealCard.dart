@@ -45,6 +45,7 @@ class MealCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       Card(
+          elevation: 1,
           margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
           child: ListTile(
               title: Container(

@@ -17,9 +17,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
 import 'package:open_weight/food/foodView.dart';
+import 'package:open_weight/food/openfoodfacts.dart';
 import 'package:provider/provider.dart';
 
 import '../application_localization.dart';
@@ -37,6 +39,16 @@ class ListFood extends StatelessWidget {
         backgroundColor: bgColor,
         appBar: AppBar(
           title: Text(AppLocalizations.of(build).foodListTitle),
+          actions: <Widget>[
+            Builder(builder: (_context) {
+              return IconButton(
+                icon: FaIcon(FontAwesomeIcons.barcode),
+                onPressed: () async {
+                  scanAndAddProduct(_context);
+                },
+              );
+            })
+          ],
         ),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
           return StreamBuilder(
