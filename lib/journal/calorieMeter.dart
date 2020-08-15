@@ -24,10 +24,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../application_localization.dart';
+import 'objectiveBar.dart';
 
 class CalorieMeter extends StatelessWidget {
   final consumedCalorie;
   final formater = NumberFormat("##.##");
+  final sizeFactor = 2.0;
   final date;
 
   CalorieMeter({Key key, @required this.consumedCalorie, @required this.date})
@@ -38,55 +40,48 @@ class CalorieMeter extends StatelessWidget {
         builder: (builder, database, prefs, child) {
       var objModel = ObjectiveModel(
           database: database, prefs: prefs, objective: 0, date: date);
-
       return StreamBuilder(
           initialData: objModel.getObjective() ?? 0,
           stream: objModel.getStream(),
           builder: (context, snapshot) {
             int objective = snapshot.data;
-            var availableCalories = objective - consumedCalorie;
-            final sizeFactor = 2.0;
             return Container(
                 child: Card(
                   elevation: 0,
-                  margin: EdgeInsets.all(10),
+                  margin: EdgeInsets.all(15),
                   child: Column(children: [
                     // I use a row, so the text is placed to the right of the screen
-                    Row(children: [
+/*                     Row(children: [
                       SizedBox(width: 5),
                       Text(
                         AppLocalizations.of(context).availableCalories,
                         textAlign: TextAlign.right,
                       )
-                    ]),
+                    ]), */
                     // On row for the daily consumption
-                    SizedBox(
+/*                     SizedBox(
                       height: 12.5,
+                    ), */
+                    // _buildFormula(context, objModel, objective),
+                    // SizedBox(height: 15),
+                    ObjectiveBar(
+                      onTap: () => { setObjectiveWithDial(context, objModel) },
+                      title: AppLocalizations.of(context).calorie,
+                      objective: objective,
+                      value: consumedCalorie,
+                      colorOk: Colors.blue,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        GestureDetector(
-                          onTap: () =>
-                              {setObjectiveWithDial(context, objModel)},
-                          child: _buildTextAndValue(
-                              context,
-                              formater.format(objective),
-                              AppLocalizations.of(context).objective),
-                        ),
-                        Text("-", textScaleFactor: sizeFactor),
-                        _buildTextAndValue(
-                            context,
-                            formater.format(consumedCalorie),
-                            AppLocalizations.of(context).consumed),
-                        Text("=", textScaleFactor: sizeFactor),
-                        _buildTextAndValue(
-                            context,
-                            formater.format(availableCalories),
-                            AppLocalizations.of(context).available),
-                      ],
-                    ),
-                    SizedBox(height: 25)
+                    StreamBuilder(
+                        stream: database.watchTotalDailyNutriments(date),
+                        initialData: List<int>.from([0, 0, 0]),
+                        builder: (context, proteinsSnapshot) {
+                          return ObjectiveBar(
+                            title: AppLocalizations.of(context).proteins,
+                            objective: 570,
+                            value: proteinsSnapshot.data[0],
+                            colorOk: Colors.purple,
+                          );
+                        }),
                   ]),
                 ),
                 decoration: BoxDecoration(
@@ -108,6 +103,26 @@ class CalorieMeter extends StatelessWidget {
       children: [
         Text(value.toString(), textScaleFactor: sizeFactor),
         Text(text, textScaleFactor: sizeFactor / 3),
+      ],
+    );
+  }
+
+  _buildFormula(BuildContext context, ObjectiveModel objModel, int objective) {
+    var availableCalories = objective - consumedCalorie;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        GestureDetector(
+          onTap: () => {setObjectiveWithDial(context, objModel)},
+          child: _buildTextAndValue(context, formater.format(objective),
+              AppLocalizations.of(context).objective),
+        ),
+        Text("-", textScaleFactor: sizeFactor),
+        _buildTextAndValue(context, formater.format(consumedCalorie),
+            AppLocalizations.of(context).consumed),
+        Text("=", textScaleFactor: sizeFactor),
+        _buildTextAndValue(context, formater.format(availableCalories),
+            AppLocalizations.of(context).available),
       ],
     );
   }

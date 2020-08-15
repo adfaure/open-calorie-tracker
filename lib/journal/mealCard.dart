@@ -31,7 +31,10 @@ import 'consumedFoodView.dart';
 
 //internal dependencies
 
-class MealCard extends StatelessWidget {
+// I have the same error as this dude, is fix seems to work for me
+// https://stackoverflow.com/questions/63429252/flutter-unhandled-exception-setstate-called-after-dispose-and-streambuil
+
+class MealCard extends StatefulWidget {
   final date;
   final String title;
   final formater = new NumberFormat("##.##");
@@ -39,7 +42,12 @@ class MealCard extends StatelessWidget {
   MealCard({Key key, @required this.title, @required this.date})
       : super(key: key);
 
-  var totalCalorie;
+  @override
+  _MealCardState createState() => _MealCardState();
+}
+
+class _MealCardState extends State<MealCard> {
+  var _stream;
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +58,12 @@ class MealCard extends StatelessWidget {
           child: ListTile(
               title: Container(
                   child: Text(AppLocalizations.of(context)
-                      .localizedMealtype(this.title))),
+                      .localizedMealtype(this.widget.title))),
               subtitle:
                   Consumer<MyDatabase>(builder: (builder, database, child) {
                 return StreamBuilder(
-                    stream:
-                        database.watchTotalDailyCalorieMeal(this.date, title),
+                    stream: database.watchTotalDailyCalorieMeal(
+                        this.widget.date, this.widget.title),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       var _totalCalorie = 0;
@@ -63,8 +71,8 @@ class MealCard extends StatelessWidget {
                         // Total calorie meal
                         _totalCalorie = snapshot.data;
                       }
-                      return Text(AppLocalizations.of(context)
-                          .totalKcal(formater.format(_totalCalorie)));
+                      return Text(AppLocalizations.of(context).totalKcal(
+                          this.widget.formater.format(_totalCalorie)));
                     });
               }),
               trailing: IconButton(
@@ -79,35 +87,34 @@ class MealCard extends StatelessWidget {
       Divider(
         height: 1,
       ),
-      Consumer<MyDatabase>(builder: (builder, database, child) {
-        return StreamBuilder(
-            initialData: List<ConsumedFood>(),
-            stream: database.watchEntriesInDailyFoods(this.date, title),
-            builder: (BuildContext context,
-                AsyncSnapshot<List<ConsumedFood>> snapshot) {
-              var count = 0;
-              if (snapshot.data != null) {
-                // Number of entry
-                count = snapshot.data.length;
-              }
-              return CustomColumnBuilder(
-                itemCount: count,
-                itemBuilder: (_, index) {
-                  // Passing by a builder so one can display a snackbar after the dialog ended.
-                  return Dismissible(
-                      confirmDismiss: (direction) {
-                        return _getConfirm(context);
-                      },
-                      background: Container(color: Colors.red.shade100),
-                      key: Key(snapshot.data[index].id.toString()),
-                      onDismissed: (direction) {
-                        database.deleteConsumedFood(snapshot.data[index]);
-                      },
-                      child: _buildListTile(context, snapshot.data[index]));
-                },
-              );
-            });
-      }),
+      StreamBuilder(
+          initialData: List<ConsumedFood>(),
+          stream: _stream,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<ConsumedFood>> snapshot) {
+            var count = 0;
+            if (snapshot.data != null) {
+              // Number of entry
+              count = snapshot.data.length;
+            }
+            return CustomColumnBuilder(
+              itemCount: count,
+              itemBuilder: (_, index) {
+                // Passing by a builder so one can display a snackbar after the dialog ended.
+                return Dismissible(
+                    confirmDismiss: (direction) {
+                      return _getConfirm(context);
+                    },
+                    background: Container(color: Colors.red.shade100),
+                    key: Key(snapshot.data[index].id.toString()),
+                    onDismissed: (direction) {
+                      Provider.of<MyDatabase>(context, listen: false)
+                          .deleteConsumedFood(snapshot.data[index]);
+                    },
+                    child: _buildListTile(context, snapshot.data[index]));
+              },
+            );
+          }),
     ]);
   }
 
@@ -122,7 +129,9 @@ class MealCard extends StatelessWidget {
                 child: ListTile(
               dense: true,
               title: Text(data.name),
-              trailing: Text(formater.format(consumedCalories(data)) + " kcal"),
+              trailing: Text(
+                  this.widget.formater.format(consumedCalories(data)) +
+                      " kcal"),
               subtitle: Text("${data.quantity.toString()} g"),
             ))));
   }
@@ -131,8 +140,10 @@ class MealCard extends StatelessWidget {
     await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              SelectFood(title: title, mealType: title, date: this.date)),
+          builder: (context) => SelectFood(
+              title: this.widget.title,
+              mealType: this.widget.title,
+              date: this.widget.date)),
     );
   }
 
@@ -179,5 +190,12 @@ class MealCard extends StatelessWidget {
             ],
           );
         });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _stream = Provider.of<MyDatabase>(context)
+        .watchEntriesInDailyFoods(this.widget.date, this.widget.title);
   }
 }

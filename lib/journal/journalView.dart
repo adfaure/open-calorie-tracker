@@ -75,8 +75,11 @@ class _JournalViewState extends State<JournalView> {
                 });
               },
               itemBuilder: (context, itemIndex) {
-                var newDate =
-                    widget.january2010.add(Duration(days: this.dateIndex));
+
+                // I need to clean the date because it `add` create a new Datetime with 1, wich is not something I wish.
+                var newDate = cleanDate(widget.january2010
+                    .add(Duration(days: this.dateIndex, hours: 0)));
+
                 return JournalPage(
                     key: Key(newDate.toString()),
                     date: newDate,
@@ -164,8 +167,6 @@ class JournalPage extends StatelessWidget {
                                     builder: (BuildContext context,
                                         AsyncSnapshot<List<int>>
                                             nutrientSnapshot) {
-                                      debugPrint(
-                                          "snap: ${nutrientSnapshot.data}");
                                       return Container(
                                           // elevation: 0,
                                           color: Colors.white,

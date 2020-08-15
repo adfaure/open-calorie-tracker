@@ -34,7 +34,6 @@ scanAndAddProduct(BuildContext build) async {
   String _scanBarcode = "UNKNOW";
 
   _scanBarcode = await scanBarcodeNormal(build);
-  debugPrint("barcode testing: $_scanBarcode");
   ProductQueryConfiguration configurations =
       ProductQueryConfiguration(_scanBarcode,
           // language: OpenFoodFactsLanguage.GERMAN,
@@ -106,12 +105,9 @@ scanAndAddProduct(BuildContext build) async {
   if (product.nutriments.energyKcal == null) {
     var kjoulesToKcal = 0.239006;
     product.nutriments.energyKcal = product.nutriments.energy * kjoulesToKcal;
-    debugPrint(
-        "No kcal information (Converting from Joules) ${product.nutriments.energy} -> ${product.nutriments.energyKcal}");
   }
 
   if (product.servingSize != null) {
-    debugPrint("Serving Size: ${product.servingSize}");
     // AFAIK Serving is in form of: "number unit"  for example "54 ml"
     var splitedServing = product.servingSize.split(new RegExp('\\s+'));
     // We try parsing the serving value, tryParse returns null on failure
@@ -124,7 +120,6 @@ scanAndAddProduct(BuildContext build) async {
   List<FoodModel> foodModel =
       await database.getFoodModelByBarcode(product.barcode);
 
-  debugPrint("${foodModel.toString()}");
   if (foodModel.length == 0) {
     database.addFoodModel(FoodModelsCompanion.insert(
         calorie: product.nutriments.energyKcal.round(),

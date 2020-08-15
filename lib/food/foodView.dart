@@ -82,7 +82,6 @@ class FoodView extends StatelessWidget {
               return IconButton(
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
-                    debugPrint(_getFormFood().toString());
                     database.upsertFoodModel(_getFormFood());
                     Navigator.pop(context);
                   }
@@ -187,7 +186,6 @@ class FoodView extends StatelessWidget {
   _buildEditableRow(String name, String controllerName,
       {FormFieldValidator<String> validator}) {
     var controller = this.controllers[controllerName];
-    debugPrint("$name: ${controller.text}");
     return Card(
       elevation: 0,
       child: Padding(
@@ -220,7 +218,6 @@ class FoodView extends StatelessWidget {
 
   //TODO: Localize these values, but I need to find out if I realy need to bring the context till here.
   String _intValidator(String value) {
-    debugPrint("intval : $value");
     return int.tryParse(value) != null ? null : "Must be an integer number.";
   }
 

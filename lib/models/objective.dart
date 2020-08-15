@@ -53,8 +53,10 @@ class ObjectiveModel {
     var prefObjective = prefs.getInt("objective");
     this.objective = prefObjective ?? 0;
 
+    debugPrint("date model: $date");
     database.getObjective(date).then((obj) {
       if (obj != null) {
+        debugPrint("Get obj for date: ${obj.date}");
         this.objective = obj.objective;
         this.streamCtlr.add(obj.objective);
       }
@@ -68,10 +70,11 @@ class ObjectiveModel {
   void updateSharedPrefs(int newValue) async {
     prefs.setInt("objective", newValue);
     changeObjective(newValue);
-
-    Objective obj = await database.getObjective(today());
+    var test = today();
+    Objective obj = await database.getObjective(test);
+    debugPrint("$obj -> ${test}");
     if (obj != null) {
-      debugPrint("Update obj entry for today");
+      debugPrint("already in basu $obj");
       database.createOrUpdateObjective(
           Objective(date: today(), objective: newValue));
     }

@@ -93,6 +93,7 @@ class AppLocalizations {
           return this.proteins;
         }
     }
+    return null;
   }
 
   // Words

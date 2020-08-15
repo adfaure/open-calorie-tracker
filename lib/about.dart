@@ -72,7 +72,6 @@ https://world.openfoodfacts.org/
   }
 
   _launchURL(String url) async {
-    debugPrint("open: $url");
     if (await canLaunch(url)) {
       await launch(url);
     } else {

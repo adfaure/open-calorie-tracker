@@ -64,7 +64,6 @@ class UserView extends StatelessWidget {
                   stream: objModel.getStream(),
                   initialData: objModel.getObjective(),
                   builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                    debugPrint(snapshot.toString());
                     return Text(
                       snapshot.data.toString(),
                       textScaleFactor: this.scaleFactor,

@@ -16,7 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
-import 'package:flutter/rendering.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -102,7 +101,6 @@ LazyDatabase _openConnection() {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
     // file.delete();
-    debugPrint("$file");
     return VmDatabase(file);
   });
 }
@@ -183,7 +181,7 @@ class MyDatabase extends _$MyDatabase {
     return into(objectives).insertOnConflictUpdate(entity);
   }
 
-  watchTotalDailyCalorieMeal(DateTime selectDate, String meal) {
+  Stream<int> watchTotalDailyCalorieMeal(DateTime selectDate, String meal) {
     return (select(consumedFoods)
           ..where((a) => a.date.equals(selectDate) & a.mealType.equals(meal)))
         .watch()
@@ -252,9 +250,7 @@ class MyDatabase extends _$MyDatabase {
   getObjective(DateTime _date) {
     return (select(objectives)
           ..where((tbl) {
-            final value = tbl.date;
-            // Expression<DateTime> date =  Expression<DateTime>(_date);
-            return value.equals(_date);
+            return tbl.date.equals(_date);
           }))
         .getSingle();
   }
@@ -262,9 +258,7 @@ class MyDatabase extends _$MyDatabase {
   watchObjective(DateTime _date) {
     return (select(objectives)
           ..where((tbl) {
-            final value = tbl.date;
-            // Expression<DateTime> date =  Expression<DateTime>(_date);
-            return value.equals(_date);
+            return tbl.date.equals(_date);
           }))
         .watchSingle();
   }
@@ -300,7 +294,6 @@ class MyDatabase extends _$MyDatabase {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(onCreate: (Migrator m) {
-      debugPrint("Create all tables");
       // Custom statement to enable primary key
       customStatement('PRAGMA foreign_keys = ON;');
       return m.createAll();
@@ -308,7 +301,6 @@ class MyDatabase extends _$MyDatabase {
       if (true /* or some other flag */) {
         final m = createMigrator(); // changed to this
         for (final table in allTables) {
-          // debugPrint("remove table: ${table.actualTableName}");
           // await m.deleteTable(table.actualTableName);
           // await m.createTable(table);
         }

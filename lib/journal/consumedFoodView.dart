@@ -20,7 +20,6 @@ import 'package:moor/moor.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:open_weight/food/gpl_chart.dart';
-import 'package:open_weight/food/gpl_chart2.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -58,7 +57,6 @@ class ConsumedFoodView extends StatelessWidget {
 
   _getFormFood(BuildContext context) {
     // var localizedToMealType = Intl.withLocale(controllers["mealType"].text, locale: "en");
-    // debugPrint("localized: $localizedToMealType");
     return ConsumedFoodsCompanion.insert(
       name: controllers["name"].text,
       portion: int.parse(controllers["portion"].text),
@@ -87,7 +85,6 @@ class ConsumedFoodView extends StatelessWidget {
               return IconButton(
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
-                    debugPrint(_getFormFood(context).toString());
                     database.upsertConsumedFood(_getFormFood(context));
                     Navigator.pop(context);
                   }
@@ -188,44 +185,9 @@ class ConsumedFoodView extends StatelessWidget {
     );
   }
 
-  _buildEditableDate(String name, String controllerName,
-      {FormFieldValidator<String> validator}) {
-    var controller = this.controllers[controllerName];
-
-    return Card(
-      elevation: 0,
-      child: Padding(
-          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-          child: Row(
-            children: <Widget>[
-              Text(
-                name,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                  child: TextFormField(
-                textAlign: TextAlign.right,
-                validator: validator,
-                decoration: InputDecoration(
-                  errorStyle: TextStyle(),
-                  fillColor: Colors.white,
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                ),
-                controller: controller,
-              ))
-            ],
-          )),
-    );
-  }
-
   _buildEditableRow(String name, String controllerName,
       {FormFieldValidator<String> validator}) {
     var controller = this.controllers[controllerName];
-    debugPrint("$name: ${controller.text}");
     return Card(
       elevation: 0,
       child: Padding(
@@ -308,12 +270,10 @@ class ConsumedFoodView extends StatelessWidget {
   }
 
   String _intValidator(String value) {
-    debugPrint("intval : $value");
     return int.tryParse(value) != null ? null : "Must be an integer number.";
   }
 
   String _dateValidator(String value) {
-    debugPrint("intval : $value");
     return int.tryParse(value) != null ? null : "Must be an integer number.";
   }
 

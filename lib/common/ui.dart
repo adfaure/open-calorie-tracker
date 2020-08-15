@@ -33,6 +33,10 @@ final Map<int, Color> appColor = {
   900: Color.fromRGBO(226, 28, 33, 1),
 };
 
+final proteinsColor = const Color(0xff440154);
+final lipidsColor = const Color(0xfffde725);
+final carbohydratesColor = const Color(0xff21918c);
+
 class BoxedContainer extends StatelessWidget {
   final Widget child;
   BoxedContainer({this.child});

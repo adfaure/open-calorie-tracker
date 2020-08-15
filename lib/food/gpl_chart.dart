@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:open_weight/common/ui.dart';
 
 import '../application_localization.dart';
 
@@ -50,9 +51,6 @@ class GPLChart extends StatelessWidget {
   final int proteins;
   // I need to get the parent context to be able to reach the AppLocalization class...
   final BuildContext context;
-  final proteinsColor = const Color(0xff440154);
-  final lipidsColor = const Color(0xfffde725);
-  final carbohydratesColor = const Color(0xff21918c);
 
   GPLChart(
       {Key key,
@@ -64,7 +62,6 @@ class GPLChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("pro: $proteins, carbo: $carbohydrates, lipid: $lipids");
     return Column(
       children: <Widget>[
         Row(

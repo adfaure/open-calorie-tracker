@@ -24,13 +24,7 @@ import '../application_localization.dart';
 
 class DayCard extends StatelessWidget {
   final DateTime date;
-  DayCard(
-      {@required this.date,
-      this.onTapPrevious,
-      this.onTapNext,
-      this.onTapMiddle});
-
-  DateTime selectedDate = DateTime.now();
+  final DateTime selectedDate = DateTime.now();
 
   final onTapPrevious;
   final onTapNext;
@@ -38,6 +32,11 @@ class DayCard extends StatelessWidget {
 
   final dayName = DateFormat("EEEE");
   final monthName = DateFormat("MMMM");
+  DayCard(
+      {@required this.date,
+      this.onTapPrevious,
+      this.onTapNext,
+      this.onTapMiddle});
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +85,8 @@ class DayCard extends StatelessWidget {
       return text + " (${AppLocalizations.of(context).today})";
     else if (aDate == yesterday)
       return text + " (${AppLocalizations.of(context).yesterday})";
-    else if (aDate == tomorrow) return text + " (${AppLocalizations.of(context).tomorrow})";
+    else if (aDate == tomorrow)
+      return text + " (${AppLocalizations.of(context).tomorrow})";
 
     return text;
   }

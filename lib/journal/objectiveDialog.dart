@@ -31,11 +31,12 @@ setObjectiveWithDial(
   await showDialog<int>(
       context: context,
       builder: (BuildContext context) {
+        var l = AppLocalizations.of(context);
         return SimpleDialog(
           title: Center(
               child: Column(children: [
             Text(
-              AppLocalizations.of(context).objective,
+              "${l.objective} : ${l.calorie}",
             ),
           ])),
           children: <Widget>[
@@ -50,9 +51,7 @@ setObjectiveWithDial(
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
                       controller: objectiveValueCtrl,
-                      decoration: InputDecoration(
-                        hintText: "80",
-                      ),
+                      decoration: InputDecoration(),
                       validator: (value) {
                         var doubleString =
                             objectiveValueCtrl.text.replaceAll(",", ".");
@@ -63,7 +62,8 @@ setObjectiveWithDial(
                           return AppLocalizations.of(context).invalidNumber;
                         }
                         if (newObjective <= 0) {
-                          return AppLocalizations.of(context).requirePositiveNumber;
+                          return AppLocalizations.of(context)
+                              .requirePositiveNumber;
                         }
                         return null;
                       },

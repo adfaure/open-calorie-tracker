@@ -31,6 +31,11 @@ DateTime nextDay(final DateTime time) {
   return DateTime(time.year, time.month, time.day + 1);
 }
 
+// Return the same day, with without hours and seconds if any
+DateTime cleanDate(final DateTime date) {
+  return DateTime(date.year, date.month, date.day);
+}
+
 /// Return true if the two dates are the same day,
 /// ignoring secondes and hours.
 bool isSameDay(final DateTime time1, final DateTime time2) {
