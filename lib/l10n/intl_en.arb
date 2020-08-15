@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-11T01:07:15.513521",
+  "@@last_modified": "2020-08-15T17:09:32.061596",
   "title": "Food Assistant",
   "@title": {
     "description": "The application title",
@@ -57,6 +57,12 @@
   "error": "Error",
   "@error": {
     "description": "Word: error",
+    "type": "text",
+    "placeholders": {}
+  },
+  "journal": "Journal",
+  "@journal": {
+    "description": "Word: journal",
     "type": "text",
     "placeholders": {}
   },

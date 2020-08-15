@@ -38,6 +38,14 @@ The emulator is launched, however flutter doesn't find as a connected device.
 - If database not working with dlopen failing this link might fix it: https://stackoverflow.com/a/62308661
 - I am interested to learn about the Bloc pattern. Looks like this article is a good entry point: https://www.didierboelens.com/2018/08/reactive-programming-streams-bloc/.
 
+# Database
+
+Any changes on the database tables needs to generate the flutter classes to be effective:
+
+```
+flutter packages pub run build_runner build --delete-conflicting-outputs
+```
+
 # Icon
 
 To change the icon of the application:
@@ -51,7 +59,7 @@ flutter pub run flutter_launcher_icons:main
 Localization is bit complicated.
 But when it is set up, it seems to works.
 
-To create new text input to be translated first add a new getter to the class: `lib/application_localization.dart`.
+To create new text input to be translated, first add a new getter to the class: `lib/application_localization.dart`.
 
 Then one can use the command from the project's root:
 
@@ -103,6 +111,8 @@ and then deploy the apk on a connected device:
 
 # Todo
 
+- The library charts_flutter seems inactive, I think https://pub.dev/packages/fl_chart is probably a better solution.
+  - Further more including a piechart into a page view is broken, and a pull requests is waiting since June
 - Localize the application eng/fr.
   - Almost done, find a way to localize the error form's error messages.
 - Add food details (lipid, iron etc)
@@ -110,3 +120,8 @@ and then deploy the apk on a connected device:
     - The initialization of the application allows to create the initialization date.
       The init date is then used as the first date the user can navigate from, and ensure the consistency of the objective data.
 - Packages the application with Nix?
+
+# Links
+
+french database about food / calories
+https://www.data.gouv.fr/fr/datasets/table-de-composition-nutritionnelle-des-aliments-ciqual/

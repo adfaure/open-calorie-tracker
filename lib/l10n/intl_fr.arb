@@ -61,6 +61,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "journal": "Journal",
+  "@journal": {
+    "description": "Word: journal",
+    "type": "text",
+    "placeholders": {}
+  },
   "lipids": "Lipides",
   "@lipids": {
     "description": "Word: lipids",

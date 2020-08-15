@@ -60,6 +60,10 @@ class AppLocalizations {
     return Intl.message('Error', name: 'error', desc: 'Word: error');
   }
 
+  String get journal {
+    return Intl.message('Journal', name: 'journal', desc: 'Word: journal');
+  }
+
   String get lipids {
     return Intl.message('Lipids', name: 'lipids', desc: 'Word: lipids');
   }

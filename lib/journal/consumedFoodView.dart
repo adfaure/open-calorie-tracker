@@ -141,7 +141,7 @@ class ConsumedFoodView extends StatelessWidget {
                           child: SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: 150,
-                              child: GPLChart2(
+                              child: GPLChart(
                                 context: context,
                                 carbohydrates: this.food.carbohydrates,
                                 lipids: this.food.lipids,

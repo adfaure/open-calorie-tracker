@@ -1,16 +1,58 @@
-import 'dart:math';
-
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../application_localization.dart';
-import 'package:charts_flutter_cf/charts_flutter_cf.dart' as charts;
 
-class GPLChart extends StatefulWidget {
-  int carbohydrates;
-  int lipids;
-  int proteins;
+class Indicator extends StatelessWidget {
+  final Color color;
+  final String text;
+  final bool isSquare;
+  final double size;
+  final Color textColor;
+
+  const Indicator({
+    Key key,
+    this.color,
+    this.text,
+    this.isSquare,
+    this.size = 16,
+    this.textColor = const Color(0xff505050),
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
+            color: color,
+          ),
+        ),
+        const SizedBox(
+          width: 4,
+        ),
+        Text(
+          text,
+          style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
+        )
+      ],
+    );
+  }
+}
+
+class GPLChart extends StatelessWidget {
+  final int carbohydrates;
+  final int lipids;
+  final int proteins;
   // I need to get the parent context to be able to reach the AppLocalization class...
-  BuildContext context;
+  final BuildContext context;
+  final proteinsColor = const Color(0xff440154);
+  final lipidsColor = const Color(0xfffde725);
+  final carbohydratesColor = const Color(0xff21918c);
 
   GPLChart(
       {Key key,
@@ -21,77 +63,108 @@ class GPLChart extends StatefulWidget {
       : super(key: key);
 
   @override
-  _GPLChartState createState() =>
-      _GPLChartState(this.proteins, this.carbohydrates, this.lipids);
-}
-
-class _GPLChartState extends State<GPLChart> {
-  final bool animate;
-
-  List<charts.Series> seriesList;
-  int carbohydrates;
-  int lipids;
-  int proteins;
-
-  _GPLChartState(this.proteins, this.carbohydrates, this.lipids,
-      {this.animate});
-
-  @override
-  void initState() {
-    super.initState();
-    seriesList =
-        createSampleData(widget.context, proteins, lipids, carbohydrates);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return charts.PieChart(seriesList,
-        behaviors: [charts.DatumLegend(showMeasures: true)],
-        // behaviors: [],
-        // animate: animate,
-        // Configure the width of the pie slices to 30px. The remaining space in
-        // the chart will be left as a hole in the center. Adjust the start
-        // angle and the arc length of the pie so it resembles a gauge.
-        defaultRenderer: charts.ArcRendererConfig(
-            // arcRendererDecorators: [new charts.ArcLabelDecorator()],
-            startAngle: pi,
-            arcLength: 20 / 10 * pi,
-            arcRatio: 0.5));
+    debugPrint("pro: $proteins, carbo: $carbohydrates, lipid: $lipids");
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Indicator(
+              color: proteinsColor,
+              text: AppLocalizations.of(context).proteins,
+              isSquare: false,
+            ),
+            Indicator(
+              color: carbohydratesColor,
+              text: AppLocalizations.of(context).carbohydrates,
+              isSquare: false,
+            ),
+            Indicator(
+              color: lipidsColor,
+              text: AppLocalizations.of(context).lipids,
+              isSquare: false,
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Expanded(
+                child: Text(
+              proteins.toString(),
+              textAlign: TextAlign.center,
+            )),
+            Expanded(
+                child: Text(
+              carbohydrates.toString(),
+              textAlign: TextAlign.center,
+            )),
+            Expanded(
+                child: Text(
+              lipids.toString(),
+              textAlign: TextAlign.center,
+            )),
+          ],
+        ),
+        Expanded(
+          child: AspectRatio(
+            aspectRatio: 16 / 9,
+            child: PieChart(
+              PieChartData(
+                  startDegreeOffset: 180,
+                  borderData: FlBorderData(
+                    show: false,
+                  ),
+                  sectionsSpace: 2,
+                  centerSpaceRadius: 25,
+                  sections: showingSections()),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<GaugeSegment, String>> createSampleData(
-      BuildContext context, int proteins, int lipids, int carbohydrates) {
-    final data = [
-      GaugeSegment('Lipids', lipids),
-      GaugeSegment('Carbohydrates', carbohydrates),
-      GaugeSegment('Proteins', proteins),
-    ];
-    debugPrint("ddata: ${data}");
-
-    return [
-      charts.Series<GaugeSegment, String>(
-        id: 'Segments',
-        labelAccessorFn: (elem, i) =>
-            AppLocalizations.of(context).dynamicNutriment(elem.segment),
-        colorFn: (elem, value) {
-          switch (elem.segment) {
-            case "Lipids":
-              return charts.Color.fromHex(code: "#fde725");
-            case "Proteins":
-              return charts.Color.fromHex(code: "#21918c");
-            case "Carbohydrates":
-              return charts.Color.fromHex(code: "#440154");
-            default:
-              return charts.Color.black;
-          }
-        },
-        domainFn: (GaugeSegment segment, _) =>
-            AppLocalizations.of(context).dynamicNutriment(segment.segment),
-        measureFn: (GaugeSegment segment, _) => segment.size,
-        data: data,
+  List<PieChartSectionData> showingSections() {
+    final double opacity = 1;
+    return List.from([
+      PieChartSectionData(
+        color: proteinsColor.withOpacity(opacity),
+        value: proteins.toDouble(),
+        radius: 22,
+        showTitle: false,
+        titleStyle: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xff044d7c)),
+        titlePositionPercentageOffset: 0.55,
+      ),
+      PieChartSectionData(
+        color: carbohydratesColor.withOpacity(opacity),
+        value: carbohydrates.toDouble(),
+        radius: 22,
+        showTitle: false,
+        titleStyle: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xff90672d)),
+        titlePositionPercentageOffset: 0.55,
+      ),
+      PieChartSectionData(
+        color: lipidsColor.withOpacity(opacity),
+        value: lipids.toDouble(),
+        radius: 22,
+        showTitle: false,
+        titleStyle: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xff4c3788)),
+        titlePositionPercentageOffset: 0.6,
       )
-    ];
+    ]);
   }
 }
 

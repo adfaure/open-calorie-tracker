@@ -17,9 +17,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:open_weight/application_localization.dart';
 import 'package:open_weight/common/helpers.dart';
 import 'package:open_weight/food/gpl_chart.dart';
-import 'package:open_weight/food/gpl_chart2.dart';
 import 'package:provider/provider.dart';
 // Internal dependencies
 import 'package:open_weight/common/ui.dart';
@@ -62,7 +62,7 @@ class _JournalViewState extends State<JournalView> {
     return Scaffold(
         backgroundColor: appBgColor,
         appBar: AppBar(
-          title: Text("Journal"),
+          title: Text(AppLocalizations.of(context).journal),
         ),
         drawer: ApplicationDrawer(),
         body: Consumer<MyDatabase>(builder: (builder, database, child) {
@@ -75,7 +75,6 @@ class _JournalViewState extends State<JournalView> {
                 });
               },
               itemBuilder: (context, itemIndex) {
-                debugPrint("item: $itemIndex");
                 var newDate =
                     widget.january2010.add(Duration(days: this.dateIndex));
                 return JournalPage(
@@ -163,8 +162,10 @@ class JournalPage extends StatelessWidget {
                                     stream: database
                                         .watchTotalDailyNutriments(date),
                                     builder: (BuildContext context,
-                                        AsyncSnapshot<List<int>> nutrientSnapshot) {
-                                          debugPrint("snap: ${nutrientSnapshot.data}");
+                                        AsyncSnapshot<List<int>>
+                                            nutrientSnapshot) {
+                                      debugPrint(
+                                          "snap: ${nutrientSnapshot.data}");
                                       return Container(
                                           // elevation: 0,
                                           color: Colors.white,
@@ -174,11 +175,14 @@ class JournalPage extends StatelessWidget {
                                                   .size
                                                   .width,
                                               height: 200,
-                                              child: GPLChart2(
+                                              child: GPLChart(
                                                 context: context,
-                                                proteins: nutrientSnapshot.data[0],
-                                                carbohydrates: nutrientSnapshot.data[1],
-                                                lipids: nutrientSnapshot.data[2],
+                                                proteins:
+                                                    nutrientSnapshot.data[0],
+                                                carbohydrates:
+                                                    nutrientSnapshot.data[1],
+                                                lipids:
+                                                    nutrientSnapshot.data[2],
                                               )));
                                     })),
                           ], padding: EdgeInsets.fromLTRB(0, 0, 0, 8)))),
