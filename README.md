@@ -82,7 +82,6 @@ flutter pub run intl_translation:generate_from_arb --output-dir=lib/l10n --no-us
 
 # Deploy
 
-
 The application bundle can be created with:
 
 ```
@@ -114,13 +113,28 @@ and then deploy the apk on a connected device:
  java -jar bundletool-all-1.0.0.jar install-apks --apks=build/foodassistant/food_assistant.apks
 ```
 
+# Get CIQUAL DATABASE
+fr: 
+https://ciqual.anses.fr/cms/sites/default/files/inline-files/Table%20Ciqual%202020_FR_2020%2007%2007.xls
+
+eng:
+https://ciqual.anses.fr/cms/sites/default/files/inline-files/Table%20Ciqual%202020_ENG_2020%2007%2007.xls
+
 # Todo
 
+## V1 
+
+- Add unknown barcode to OFF master
 - Localize the application eng/fr.
   - Almost done, find a way to localize the error form's error messages.
 - Create a first login page, to enter user information such as the objective.
     - The initialization of the application allows to create the initialization date.
       The init date is then used as the first date the user can navigate from, and ensure the consistency of the objective data.
+    - The login page / or the user page enables to find how to set the best objectives for your use cases
+- Add Ciqual database
+
+## Someday
+
 - Use enum for: mealtype and objective
 
 # Links

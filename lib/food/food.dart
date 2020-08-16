@@ -18,11 +18,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/food/createFood.dart';
-import 'package:open_weight/food/foodCard.dart';
-import 'package:open_weight/food/foodView.dart';
+import 'package:open_weight/food/list_food.dart';
 import 'package:open_weight/food/openfoodfacts.dart';
-import 'package:provider/provider.dart';
+import 'package:open_weight/food/search_food.dart';
 
 import '../application_localization.dart';
 import '../database/db_helper.dart';
@@ -35,65 +35,46 @@ class ListFood extends StatelessWidget {
 
   @override
   Widget build(BuildContext build) {
-    return Scaffold(
-        backgroundColor: bgColor,
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(build).foodListTitle),
-          actions: <Widget>[
-            Builder(builder: (_context) {
-              return IconButton(
-                icon: FaIcon(FontAwesomeIcons.barcode),
-                onPressed: () async {
-                  scanAndAddProduct(_context);
-                },
-              );
-            })
-          ],
-        ),
-        body: Consumer<MyDatabase>(builder: (builder, database, child) {
-          return StreamBuilder(
-              stream: database.watchEntriesInFoods(),
-              initialData: List<FoodModel>(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<FoodModel>> snapshot) {
-                return ListView.builder(
-                  // When the widget is first initialize, the data is null.
-                  // Tertiary operators prevent getting an error (It might be seen as a workaround, idk yet)
-                  itemCount: snapshot.data.length ?? 0,
-                  itemBuilder: (_, index) {
-                    return new GestureDetector(
-                        onTap: () =>
-                            {_showFoodView(context, snapshot.data[index])},
-                        child: FoodCard(
-                            food: snapshot.data[index],
-                            actionButton: IconButton(
-                              icon: Icon(Icons.delete_outline),
-                              onPressed: () {
-                                var entry = snapshot.data[index];
-                                database.deleteFoodModel(entry);
-                              },
-                              color: Colors.red,
-                            )));
-                  },
-                );
-              });
-        }),
-        floatingActionButton: Builder(
-          builder: (context) => FloatingActionButton(
-              onPressed: () => _navigateAndDisplaySelection(context),
-              child: Icon(Icons
-                  .add)), // This trailing comma makes auto-formatting nicer for build methods.
-        ));
-  }
-
-  _showFoodView(BuildContext context, FoodModel food) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => FoodView(
-                food: food,
-              )),
-    );
+    return DefaultTabController(
+        initialIndex: 1,
+        length: 2,
+        child: Scaffold(
+            backgroundColor: bgColor,
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(build).foodListTitle),
+              bottom: TabBar(
+                indicatorColor: Colors.pink.shade200,
+                indicatorWeight: 5,
+                labelColor: Colors.pinkAccent.shade50,
+                tabs: [
+                  Tab(icon: Icon(FontAwesomeIcons.carrot)),
+                  Tab(icon: Icon(FontAwesomeIcons.book)),
+                  // Tab(icon: Icon(Icons.pie_chart_outlined)),
+                ],
+              ),
+              actions: <Widget>[
+                Builder(builder: (_context) {
+                  return IconButton(
+                    icon: FaIcon(FontAwesomeIcons.barcode),
+                    onPressed: () async {
+                      scanAndAddProduct(_context);
+                    },
+                  );
+                })
+              ],
+            ),
+            body: Container(
+                color: appBgColor,
+                child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [FoodList(), SearchFood()],
+                )),
+            floatingActionButton: Builder(
+              builder: (context) => FloatingActionButton(
+                  onPressed: () => _navigateAndDisplaySelection(context),
+                  child: Icon(Icons
+                      .add)), // This trailing comma makes auto-formatting nicer for build methods.
+            )));
   }
 
   _navigateAndDisplaySelection(BuildContext context) async {

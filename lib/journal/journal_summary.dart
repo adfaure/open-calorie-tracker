@@ -24,7 +24,6 @@ import 'package:provider/provider.dart';
 // Internal dependencies
 import 'package:open_weight/journal/dayCard.dart';
 import '../database/db_helper.dart';
-import 'calorieMeter.dart';
 
 class JournalSummary extends StatefulWidget {
   final DateTime date;

@@ -37,12 +37,22 @@ dependencies:
   # intl_translation: ^0.17.10
   # openfoodfacts:
   #   path: ../openfoodfacts-dart
+<<<<<<< HEAD
   flutter_barcode_scanner: ^2.0.0
   flutter_markdown: ^0.6.9
   url_launcher: ^6.0.18
   font_awesome_flutter: ^9.2.0
   fl_chart: ^0.41.0
   step_progress_indicator: ^1.0.2
+=======
+  flutter_barcode_scanner: ^1.0.1
+  flutter_markdown: ^0.4.2
+  url_launcher: ^5.4.2
+  font_awesome_flutter: ^8.8.1
+  fl_chart: ^0.11.0
+  step_progress_indicator: ^0.2.3+6
+  df: ^0.2.1
+>>>>>>> f0ad723 (code: start ciqual datat integration)
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.2
@@ -70,7 +80,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/data/ciqual_2020_fr_eng.csv
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
