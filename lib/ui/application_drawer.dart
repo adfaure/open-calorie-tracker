@@ -18,16 +18,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moor_db_viewer/moor_db_viewer.dart';
+import 'package:open_weight/database/db_helper.dart';
+import 'package:open_weight/food/food.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:open_weight/about.dart';
 import 'package:open_weight/common/ui.dart';
-import 'application_localization.dart';
-import 'chartViewDebug.dart';
-import 'database/db_helper.dart';
-import 'food/food.dart';
-import 'profile.dart';
+
+import '../application_localization.dart';
+import '../chartViewDebug.dart';
+import 'about.dart';
 
 class ApplicationDrawer extends StatelessWidget {
   @override
@@ -43,12 +43,6 @@ class ApplicationDrawer extends StatelessWidget {
         title: Text(AppLocalizations.of(context).drawerFood),
         onTap: () {
           _navigateShowFoodPanel(context);
-        },
-      ),
-      ListTile(
-        title: Text(AppLocalizations.of(context).profile),
-        onTap: () {
-          _navigateUserView(context);
         },
       ),
       ListTile(
@@ -107,13 +101,6 @@ class ApplicationDrawer extends StatelessWidget {
           builder: (context) => ListFood(
                 title: "Your foods",
               )),
-    );
-  }
-
-  _navigateUserView(BuildContext context) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => UserView()),
     );
   }
 

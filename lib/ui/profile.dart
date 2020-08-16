@@ -17,34 +17,29 @@
 
 import 'package:flutter/material.dart';
 import 'package:open_weight/common/helpers.dart';
-import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
+import 'package:open_weight/journal/objectiveDialog.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'application_localization.dart';
-import 'journal/objectiveDialog.dart';
+import '../application_localization.dart';
 
 /// Focus on a modifiable food entry.
 class UserView extends StatelessWidget {
   final scaleFactor = 1.2;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: appBgColor,
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context).profile),
-        ),
-        body: Consumer2<MyDatabase, SharedPreferences>(
-            builder: (builder, database, prefs, child) {
-          return ListView(
-            children: <Widget>[
-              _objectiveRow(context, prefs, database),
-              _objectiveProteinRow(context, prefs, database)
-            ],
-          );
-        }));
+    return Consumer2<MyDatabase, SharedPreferences>(
+        builder: (builder, database, prefs, child) {
+      return ListView(
+        children: <Widget>[
+          _objectiveRow(context, prefs, database),
+          _objectiveProteinRow(context, prefs, database),
+          _objectiveCarbohydrateRow(context, prefs, database)
+        ],
+      );
+    });
   }
 
   _objectiveRow(
@@ -100,6 +95,41 @@ class UserView extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Text("${l.objective}: ${l.proteins}"),
+              Expanded(
+                child: Container(),
+              ),
+              StreamBuilder(
+                  stream: objModelProteins.getStream(),
+                  initialData: 0,
+                  builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                    return Text(
+                      snapshot.data.toString(),
+                      textScaleFactor: this.scaleFactor,
+                    );
+                  })
+            ],
+          ),
+        )));
+  }
+
+  _objectiveCarbohydrateRow(
+      BuildContext context, SharedPreferences prefs, MyDatabase database) {
+    var objModelProteins = ObjectiveModel(
+        database: database,
+        prefs: prefs,
+        objective: 0,
+        date: today(),
+        type: "carbohydrate");
+    var l = AppLocalizations.of(context);
+
+    return GestureDetector(
+        onTap: () => {setObjectiveWithDial(context, objModelProteins)},
+        child: Card(
+            child: Padding(
+          padding: EdgeInsets.all(15),
+          child: Row(
+            children: <Widget>[
+              Text("${l.objective}: ${l.carbohydrates}"),
               Expanded(
                 child: Container(),
               ),

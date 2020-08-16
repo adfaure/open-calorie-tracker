@@ -81,7 +81,6 @@ class ObjectiveModel {
 
   void changeObjective(int newValue) {
     this.objective = newValue;
-    debugPrint("New value: $newValue");
     this.streamCtlr.add(newValue);
   }
 

@@ -59,7 +59,7 @@ class ObjectiveBar extends StatelessWidget {
               child: StepProgressIndicator(
                 totalSteps: totalStep.toInt(),
                 currentStep: percentValue.toInt(),
-                size: 20,
+                size: 10,
                 padding: 0,
                 selectedColor: colorOk,
                 unselectedColor: colorUnselected,

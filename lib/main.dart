@@ -18,11 +18,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:open_weight/ui/application_tabs.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:open_weight/journal/journalView.dart';
 import 'application_localization.dart';
 import 'common/ui.dart';
 import 'database/db_helper.dart';
@@ -31,6 +32,9 @@ import 'database/db_helper.dart';
 SharedPreferences sharedPrefs;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // I don't support landscape orientation
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   final database = MyDatabase();
   sharedPrefs = await SharedPreferences.getInstance();
@@ -57,7 +61,8 @@ class MyApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      onGenerateTitle: (BuildContext context) => AppLocalizations.of(context).title,
+      onGenerateTitle: (BuildContext context) =>
+          AppLocalizations.of(context).title,
       supportedLocales: [
         const Locale('en', ''), // English, no country code
         const Locale('fr', ''), // fr, no country code
@@ -65,7 +70,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => JournalView(),
+        '/': (context) => ApplicationTabBar(), // JournalView(),
       },
       // title: AppLocalizations.of(context).title,
       theme: ThemeData(

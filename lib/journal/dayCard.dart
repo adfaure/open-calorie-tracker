@@ -42,30 +42,35 @@ class DayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        // height: 50,
         color: Colors.white,
-        child: Row(
-          children: [
-            SizedBox(
-              width: 15,
-            ),
-            IconButton(
-                iconSize: 45,
-                icon: Icon(Icons.navigate_before, color: redTheme),
-                onPressed: onTapPrevious),
-            Expanded(
-                child: GestureDetector(
-                    onTap: onTapMiddle,
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: Text(dateFormat(context))))),
-            IconButton(
-              iconSize: 45,
-              icon: Icon(Icons.navigate_next, color: redTheme),
-              onPressed: onTapNext,
-            ),
-          ],
-        ));
+        child: Container(
+            height: 50,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 15,
+                ),
+                onTapNext != null
+                    ? IconButton(
+                        iconSize: 45,
+                        icon: Icon(Icons.navigate_before, color: redTheme),
+                        onPressed: onTapPrevious)
+                    : Container(),
+                Expanded(
+                    child: GestureDetector(
+                        onTap: onTapMiddle,
+                        child: Container(
+                            alignment: Alignment.center,
+                            child: Text(dateFormat(context))))),
+                onTapNext != null
+                    ? IconButton(
+                        iconSize: 45,
+                        icon: Icon(Icons.navigate_next, color: redTheme),
+                        onPressed: onTapNext,
+                      )
+                    : Container(),
+              ],
+            )));
   }
 
   String dateFormat(BuildContext context) {

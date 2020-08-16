@@ -17,13 +17,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:open_weight/application_localization.dart';
 import 'package:open_weight/common/helpers.dart';
-import 'package:open_weight/food/gpl_chart.dart';
 import 'package:provider/provider.dart';
 // Internal dependencies
 import 'package:open_weight/common/ui.dart';
-import 'package:open_weight/application_drawer.dart';
 import 'package:open_weight/journal/dayCard.dart';
 import 'package:open_weight/journal/calorieMeter.dart';
 import 'package:open_weight/journal/mealCard.dart';
@@ -58,34 +55,28 @@ class _JournalViewState extends State<JournalView> {
   }
 
   @override
-  Widget build(BuildContext build) {
-    return Scaffold(
-        backgroundColor: appBgColor,
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context).journal),
-        ),
-        drawer: ApplicationDrawer(),
-        body: Consumer<MyDatabase>(builder: (builder, database, child) {
-          /// StreamBuilder to handle the date selection.
-          return PageView.builder(
-              controller: _pageController,
-              onPageChanged: (newIdx) async {
-                this.setState(() {
-                  this.dateIndex = newIdx;
-                });
-              },
-              itemBuilder: (context, itemIndex) {
-                // I need to clean the date because it `add` create a new Datetime with 1, wich is not something I wish.
-                var newDate = cleanDate(widget.january2010
-                    .add(Duration(days: this.dateIndex, hours: 0)));
+  Widget build(BuildContext context) {
+    return Consumer<MyDatabase>(builder: (builder, database, child) {
+      /// StreamBuilder to handle the date selection.
+      return PageView.builder(
+          controller: _pageController,
+          onPageChanged: (newIdx) async {
+            this.setState(() {
+              this.dateIndex = newIdx;
+            });
+          },
+          itemBuilder: (context, itemIndex) {
+            // I need to clean the date because it `add` create a new Datetime with 1, wich is not something I wish.
+            var newDate = cleanDate(widget.january2010
+                .add(Duration(days: this.dateIndex, hours: 0)));
 
-                return JournalPage(
-                    key: Key(newDate.toString()),
-                    date: newDate,
-                    dateCallback: _changeDate);
-              });
-          // key: new ValueKey(this.date));
-        }));
+            return JournalPage(
+                key: Key(newDate.toString()),
+                date: newDate,
+                dateCallback: _changeDate);
+          });
+      // key: new ValueKey(this.date));
+    });
   }
 
   _changeDate(DateTime newDate, MyDatabase database) async {
@@ -138,7 +129,7 @@ class JournalPage extends StatelessWidget {
                     CalorieMeter(
                       date: date,
                       consumedCalorie: totalCalories,
-                      carbohydrates: totalCarbohyprates,
+                      consumedCarbohydrates: totalCarbohyprates,
                       consumedProteins: totalProteins,
                       lipids: totalLipids,
                     ),
@@ -162,34 +153,6 @@ class JournalPage extends StatelessWidget {
                             MealCard(title: "Lunch", date: date),
                             MealCard(title: "Diner", date: date),
                             MealCard(title: "Snacks", date: date),
-/*                             Card(
-                                elevation: 1,
-                                child: StreamBuilder(
-                                    initialData: List<int>.from([1, 1, 1]),
-                                    stream: database
-                                        .watchTotalDailyNutriments(date),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<List<int>>
-                                            nutrientSnapshot) {
-                                      return Container(
-                                          // elevation: 0,
-                                          color: Colors.white,
-                                          padding: EdgeInsets.all(15),
-                                          child: SizedBox(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              height: 200,
-                                              child: GPLChart(
-                                                context: context,
-                                                proteins:
-                                                    nutrientSnapshot.data[0],
-                                                carbohydrates:
-                                                    nutrientSnapshot.data[1],
-                                                lipids:
-                                                    nutrientSnapshot.data[2],
-                                              )));
-                                    })), */
                           ], padding: EdgeInsets.fromLTRB(0, 0, 0, 8)))),
             ]);
           });

@@ -35,6 +35,10 @@ setObjectiveWithDial(
         var text = l.calorie;
         if (objectiveModel.type == "protein") {
           text = l.proteins;
+        } else if (objectiveModel.type == "calorie") {
+          text = l.calorie;
+        } else if (objectiveModel.type == "carbohydrate") {
+          text = l.carbohydrates;
         }
         return SimpleDialog(
           title: Center(

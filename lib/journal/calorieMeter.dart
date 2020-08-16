@@ -35,18 +35,19 @@ class CalorieMeter extends StatelessWidget {
 
   final consumedProteins;
   final lipids;
-  final carbohydrates;
+  final consumedCarbohydrates;
 
   CalorieMeter(
       {Key key,
       @required this.consumedCalorie,
       @required this.consumedProteins,
       @required this.lipids,
-      @required this.carbohydrates,
+      @required this.consumedCarbohydrates,
       @required this.date})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var l = AppLocalizations.of(context);
     return Consumer2<MyDatabase, SharedPreferences>(
         builder: (builder, database, prefs, child) {
       var objModel = ObjectiveModel(
@@ -57,45 +58,23 @@ class CalorieMeter extends StatelessWidget {
           objective: 0,
           date: date,
           type: "protein");
+      var objModelCarbohydrate = ObjectiveModel(
+          database: database,
+          prefs: prefs,
+          objective: 0,
+          date: date,
+          type: "carbohydrate");
       return Container(
           child: Card(
             elevation: 0,
             margin: EdgeInsets.all(15),
             child: Column(children: [
-              StreamBuilder(
-                  initialData: 0,
-                  stream: objModel.getStream(),
-                  builder: (context, snapshot) {
-                    int objective = snapshot.data;
-                    if (objective == 0) {
-                      return Container();
-                    }
-                    return ObjectiveBar(
-                      onTap: () => {setObjectiveWithDial(context, objModel)},
-                      title: AppLocalizations.of(context).calorie,
-                      objective: objective,
-                      value: consumedCalorie,
-                      colorOk: Colors.blue,
-                    );
-                  }),
-              StreamBuilder(
-                  initialData: 0,
-                  stream: objModelProteins.getStream(),
-                  builder: (context, proteinsSnapshot) {
-                    var objective = proteinsSnapshot.data;
-                    if (objective == 0) {
-                      return Container();
-                    }
-
-                    return ObjectiveBar(
-                      onTap: () =>
-                          {setObjectiveWithDial(context, objModelProteins)},
-                      title: AppLocalizations.of(context).proteins,
-                      objective: proteinsSnapshot.data,
-                      value: this.consumedProteins,
-                      colorOk: Colors.purple,
-                    );
-                  }),
+              _buildProgressBar(
+                  objModel, this.consumedCalorie, l.calorie, Colors.blueAccent),
+              _buildProgressBar(objModelProteins, this.consumedProteins,
+                  l.proteins, Colors.purple),
+              _buildProgressBar(objModelCarbohydrate,
+                  this.consumedCarbohydrates, l.carbohydrates, Colors.teal)
             ]),
           ),
           decoration: BoxDecoration(
@@ -108,6 +87,26 @@ class CalorieMeter extends StatelessWidget {
             ],
           ));
     });
+  }
+
+  _buildProgressBar(
+      ObjectiveModel model, int value, String title, Color colorOk) {
+    return StreamBuilder(
+        initialData: 0,
+        stream: model.getStream(),
+        builder: (context, proteinsSnapshot) {
+          var objective = proteinsSnapshot.data;
+          if (objective == 0) {
+            return Container();
+          }
+          return ObjectiveBar(
+            onTap: () => {setObjectiveWithDial(context, model)},
+            title: title,
+            objective: proteinsSnapshot.data,
+            value: value,
+            colorOk: colorOk,
+          );
+        });
   }
 
   _buildTextAndValue(BuildContext context, value, text) {

@@ -189,16 +189,21 @@ class SelectFood extends StatelessWidget {
           lipids: Value<int>(selectedFood.lipids),
         ));
 
-        // Calorie objective
-        var objValue;
-        Objective obj = await database.getObjective(this.date, "calorie");
-        if (obj == null)
-          objValue = prefs.getInt("objective") ?? 0;
-        else
-          objValue = obj.objective;
+        // If we register a food, we check if anyobjective are up for, for the calorie and the nutrients.
+        // If it is the case, we save them in the database if it not already done, this should enable us to keep an history up to date.
 
-        database.createOrUpdateObjective(
-            Objective(date: this.date, objective: objValue, type: "calorie"));
+        // Calorie Objective
+        var objModelCalorie = ObjectiveModel(
+            database: database,
+            prefs: prefs,
+            objective: 0,
+            date: date,
+            type: "calorie");
+        var calObj = await objModelCalorie.getSafeObjective();
+        if (calObj > 0) {
+          database.createOrUpdateObjective(
+              Objective(date: this.date, objective: calObj, type: "calorie"));
+        }
 
         // Proteins Objective
         var objModelProteins = ObjectiveModel(
@@ -211,6 +216,19 @@ class SelectFood extends StatelessWidget {
         if (protObj > 0) {
           database.createOrUpdateObjective(
               Objective(date: this.date, objective: protObj, type: "protein"));
+        }
+
+        // carbohydrate Objective
+        var objCarboModel = ObjectiveModel(
+            database: database,
+            prefs: prefs,
+            objective: 0,
+            date: date,
+            type: "carbohydrate");
+        var carboObj = await objCarboModel.getSafeObjective();
+        if (carboObj > 0) {
+          database.createOrUpdateObjective(Objective(
+              date: this.date, objective: carboObj, type: "carbohydrate"));
         }
 
         Navigator.of(context).pop();
