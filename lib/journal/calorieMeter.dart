@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:open_weight/common/helpers.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:open_weight/journal/objectiveDialog.dart';
 import 'package:open_weight/models/objective.dart';
@@ -32,7 +33,17 @@ class CalorieMeter extends StatelessWidget {
   final sizeFactor = 2.0;
   final date;
 
-  CalorieMeter({Key key, @required this.consumedCalorie, @required this.date})
+  final consumedProteins;
+  final lipids;
+  final carbohydrates;
+
+  CalorieMeter(
+      {Key key,
+      @required this.consumedCalorie,
+      @required this.consumedProteins,
+      @required this.lipids,
+      @required this.carbohydrates,
+      @required this.date})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -40,60 +51,62 @@ class CalorieMeter extends StatelessWidget {
         builder: (builder, database, prefs, child) {
       var objModel = ObjectiveModel(
           database: database, prefs: prefs, objective: 0, date: date);
-      return StreamBuilder(
-          initialData: objModel.getObjective() ?? 0,
-          stream: objModel.getStream(),
-          builder: (context, snapshot) {
-            int objective = snapshot.data;
-            return Container(
-                child: Card(
-                  elevation: 0,
-                  margin: EdgeInsets.all(15),
-                  child: Column(children: [
-                    // I use a row, so the text is placed to the right of the screen
-/*                     Row(children: [
-                      SizedBox(width: 5),
-                      Text(
-                        AppLocalizations.of(context).availableCalories,
-                        textAlign: TextAlign.right,
-                      )
-                    ]), */
-                    // On row for the daily consumption
-/*                     SizedBox(
-                      height: 12.5,
-                    ), */
-                    // _buildFormula(context, objModel, objective),
-                    // SizedBox(height: 15),
-                    ObjectiveBar(
-                      onTap: () => { setObjectiveWithDial(context, objModel) },
+      var objModelProteins = ObjectiveModel(
+          database: database,
+          prefs: prefs,
+          objective: 0,
+          date: date,
+          type: "protein");
+      return Container(
+          child: Card(
+            elevation: 0,
+            margin: EdgeInsets.all(15),
+            child: Column(children: [
+              StreamBuilder(
+                  initialData: objModel.getObjective() ?? 0,
+                  stream: objModel.getStream(),
+                  builder: (context, snapshot) {
+                    int objective = snapshot.data;
+                    if (objective == 0) {
+                      return Container();
+                    }
+                    return ObjectiveBar(
+                      onTap: () => {setObjectiveWithDial(context, objModel)},
                       title: AppLocalizations.of(context).calorie,
                       objective: objective,
                       value: consumedCalorie,
                       colorOk: Colors.blue,
-                    ),
-                    StreamBuilder(
-                        stream: database.watchTotalDailyNutriments(date),
-                        initialData: List<int>.from([0, 0, 0]),
-                        builder: (context, proteinsSnapshot) {
-                          return ObjectiveBar(
-                            title: AppLocalizations.of(context).proteins,
-                            objective: 570,
-                            value: proteinsSnapshot.data[0],
-                            colorOk: Colors.purple,
-                          );
-                        }),
-                  ]),
-                ),
-                decoration: BoxDecoration(
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        spreadRadius: 0,
-                        color: Colors.white,
-                        blurRadius: 1.0,
-                        offset: Offset(3, 1))
-                  ],
-                ));
-          });
+                    );
+                  }),
+              StreamBuilder(
+                  initialData: objModelProteins.getObjective() ?? 10,
+                  stream: objModelProteins.getStream(),
+                  builder: (context, proteinsSnapshot) {
+                    var objective = proteinsSnapshot.data;
+                    if (objective == 0) {
+                      return Container();
+                    }
+
+                    return ObjectiveBar(
+                      onTap: () =>
+                          {setObjectiveWithDial(context, objModelProteins)},
+                      title: AppLocalizations.of(context).proteins,
+                      objective: proteinsSnapshot.data,
+                      value: this.consumedProteins,
+                      colorOk: Colors.purple,
+                    );
+                  }),
+            ]),
+          ),
+          decoration: BoxDecoration(
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  spreadRadius: 0,
+                  color: Colors.white,
+                  blurRadius: 1.0,
+                  offset: Offset(3, 1))
+            ],
+          ));
     });
   }
 

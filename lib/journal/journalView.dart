@@ -75,7 +75,6 @@ class _JournalViewState extends State<JournalView> {
                 });
               },
               itemBuilder: (context, itemIndex) {
-
                 // I need to clean the date because it `add` create a new Datetime with 1, wich is not something I wish.
                 var newDate = cleanDate(widget.january2010
                     .add(Duration(days: this.dateIndex, hours: 0)));
@@ -107,12 +106,14 @@ class JournalPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MyDatabase>(builder: (context, database, child) {
       return StreamBuilder(
-          stream: database.watchTotalDailyCalorie(date),
+          stream: database.watchTotalCalorieAndDailyNutriments(date),
+          initialData: List<int>.from([0, 0, 0, 0]),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            var totalCalorie = snapshot.data;
-            if (totalCalorie == null) {
-              totalCalorie = 0;
-            }
+            var totalCalories = snapshot.data[0];
+            var totalProteins = snapshot.data[1];
+            var totalCarbohyprates = snapshot.data[2];
+            var totalLipids = snapshot.data[3];
+
             return Column(children: <Widget>[
               Material(
                   elevation: 1,
@@ -135,8 +136,11 @@ class JournalPage extends StatelessWidget {
                       height: 5,
                     ),
                     CalorieMeter(
-                      consumedCalorie: totalCalorie,
                       date: date,
+                      consumedCalorie: totalCalories,
+                      carbohydrates: totalCarbohyprates,
+                      consumedProteins: totalProteins,
+                      lipids: totalLipids,
                     ),
                     Divider(
                       color: Colors.grey.shade50,
@@ -158,7 +162,7 @@ class JournalPage extends StatelessWidget {
                             MealCard(title: "Lunch", date: date),
                             MealCard(title: "Diner", date: date),
                             MealCard(title: "Snacks", date: date),
-                            Card(
+/*                             Card(
                                 elevation: 1,
                                 child: StreamBuilder(
                                     initialData: List<int>.from([1, 1, 1]),
@@ -185,7 +189,7 @@ class JournalPage extends StatelessWidget {
                                                 lipids:
                                                     nutrientSnapshot.data[2],
                                               )));
-                                    })),
+                                    })), */
                           ], padding: EdgeInsets.fromLTRB(0, 0, 0, 8)))),
             ]);
           });

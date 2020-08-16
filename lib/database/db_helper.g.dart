@@ -1309,17 +1309,21 @@ class $ConsumedFoodsTable extends ConsumedFoods
 class Objective extends DataClass implements Insertable<Objective> {
   final int objective;
   final DateTime date;
-  Objective({@required this.objective, @required this.date});
+  final String type;
+  Objective(
+      {@required this.objective, @required this.date, @required this.type});
   factory Objective.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
+    final stringType = db.typeSystem.forDartType<String>();
     return Objective(
       objective:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}objective']),
       date:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
     );
   }
   @override
@@ -1331,6 +1335,9 @@ class Objective extends DataClass implements Insertable<Objective> {
     if (!nullToAbsent || date != null) {
       map['date'] = Variable<DateTime>(date);
     }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String>(type);
+    }
     return map;
   }
 
@@ -1340,6 +1347,7 @@ class Objective extends DataClass implements Insertable<Objective> {
           ? const Value.absent()
           : Value(objective),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
     );
   }
 
@@ -1349,6 +1357,7 @@ class Objective extends DataClass implements Insertable<Objective> {
     return Objective(
       objective: serializer.fromJson<int>(json['objective']),
       date: serializer.fromJson<DateTime>(json['date']),
+      type: serializer.fromJson<String>(json['type']),
     );
   }
   @override
@@ -1357,58 +1366,71 @@ class Objective extends DataClass implements Insertable<Objective> {
     return <String, dynamic>{
       'objective': serializer.toJson<int>(objective),
       'date': serializer.toJson<DateTime>(date),
+      'type': serializer.toJson<String>(type),
     };
   }
 
-  Objective copyWith({int objective, DateTime date}) => Objective(
+  Objective copyWith({int objective, DateTime date, String type}) => Objective(
         objective: objective ?? this.objective,
         date: date ?? this.date,
+        type: type ?? this.type,
       );
   @override
   String toString() {
     return (StringBuffer('Objective(')
           ..write('objective: $objective, ')
-          ..write('date: $date')
+          ..write('date: $date, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(objective.hashCode, date.hashCode));
+  int get hashCode =>
+      $mrjf($mrjc(objective.hashCode, $mrjc(date.hashCode, type.hashCode)));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Objective &&
           other.objective == this.objective &&
-          other.date == this.date);
+          other.date == this.date &&
+          other.type == this.type);
 }
 
 class ObjectivesCompanion extends UpdateCompanion<Objective> {
   final Value<int> objective;
   final Value<DateTime> date;
+  final Value<String> type;
   const ObjectivesCompanion({
     this.objective = const Value.absent(),
     this.date = const Value.absent(),
+    this.type = const Value.absent(),
   });
   ObjectivesCompanion.insert({
     @required int objective,
     @required DateTime date,
+    @required String type,
   })  : objective = Value(objective),
-        date = Value(date);
+        date = Value(date),
+        type = Value(type);
   static Insertable<Objective> custom({
     Expression<int> objective,
     Expression<DateTime> date,
+    Expression<String> type,
   }) {
     return RawValuesInsertable({
       if (objective != null) 'objective': objective,
       if (date != null) 'date': date,
+      if (type != null) 'type': type,
     });
   }
 
-  ObjectivesCompanion copyWith({Value<int> objective, Value<DateTime> date}) {
+  ObjectivesCompanion copyWith(
+      {Value<int> objective, Value<DateTime> date, Value<String> type}) {
     return ObjectivesCompanion(
       objective: objective ?? this.objective,
       date: date ?? this.date,
+      type: type ?? this.type,
     );
   }
 
@@ -1421,6 +1443,9 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
     if (date.present) {
       map['date'] = Variable<DateTime>(date.value);
     }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
     return map;
   }
 
@@ -1428,7 +1453,8 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
   String toString() {
     return (StringBuffer('ObjectivesCompanion(')
           ..write('objective: $objective, ')
-          ..write('date: $date')
+          ..write('date: $date, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
@@ -1463,8 +1489,20 @@ class $ObjectivesTable extends Objectives
     );
   }
 
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  GeneratedTextColumn _type;
   @override
-  List<GeneratedColumn> get $columns => [objective, date];
+  GeneratedTextColumn get type => _type ??= _constructType();
+  GeneratedTextColumn _constructType() {
+    return GeneratedTextColumn(
+      'type',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [objective, date, type];
   @override
   $ObjectivesTable get asDslTable => this;
   @override
@@ -1488,11 +1526,17 @@ class $ObjectivesTable extends Objectives
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {date};
+  Set<GeneratedColumn> get $primaryKey => {date, type};
   @override
   Objective map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;

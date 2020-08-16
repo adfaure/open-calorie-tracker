@@ -189,15 +189,14 @@ class SelectFood extends StatelessWidget {
         ));
 
         var objValue;
-        Objective obj = await database.getObjective(this.date);
-        debugPrint("select food $date");
+        Objective obj = await database.getObjective(this.date, "calorie");
         if (obj == null)
           objValue = prefs.getInt("objective") ?? 0;
         else
           objValue = obj.objective;
 
         database.createOrUpdateObjective(
-            Objective(date: this.date, objective: objValue));
+            Objective(date: this.date, objective: objValue, type: "calorie"));
 
         Navigator.of(context).pop();
       }

@@ -42,6 +42,7 @@ class ObjectiveModel {
   SharedPreferences prefs;
   bool inDb;
   StreamSubscription sub;
+  String type;
 
   final DateTime date;
 
@@ -49,14 +50,14 @@ class ObjectiveModel {
       {@required this.objective,
       @required this.database,
       @required this.date,
-      @required this.prefs}) {
-    var prefObjective = prefs.getInt("objective");
+      @required this.prefs,
+      this.type = "calorie"}) {
+    var prefObjective = prefs.getInt("objective/$type");
+    debugPrint("obj: $type, $prefObjective");
     this.objective = prefObjective ?? 0;
 
-    debugPrint("date model: $date");
-    database.getObjective(date).then((obj) {
+    database.getObjective(date, type).then((obj) {
       if (obj != null) {
-        debugPrint("Get obj for date: ${obj.date}");
         this.objective = obj.objective;
         this.streamCtlr.add(obj.objective);
       }
@@ -68,15 +69,15 @@ class ObjectiveModel {
   StreamController<int> streamCtlr = StreamController<int>.broadcast();
 
   void updateSharedPrefs(int newValue) async {
-    prefs.setInt("objective", newValue);
+    debugPrint("update share pref for $type, with $newValue");
+    prefs.setInt("objective/$type", newValue);
+
     changeObjective(newValue);
-    var test = today();
-    Objective obj = await database.getObjective(test);
-    debugPrint("$obj -> ${test}");
+    Objective obj = await database.getObjective(today(), type);
+
     if (obj != null) {
-      debugPrint("already in basu $obj");
       database.createOrUpdateObjective(
-          Objective(date: today(), objective: newValue));
+          Objective(date: today(), objective: newValue, type: type));
     }
   }
 
@@ -87,7 +88,7 @@ class ObjectiveModel {
 
   void addCurrentToDatabase() async {
     database.createOrUpdateObjective(
-        Objective(date: this.date, objective: objective));
+        Objective(date: this.date, objective: objective, type: type));
   }
 
   int getObjective() {

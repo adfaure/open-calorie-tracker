@@ -29,8 +29,10 @@ part 'db_helper.g.dart';
 class Objectives extends Table {
   IntColumn get objective => integer()();
   DateTimeColumn get date => dateTime()();
+  TextColumn get type => text()();
+
   @override
-  Set<Column> get primaryKey => {date};
+  Set<Column> get primaryKey => {date, type};
 }
 
 // Food Models contains the food that will be added.
@@ -80,18 +82,6 @@ class ConsumedFoods extends Table {
   IntColumn get carbohydrates => integer().nullable()();
   IntColumn get proteins => integer().nullable()();
 }
-
-/* class ConsumedFood {
-  final ConsumedFood consumedFood;
-
-  ConsumedFood({@required this.consumedFood});
-
-  int consumedCalories() {
-    var caloriesPerUnit = this.consumedFood.calorie / this.consumedFood.portion;
-    var total = consumedFood.this * caloriesPerUnit;
-    return total.round();
-  }
-}*/
 
 LazyDatabase _openConnection() {
   // the LazyDatabase util lets us find the right location for the file async.
@@ -225,59 +215,37 @@ class MyDatabase extends _$MyDatabase {
     });
   }
 
-  /// It should not be possible to modify an objectives, it is only possible to add new objectives.
-  /// It is only possible to modify the objective of the current day.
-  /// And only one objective is allowed per [date].
-  /// To get the objectives of a special [date], I get all objectives that are older than the given [date].
-  /// Then, I get the newest.
-  /// In other words, the objective of [date] is the lastly modified objective before this [date],
-  /// or if it exists the objective of this [date].
-  /*getObjective(DateTime _date) {
-    return (select(objectives)
-          ..where((tbl) {
-            final value = tbl.date;
-            // Expression<DateTime> date =  Expression<DateTime>(_date);
-            return value.isSmallerOrEqualValue(_date);
-          })
-          ..orderBy([
-            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
-          ])
-          ..limit(1))
-        .getSingle();
+  Stream<List<int>> watchTotalCalorieAndDailyNutriments(DateTime selectDate) {
+    return (select(consumedFoods)..where((a) => a.date.equals(selectDate)))
+        .watch()
+        .map((rows) {
+      return rows.map((row) {
+        return row;
+      }).fold(List<int>.from([0, 0, 0, 0]), (previousValue, consumedFood) {
+        previousValue[0] += consumedFood.calorie;
+        previousValue[1] += consumedFood.proteins;
+        previousValue[2] += consumedFood.carbohydrates;
+        previousValue[3] += consumedFood.lipids;
+        return previousValue;
+      });
+    });
   }
-  */
 
-  getObjective(DateTime _date) {
+  getObjective(DateTime _date, String _type) {
     return (select(objectives)
           ..where((tbl) {
-            return tbl.date.equals(_date);
+            return tbl.date.equals(_date) & tbl.type.equals(_type);
           }))
         .getSingle();
   }
 
-  watchObjective(DateTime _date) {
+  watchObjective(DateTime _date, String _type) {
     return (select(objectives)
           ..where((tbl) {
-            return tbl.date.equals(_date);
+            return tbl.date.equals(_date) & tbl.type.equals(_type);
           }))
         .watchSingle();
   }
-
-  /*
-  Stream<Objective> watchObjective(DateTime _date) {
-    return (select(objectives)
-          ..where((tbl) {
-            final value = tbl.date;
-            // Expression<DateTime> date =  Expression<DateTime>(_date);
-            return value.isSmallerOrEqualValue(_date);
-          })
-          ..orderBy([
-            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
-          ])
-          ..limit(1))
-        .watchSingle();
-  }
-  */
 
   /// In the case we go to far in the past, I get the first value of the database.
   getObjectiveUpper() {

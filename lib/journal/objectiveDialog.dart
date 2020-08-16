@@ -32,11 +32,15 @@ setObjectiveWithDial(
       context: context,
       builder: (BuildContext context) {
         var l = AppLocalizations.of(context);
+        var text = l.calorie;
+        if (objectiveModel.type == "protein") {
+          text = l.proteins;
+        }
         return SimpleDialog(
           title: Center(
               child: Column(children: [
             Text(
-              "${l.objective} : ${l.calorie}",
+              "${l.objective} : ${text}",
             ),
           ])),
           children: <Widget>[
@@ -61,7 +65,7 @@ setObjectiveWithDial(
                         } catch (e) {
                           return AppLocalizations.of(context).invalidNumber;
                         }
-                        if (newObjective <= 0) {
+                        if (newObjective < 0) {
                           return AppLocalizations.of(context)
                               .requirePositiveNumber;
                         }

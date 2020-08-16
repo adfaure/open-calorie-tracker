@@ -39,7 +39,10 @@ class UserView extends StatelessWidget {
         body: Consumer2<MyDatabase, SharedPreferences>(
             builder: (builder, database, prefs, child) {
           return ListView(
-            children: <Widget>[_objectiveRow(context, prefs, database)],
+            children: <Widget>[
+              _objectiveRow(context, prefs, database),
+              _objectiveProteinRow(context, prefs, database)
+            ],
           );
         }));
   }
@@ -47,7 +50,13 @@ class UserView extends StatelessWidget {
   _objectiveRow(
       BuildContext context, SharedPreferences prefs, MyDatabase database) {
     var objModel = ObjectiveModel(
-        database: database, prefs: prefs, objective: 0, date: today());
+        database: database,
+        prefs: prefs,
+        objective: 0,
+        date: today(),
+        type: "calorie");
+    var l = AppLocalizations.of(context);
+
     return GestureDetector(
         onTap: () => {setObjectiveWithDial(context, objModel)},
         child: Card(
@@ -55,14 +64,48 @@ class UserView extends StatelessWidget {
           padding: EdgeInsets.all(15),
           child: Row(
             children: <Widget>[
-              Text(AppLocalizations.of(context).objective, 
-              ),
+              Text("${l.objective}: ${l.calorie}"),
               Expanded(
                 child: Container(),
               ),
               StreamBuilder(
                   stream: objModel.getStream(),
                   initialData: objModel.getObjective(),
+                  builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                    return Text(
+                      snapshot.data.toString(),
+                      textScaleFactor: this.scaleFactor,
+                    );
+                  })
+            ],
+          ),
+        )));
+  }
+
+  _objectiveProteinRow(
+      BuildContext context, SharedPreferences prefs, MyDatabase database) {
+    var objModelProteins = ObjectiveModel(
+        database: database,
+        prefs: prefs,
+        objective: 0,
+        date: today(),
+        type: "protein");
+    var l = AppLocalizations.of(context);
+
+    return GestureDetector(
+        onTap: () => {setObjectiveWithDial(context, objModelProteins)},
+        child: Card(
+            child: Padding(
+          padding: EdgeInsets.all(15),
+          child: Row(
+            children: <Widget>[
+              Text("${l.objective}: ${l.proteins}"),
+              Expanded(
+                child: Container(),
+              ),
+              StreamBuilder(
+                  stream: objModelProteins.getStream(),
+                  initialData: objModelProteins.getObjective(),
                   builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                     return Text(
                       snapshot.data.toString(),
