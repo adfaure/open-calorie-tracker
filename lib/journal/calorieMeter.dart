@@ -63,7 +63,7 @@ class CalorieMeter extends StatelessWidget {
             margin: EdgeInsets.all(15),
             child: Column(children: [
               StreamBuilder(
-                  initialData: objModel.getObjective() ?? 0,
+                  initialData: 0,
                   stream: objModel.getStream(),
                   builder: (context, snapshot) {
                     int objective = snapshot.data;
@@ -79,7 +79,7 @@ class CalorieMeter extends StatelessWidget {
                     );
                   }),
               StreamBuilder(
-                  initialData: objModelProteins.getObjective() ?? 10,
+                  initialData: 0,
                   stream: objModelProteins.getStream(),
                   builder: (context, proteinsSnapshot) {
                     var objective = proteinsSnapshot.data;

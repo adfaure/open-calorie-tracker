@@ -70,7 +70,7 @@ class UserView extends StatelessWidget {
               ),
               StreamBuilder(
                   stream: objModel.getStream(),
-                  initialData: objModel.getObjective(),
+                  initialData: 0,
                   builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                     return Text(
                       snapshot.data.toString(),
@@ -105,7 +105,7 @@ class UserView extends StatelessWidget {
               ),
               StreamBuilder(
                   stream: objModelProteins.getStream(),
-                  initialData: objModelProteins.getObjective(),
+                  initialData: 0,
                   builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                     return Text(
                       snapshot.data.toString(),

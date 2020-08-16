@@ -24,6 +24,7 @@ import 'package:moor/moor.dart' hide Column;
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
 import 'package:open_weight/food/openfoodfacts.dart';
+import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -188,6 +189,7 @@ class SelectFood extends StatelessWidget {
           lipids: Value<int>(selectedFood.lipids),
         ));
 
+        // Calorie objective
         var objValue;
         Objective obj = await database.getObjective(this.date, "calorie");
         if (obj == null)
@@ -197,6 +199,19 @@ class SelectFood extends StatelessWidget {
 
         database.createOrUpdateObjective(
             Objective(date: this.date, objective: objValue, type: "calorie"));
+
+        // Proteins Objective
+        var objModelProteins = ObjectiveModel(
+            database: database,
+            prefs: prefs,
+            objective: 0,
+            date: date,
+            type: "protein");
+        var protObj = await objModelProteins.getSafeObjective();
+        if (protObj > 0) {
+          database.createOrUpdateObjective(
+              Objective(date: this.date, objective: protObj, type: "protein"));
+        }
 
         Navigator.of(context).pop();
       }

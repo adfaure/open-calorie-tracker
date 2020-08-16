@@ -16,6 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
+import 'package:flutter/rendering.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -222,7 +223,10 @@ class MyDatabase extends _$MyDatabase {
       return rows.map((row) {
         return row;
       }).fold(List<int>.from([0, 0, 0, 0]), (previousValue, consumedFood) {
-        previousValue[0] += consumedFood.calorie;
+        var calories = consumedFood.quantity *
+            (consumedFood.calorie / consumedFood.portion);
+
+        previousValue[0] += calories.round();
         previousValue[1] += consumedFood.proteins;
         previousValue[2] += consumedFood.carbohydrates;
         previousValue[3] += consumedFood.lipids;

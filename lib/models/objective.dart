@@ -43,7 +43,7 @@ class ObjectiveModel {
   bool inDb;
   StreamSubscription sub;
   String type;
-
+  StreamController<int> streamCtlr;
   final DateTime date;
 
   ObjectiveModel(
@@ -53,7 +53,6 @@ class ObjectiveModel {
       @required this.prefs,
       this.type = "calorie"}) {
     var prefObjective = prefs.getInt("objective/$type");
-    debugPrint("obj: $type, $prefObjective");
     this.objective = prefObjective ?? 0;
 
     database.getObjective(date, type).then((obj) {
@@ -63,13 +62,12 @@ class ObjectiveModel {
       }
     });
 
-    streamCtlr.add(objective);
+    streamCtlr = StreamController<int>.broadcast(onListen: () {
+      this.changeObjective(objective);
+    });
   }
 
-  StreamController<int> streamCtlr = StreamController<int>.broadcast();
-
   void updateSharedPrefs(int newValue) async {
-    debugPrint("update share pref for $type, with $newValue");
     prefs.setInt("objective/$type", newValue);
 
     changeObjective(newValue);
@@ -83,6 +81,7 @@ class ObjectiveModel {
 
   void changeObjective(int newValue) {
     this.objective = newValue;
+    debugPrint("New value: $newValue");
     this.streamCtlr.add(newValue);
   }
 
@@ -91,8 +90,19 @@ class ObjectiveModel {
         Objective(date: this.date, objective: objective, type: type));
   }
 
-  int getObjective() {
-    return objective;
+  Future<int> getSafeObjective() async {
+    var _objective;
+    var dataObj = await database.getObjective(date, type);
+
+    if (dataObj == null) {
+      debugPrint("Get obj: objective/$type");
+      _objective = prefs.getInt("objective/$type") ?? 0;
+    } else {
+      _objective = dataObj.objective;
+    }
+
+    if (_objective != objective) changeObjective(_objective);
+    return _objective;
   }
 
   Stream<int> getStream() {
