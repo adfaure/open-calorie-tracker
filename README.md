@@ -111,7 +111,6 @@ and then deploy the apk on a connected device:
 
 # Todo
 
-- Add nutrient objective (proteins, glucide etc)
 - Localize the application eng/fr.
   - Almost done, find a way to localize the error form's error messages.
 - Create a first login page, to enter user information such as the objective.
