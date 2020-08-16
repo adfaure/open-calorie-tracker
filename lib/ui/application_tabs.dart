@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:open_weight/application_localization.dart';
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/journal/journalView.dart';
@@ -10,7 +11,6 @@ class ApplicationTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-
       initialIndex: 1,
       length: 2,
       child: Scaffold(
@@ -21,9 +21,7 @@ class ApplicationTabBar extends StatelessWidget {
               indicatorWeight: 5,
               labelColor: Colors.pinkAccent.shade50,
               tabs: [
-                Tab(
-                  icon: Icon(Icons.account_box),
-                ),
+                Tab(icon: Icon(FontAwesomeIcons.tasks)),
                 Tab(icon: Icon(Icons.calendar_today)),
                 // Tab(icon: Icon(Icons.pie_chart_outlined)),
               ],

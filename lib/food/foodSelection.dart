@@ -188,6 +188,8 @@ class SelectFood extends StatelessWidget {
           carbohydrates: Value<int>(selectedFood.carbohydrates),
           lipids: Value<int>(selectedFood.lipids),
         ));
+        
+        Navigator.of(context).pop();
 
         // If we register a food, we check if anyobjective are up for, for the calorie and the nutrients.
         // If it is the case, we save them in the database if it not already done, this should enable us to keep an history up to date.
@@ -231,7 +233,19 @@ class SelectFood extends StatelessWidget {
               date: this.date, objective: carboObj, type: "carbohydrate"));
         }
 
-        Navigator.of(context).pop();
+        // carbohydrate Objective
+        var objLipidModel = ObjectiveModel(
+            database: database,
+            prefs: prefs,
+            objective: 0,
+            date: date,
+            type: "lipid");
+        var lipidObj = await objCarboModel.getSafeObjective();
+        if (carboObj > 0) {
+          database.createOrUpdateObjective(
+              Objective(date: this.date, objective: lipidObj, type: "lipid"));
+        }
+
       }
     });
   }

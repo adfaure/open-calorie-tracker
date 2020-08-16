@@ -45,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "foodListTitle" : MessageLookupByLibrary.simpleMessage("Liste des aliments"),
     "foodNameRequired" : MessageLookupByLibrary.simpleMessage("Nom (champ requis)"),
     "invalidNumber" : MessageLookupByLibrary.simpleMessage("Nombre invalide"),
+    "journal" : MessageLookupByLibrary.simpleMessage("Journal"),
     "lipids" : MessageLookupByLibrary.simpleMessage("Lipides"),
     "lunch" : MessageLookupByLibrary.simpleMessage("Déjeuner"),
     "mealType" : MessageLookupByLibrary.simpleMessage("Type de repas"),
@@ -53,6 +54,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "newFood" : MessageLookupByLibrary.simpleMessage("Nouvel aliment"),
     "noEnergyInformationsFor" : MessageLookupByLibrary.simpleMessage("Données calorique manquantes pour"),
     "objective" : MessageLookupByLibrary.simpleMessage("Objectif"),
+    "objectives" : MessageLookupByLibrary.simpleMessage("Objectifs"),
     "portion" : MessageLookupByLibrary.simpleMessage("Portion"),
     "portionBoxTitle" : MessageLookupByLibrary.simpleMessage("Taille de la portion"),
     "portionFieldTitle" : MessageLookupByLibrary.simpleMessage("Portion (champ requis)"),
@@ -70,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tomorrow" : MessageLookupByLibrary.simpleMessage("Demain"),
     "totalKcal" : m0,
     "unit" : MessageLookupByLibrary.simpleMessage("Unité"),
+    "value" : MessageLookupByLibrary.simpleMessage("Valeur"),
     "watermelon" : MessageLookupByLibrary.simpleMessage("Pastèque"),
     "yesterday" : MessageLookupByLibrary.simpleMessage("Hier")
   };

@@ -17,7 +17,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:open_weight/common/helpers.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:open_weight/journal/objectiveDialog.dart';
 import 'package:open_weight/models/objective.dart';
@@ -64,6 +63,17 @@ class CalorieMeter extends StatelessWidget {
           objective: 0,
           date: date,
           type: "carbohydrate");
+      var objModelLipid = ObjectiveModel(
+          database: database,
+          prefs: prefs,
+          objective: 0,
+          date: date,
+          type: "lipid");
+      if (!objModelCarbohydrate.getStatus() &&
+          !objModelProteins.getStatus() &&
+          !objModel.getStatus()) {
+        return Container();
+      }
       return Container(
           child: Card(
             elevation: 0,
@@ -74,7 +84,9 @@ class CalorieMeter extends StatelessWidget {
               _buildProgressBar(objModelProteins, this.consumedProteins,
                   l.proteins, Colors.purple),
               _buildProgressBar(objModelCarbohydrate,
-                  this.consumedCarbohydrates, l.carbohydrates, Colors.teal)
+                  this.consumedCarbohydrates, l.carbohydrates, Colors.teal),
+              _buildProgressBar(objModelLipid, this.consumedCarbohydrates,
+                  l.lipids, Colors.yellowAccent.shade700)
             ]),
           ),
           decoration: BoxDecoration(
@@ -96,7 +108,8 @@ class CalorieMeter extends StatelessWidget {
         stream: model.getStream(),
         builder: (context, proteinsSnapshot) {
           var objective = proteinsSnapshot.data;
-          if (objective == 0) {
+
+          if (!model.getStatus() || objective == 0) {
             return Container();
           }
           return ObjectiveBar(
@@ -115,26 +128,6 @@ class CalorieMeter extends StatelessWidget {
       children: [
         Text(value.toString(), textScaleFactor: sizeFactor),
         Text(text, textScaleFactor: sizeFactor / 3),
-      ],
-    );
-  }
-
-  _buildFormula(BuildContext context, ObjectiveModel objModel, int objective) {
-    var availableCalories = objective - consumedCalorie;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        GestureDetector(
-          onTap: () => {setObjectiveWithDial(context, objModel)},
-          child: _buildTextAndValue(context, formater.format(objective),
-              AppLocalizations.of(context).objective),
-        ),
-        Text("-", textScaleFactor: sizeFactor),
-        _buildTextAndValue(context, formater.format(consumedCalorie),
-            AppLocalizations.of(context).consumed),
-        Text("=", textScaleFactor: sizeFactor),
-        _buildTextAndValue(context, formater.format(availableCalories),
-            AppLocalizations.of(context).available),
       ],
     );
   }

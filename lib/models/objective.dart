@@ -52,7 +52,7 @@ class ObjectiveModel {
       @required this.date,
       @required this.prefs,
       this.type = "calorie"}) {
-    var prefObjective = prefs.getInt("objective/$type");
+    var prefObjective = prefs.getInt("objective/$type/value");
     this.objective = prefObjective ?? 0;
 
     database.getObjective(date, type).then((obj) {
@@ -68,7 +68,7 @@ class ObjectiveModel {
   }
 
   void updateSharedPrefs(int newValue) async {
-    prefs.setInt("objective/$type", newValue);
+    prefs.setInt("objective/$type/value", newValue);
 
     changeObjective(newValue);
     Objective obj = await database.getObjective(today(), type);
@@ -94,8 +94,8 @@ class ObjectiveModel {
     var dataObj = await database.getObjective(date, type);
 
     if (dataObj == null) {
-      debugPrint("Get obj: objective/$type");
-      _objective = prefs.getInt("objective/$type") ?? 0;
+      debugPrint("Get obj: objective/$type/value");
+      _objective = prefs.getInt("objective/$type/value") ?? 0;
     } else {
       _objective = dataObj.objective;
     }
@@ -106,6 +106,26 @@ class ObjectiveModel {
 
   Stream<int> getStream() {
     return streamCtlr.stream;
+  }
+
+  bool getStatus() {
+    var status = prefs.getBool("objective/$type/status");
+    if (status == null) {
+      status = false;
+    }
+    return status;
+  }
+
+  void enableObjective() {
+    var status = prefs.getBool("objective/$type/status");
+    if (status == null) {
+      status = false;
+    }
+    prefs.setBool("objective/$type/status", true);
+  }
+
+  void disableObjective() {
+    prefs.setBool("objective/$type/status", false);
   }
 
   close() {

@@ -106,6 +106,10 @@ class AppLocalizations {
     return Intl.message('Objective',
         name: 'objective', desc: 'objective (starts with a caps)');
   }
+  String get objectives {
+    return Intl.message('Objectives',
+        name: 'objectives', desc: 'Objectives (starts with a caps)');
+  }
 
   String get cancel {
     return Intl.message('Cancel', name: 'cancel', desc: 'Dialog cancel button');
@@ -163,6 +167,10 @@ class AppLocalizations {
           return this.snacks;
         }
     }
+  }
+
+  String get value {
+    return Intl.message('Value', name: 'value', desc: '');
   }
 
   String get tomorrow {

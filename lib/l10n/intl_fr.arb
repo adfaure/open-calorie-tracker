@@ -97,6 +97,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "objectives": "Objectifs",
+  "@objectives": {
+    "description": "Objectives (starts with a caps)",
+    "type": "text",
+    "placeholders": {}
+  },
   "cancel": "Annuler",
   "@cancel": {
     "description": "Dialog cancel button",
@@ -141,6 +147,12 @@
   },
   "snacks": "Collations",
   "@snacks": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "value": "Valeur",
+  "@value": {
     "description": "",
     "type": "text",
     "placeholders": {}

@@ -39,7 +39,10 @@ setObjectiveWithDial(
           text = l.calorie;
         } else if (objectiveModel.type == "carbohydrate") {
           text = l.carbohydrates;
+        } else if (objectiveModel.type == "lipid") {
+          text = l.lipids;
         }
+
         return SimpleDialog(
           title: Center(
               child: Column(children: [
@@ -92,6 +95,12 @@ setObjectiveWithDial(
         );
       }).then((newObjective) async {
     if (newObjective != null) {
+      if (newObjective == 0) {
+        debugPrint("Disabling objective");
+        objectiveModel.disableObjective();
+      } else {
+        objectiveModel.enableObjective();
+      }
       objectiveModel.updateSharedPrefs(newObjective);
     }
   });

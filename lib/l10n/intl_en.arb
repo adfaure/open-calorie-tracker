@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-15T17:09:32.061596",
+  "@@last_modified": "2020-08-16T18:03:16.748380",
   "title": "Food Assistant",
   "@title": {
     "description": "The application title",
@@ -96,6 +96,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "objectives": "Objectives",
+  "@objectives": {
+    "description": "Objectives (starts with a caps)",
+    "type": "text",
+    "placeholders": {}
+  },
   "cancel": "Cancel",
   "@cancel": {
     "description": "Dialog cancel button",
@@ -140,6 +146,12 @@
   },
   "snacks": "Snacks",
   "@snacks": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "value": "Value",
+  "@value": {
     "description": "",
     "type": "text",
     "placeholders": {}

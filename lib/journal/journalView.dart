@@ -122,20 +122,12 @@ class JournalPage extends StatelessWidget {
                         dateCallback(_previousDay, database);
                       },
                     ),
-                    Divider(
-                      color: Colors.grey.shade50,
-                      height: 5,
-                    ),
                     CalorieMeter(
                       date: date,
                       consumedCalorie: totalCalories,
                       consumedCarbohydrates: totalCarbohyprates,
                       consumedProteins: totalProteins,
                       lipids: totalLipids,
-                    ),
-                    Divider(
-                      color: Colors.grey.shade50,
-                      height: 5,
                     ),
                     Divider(
                       color: Colors.grey,
