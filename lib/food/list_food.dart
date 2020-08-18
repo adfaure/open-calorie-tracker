@@ -10,7 +10,7 @@ class FoodList extends StatelessWidget {
   Widget build(BuildContext build) {
     return Consumer<MyDatabase>(builder: (builder, database, child) {
       return StreamBuilder(
-          stream: database.watchEntriesInFoods(),
+          stream: database.watchVisibleFoods(),
           initialData: List<FoodModel>(),
           builder:
               (BuildContext context, AsyncSnapshot<List<FoodModel>> snapshot) {

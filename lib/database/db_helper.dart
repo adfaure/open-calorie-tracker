@@ -16,10 +16,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
+<<<<<<< HEAD
 import 'package:flutter/rendering.dart';
 // import 'package:moor_ffi/moor_ffi.dart';
 
 import 'package:moor/ffi.dart';
+=======
+import 'package:df/df.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:moor_ffi/moor_ffi.dart';
+>>>>>>> edff263 (code: populate database of startup)
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:moor/moor.dart';
@@ -43,6 +50,7 @@ class Objectives extends Table {
 class FoodModels extends Table {
   // Uniq ID
   IntColumn get id => integer().autoIncrement()();
+  BoolColumn get visible => boolean().withDefault(const Constant(true))();
 
   TextColumn get name => text()();
   // Portion should be 100...
@@ -93,7 +101,7 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    // file.delete();
+    file.delete();
     return VmDatabase(file);
   });
 }
@@ -141,6 +149,12 @@ class MyDatabase extends _$MyDatabase {
   // The stream will automatically emit new items whenever the underlying data changes.
   Stream<List<FoodModel>> watchEntriesInFoods() {
     return (select(foodModels)).watch();
+  }
+
+  // The stream will automatically emit new items whenever the underlying data changes.
+  Stream<List<FoodModel>> watchVisibleFoods() {
+    return (select(foodModels)..where((tbl) => tbl.visible.equals(true)))
+        .watch();
   }
 
   // The stream will automatically emit new items whenever the underlying data changes.
@@ -262,6 +276,55 @@ class MyDatabase extends _$MyDatabase {
         .getSingle();
   }
 
+  // The ciqual table list numerous raw food compositions.
+  // The database is featured in the application as an assets.
+  // At the creation of the database, we populate the database with the foods of the ciqual table.
+  Future _populateDatabase() async {
+    // Doing everyting inside an unique transaction should be more efficient.
+    return transaction(() async {
+      String filePath = "assets/data/ciqual_2020_fr_eng.csv";
+      final byteData = await rootBundle.load(filePath);
+      final localPath = (await getTemporaryDirectory()).path;
+      String localFilePath = '$localPath/ciqual_2020_fr_eng.csv';
+
+      final file = File(localFilePath);
+      await file.writeAsBytes(byteData.buffer
+          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+      final df = await DataFrame.fromCsv(localFilePath);
+      var it = df.rows.iterator;
+
+      it.moveNext();
+      while (it.moveNext()) {
+        // I think that I should remove this library and do the parsing myself
+        // The problem is that the library doesn't give a consistant type for the value
+        // so i need to first force it to be string, then do the parsing by calling it.parse.
+        int carbohydrates =
+            (double.tryParse(it.current["carbohydrates"].toString()) ?? 0)
+                .round();
+        int lipids =
+            (double.tryParse(it.current["lipids"].toString()) ?? 0).round();
+        int proteins =
+            (double.tryParse(it.current["proteins"].toString()) ?? 0).round();
+        int kcal =
+            (double.tryParse(it.current["kcal"].toString()) ?? 0).round();
+
+        var name = it.current["alim_nom_fr"];
+        debugPrint("test: ${double.tryParse("1")}");
+        await addFoodModel(FoodModelsCompanion(
+            visible: Value<bool>(false),
+            source: Value<String>("ciqual"),
+            name: Value<String>(name),
+            unit: Value<String>("g"),
+            portion: Value<int>(100),
+            proteins: Value<int>(proteins),
+            lipids: Value<int>(lipids),
+            carbohydrates: Value<int>(carbohydrates),
+            calorie: Value<int>(kcal)));
+      }
+    });
+  }
+
   /// https://github.com/simolus3/moor/issues/188
   /// Only for devellopement,
   /// the if(true ...) should be transformed to check a debug (or dev) mode flag instead
@@ -274,9 +337,10 @@ class MyDatabase extends _$MyDatabase {
     }, beforeOpen: (openingDetails) async {
       if (true /* or some other flag */) {
         final m = createMigrator(); // changed to this
-        for (final table in allTables) {
-          // await m.deleteTable(table.actualTableName);
-          // await m.createTable(table);
+        if (openingDetails.wasCreated) {
+          debugPrint("data base was just created.");
+          await _populateDatabase();
+          debugPrint("Ciqual integrated");
         }
       }
     });

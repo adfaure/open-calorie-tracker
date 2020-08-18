@@ -9,6 +9,7 @@ part of 'db_helper.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class FoodModel extends DataClass implements Insertable<FoodModel> {
   final int id;
+  final bool visible;
   final String name;
   final int portion;
   final String unit;
@@ -22,6 +23,7 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
   final int proteins;
   FoodModel(
       {@required this.id,
+      @required this.visible,
       @required this.name,
       @required this.portion,
       @required this.unit,
@@ -68,6 +70,9 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
     if (!nullToAbsent || id != null) {
       map['id'] = Variable<int>(id);
     }
+    if (!nullToAbsent || visible != null) {
+      map['visible'] = Variable<bool>(visible);
+    }
     if (!nullToAbsent || name != null) {
       map['name'] = Variable<String>(name);
     }
@@ -107,6 +112,9 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
   FoodModelsCompanion toCompanion(bool nullToAbsent) {
     return FoodModelsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      visible: visible == null && nullToAbsent
+          ? const Value.absent()
+          : Value(visible),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       portion: portion == null && nullToAbsent
           ? const Value.absent()
@@ -142,6 +150,7 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return FoodModel(
       id: serializer.fromJson<int>(json['id']),
+      visible: serializer.fromJson<bool>(json['visible']),
       name: serializer.fromJson<String>(json['name']),
       portion: serializer.fromJson<int>(json['portion']),
       unit: serializer.fromJson<String>(json['unit']),
@@ -160,6 +169,7 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'visible': serializer.toJson<bool>(visible),
       'name': serializer.toJson<String>(name),
       'portion': serializer.toJson<int>(portion),
       'unit': serializer.toJson<String>(unit),
@@ -176,6 +186,7 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
 
   FoodModel copyWith(
           {int id,
+          bool visible,
           String name,
           int portion,
           String unit,
@@ -189,6 +200,7 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
           int proteins}) =>
       FoodModel(
         id: id ?? this.id,
+        visible: visible ?? this.visible,
         name: name ?? this.name,
         portion: portion ?? this.portion,
         unit: unit ?? this.unit,
@@ -205,6 +217,7 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
   String toString() {
     return (StringBuffer('FoodModel(')
           ..write('id: $id, ')
+          ..write('visible: $visible, ')
           ..write('name: $name, ')
           ..write('portion: $portion, ')
           ..write('unit: $unit, ')
@@ -221,13 +234,45 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
   }
 
   @override
+<<<<<<< HEAD
   int get hashCode => Object.hash(id, name, portion, unit, serving, servingUnit,
       calorie, source, barcode, lipids, carbohydrates, proteins);
   @override
   bool operator ==(Object other) =>
+=======
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          visible.hashCode,
+          $mrjc(
+              name.hashCode,
+              $mrjc(
+                  portion.hashCode,
+                  $mrjc(
+                      unit.hashCode,
+                      $mrjc(
+                          serving.hashCode,
+                          $mrjc(
+                              servingUnit.hashCode,
+                              $mrjc(
+                                  calorie.hashCode,
+                                  $mrjc(
+                                      source.hashCode,
+                                      $mrjc(
+                                          barcode.hashCode,
+                                          $mrjc(
+                                              lipids.hashCode,
+                                              $mrjc(
+                                                  carbohydrates.hashCode,
+                                                  proteins
+                                                      .hashCode)))))))))))));
+  @override
+  bool operator ==(dynamic other) =>
+>>>>>>> edff263 (code: populate database of startup)
       identical(this, other) ||
       (other is FoodModel &&
           other.id == this.id &&
+          other.visible == this.visible &&
           other.name == this.name &&
           other.portion == this.portion &&
           other.unit == this.unit &&
@@ -243,6 +288,7 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
 
 class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
   final Value<int> id;
+  final Value<bool> visible;
   final Value<String> name;
   final Value<int> portion;
   final Value<String> unit;
@@ -256,6 +302,7 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
   final Value<int> proteins;
   const FoodModelsCompanion({
     this.id = const Value.absent(),
+    this.visible = const Value.absent(),
     this.name = const Value.absent(),
     this.portion = const Value.absent(),
     this.unit = const Value.absent(),
@@ -270,6 +317,7 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
   });
   FoodModelsCompanion.insert({
     this.id = const Value.absent(),
+    this.visible = const Value.absent(),
     @required String name,
     @required int portion,
     @required String unit,
@@ -287,6 +335,7 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
         calorie = Value(calorie);
   static Insertable<FoodModel> custom({
     Expression<int> id,
+    Expression<bool> visible,
     Expression<String> name,
     Expression<int> portion,
     Expression<String> unit,
@@ -301,6 +350,7 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (visible != null) 'visible': visible,
       if (name != null) 'name': name,
       if (portion != null) 'portion': portion,
       if (unit != null) 'unit': unit,
@@ -317,6 +367,7 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
 
   FoodModelsCompanion copyWith(
       {Value<int> id,
+      Value<bool> visible,
       Value<String> name,
       Value<int> portion,
       Value<String> unit,
@@ -330,6 +381,7 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
       Value<int> proteins}) {
     return FoodModelsCompanion(
       id: id ?? this.id,
+      visible: visible ?? this.visible,
       name: name ?? this.name,
       portion: portion ?? this.portion,
       unit: unit ?? this.unit,
@@ -349,6 +401,9 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (visible.present) {
+      map['visible'] = Variable<bool>(visible.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -390,6 +445,7 @@ class FoodModelsCompanion extends UpdateCompanion<FoodModel> {
   String toString() {
     return (StringBuffer('FoodModelsCompanion(')
           ..write('id: $id, ')
+          ..write('visible: $visible, ')
           ..write('name: $name, ')
           ..write('portion: $portion, ')
           ..write('unit: $unit, ')
@@ -414,11 +470,29 @@ class $FoodModelsTable extends FoodModels
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedColumn<int> _id;
   @override
+<<<<<<< HEAD
   GeneratedColumn<int> get id =>
       _id ??= GeneratedColumn<int>('id', aliasedName, false,
           typeName: 'INTEGER',
           requiredDuringInsert: false,
           defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+=======
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _visibleMeta = const VerificationMeta('visible');
+  GeneratedBoolColumn _visible;
+  @override
+  GeneratedBoolColumn get visible => _visible ??= _constructVisible();
+  GeneratedBoolColumn _constructVisible() {
+    return GeneratedBoolColumn('visible', $tableName, false,
+        defaultValue: const Constant(true));
+  }
+
+>>>>>>> edff263 (code: populate database of startup)
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   GeneratedColumn<String> _name;
   @override
@@ -490,6 +564,7 @@ class $FoodModelsTable extends FoodModels
   @override
   List<GeneratedColumn> get $columns => [
         id,
+        visible,
         name,
         portion,
         unit,
@@ -513,6 +588,10 @@ class $FoodModelsTable extends FoodModels
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('visible')) {
+      context.handle(_visibleMeta,
+          visible.isAcceptableOrUnknown(data['visible'], _visibleMeta));
     }
     if (data.containsKey('name')) {
       context.handle(

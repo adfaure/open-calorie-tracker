@@ -16,6 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
 import 'package:flutter/material.dart';
+import 'package:moor/moor.dart' hide Column;
 import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/database/db_helper.dart';
 import 'package:provider/provider.dart';
@@ -87,6 +88,9 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                       unit: unitFormCtrl.text,
                       calorie: int.parse(calorieFormCtrl.text),
                       portion: int.parse(portionFormCtrl.text),
+                      lipids: Value<int>(0),
+                      carbohydrates: Value<int>(0),
+                      proteins: Value<int>(0),
                     ));
 
                     Navigator.pop(context);

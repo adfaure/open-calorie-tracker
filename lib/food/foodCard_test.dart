@@ -6,7 +6,7 @@ import 'package:open_weight/food/foodCard.dart';
 void main() {
 
   final food = FoodModel
-  (id: 0, name: "test", calorie: 42, portion: 100, unit: "g",);
+  (id: 0, name: "test", calorie: 42, portion: 100, unit: "g", visible: null,);
 
   testWidgets('MyWidget has a title and message', (WidgetTester tester) async {
     await tester.pumpWidget(FoodCardTestWidget(food: food,));

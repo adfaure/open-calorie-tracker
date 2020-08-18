@@ -27,6 +27,7 @@ import 'package:open_weight/food/search_food.dart';
 import '../application_localization.dart';
 import '../database/db_helper.dart';
 
+// TODO: rename
 class ListFood extends StatelessWidget {
   ListFood({Key key, @required this.title, this.foodsItem}) : super(key: key);
   final String title;
