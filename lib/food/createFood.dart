@@ -91,6 +91,7 @@ class _CreateFoodFormState extends State<CreateFoodForm> {
                       lipids: Value<int>(0),
                       carbohydrates: Value<int>(0),
                       proteins: Value<int>(0),
+                      source: Value<String>("user"),
                     ));
 
                     Navigator.pop(context);

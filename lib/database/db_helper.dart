@@ -17,11 +17,16 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:flutter/rendering.dart';
 // import 'package:moor_ffi/moor_ffi.dart';
 
 import 'package:moor/ffi.dart';
 =======
+=======
+import 'dart:convert';
+
+>>>>>>> 9ccf8c2 (code: remove dep to df library)
 import 'package:df/df.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -101,7 +106,7 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    // file.delete();
+    file.delete();
     return VmDatabase(file);
   });
 }
@@ -298,26 +303,41 @@ class MyDatabase extends _$MyDatabase {
       await file.writeAsBytes(byteData.buffer
           .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
 
-      final df = await DataFrame.fromCsv(localFilePath);
-      var it = df.rows.iterator;
+      // Detect header
+      Map<String, int> headers = Map();
+      var rows = await file
+          .openRead()
+          .map(utf8.decode)
+          .transform(new LineSplitter())
+          .toList();
 
-      it.moveNext();
-      while (it.moveNext()) {
+      for (var rowIdx = 0; rowIdx < rows.length; rowIdx++) {
+        var row = rows[rowIdx].split(",");
+        if (rowIdx == 0) {
+          for (var i = 0; i < row.length; i++) {
+            headers[row[i]] = i;
+          }
+          continue;
+        }
+
         // I think that I should remove this library and do the parsing myself
         // The problem is that the library doesn't give a consistant type for the value
         // so i need to first force it to be string, then do the parsing by calling it.parse.
         int carbohydrates =
-            (double.tryParse(it.current["carbohydrates"].toString()) ?? 0)
+            (double.tryParse(row[headers["carbohydrates"]].toString()) ?? 0)
                 .round();
         int lipids =
-            (double.tryParse(it.current["lipids"].toString()) ?? 0).round();
+            (double.tryParse(row[headers["lipids"]].toString()) ?? 0).round();
         int proteins =
-            (double.tryParse(it.current["proteins"].toString()) ?? 0).round();
+            (double.tryParse(row[headers["proteins"]].toString()) ?? 0).round();
         int kcal =
-            (double.tryParse(it.current["kcal"].toString()) ?? 0).round();
+            (double.tryParse(row[headers["kcal"]].toString()) ?? 0).round();
 
-        var name = it.current["alim_nom_fr"];
-        debugPrint("test: ${double.tryParse("1")}");
+        var name = row[headers["alim_nom_fr"]];
+        if (name == "Fraise; crue") {
+          debugPrint("Fraise crue; ${row[headers["kcal"]]}");
+        }
+        //  debugPrint("test: ${double.tryParse("1.0")}");
         await addFoodModel(FoodModelsCompanion(
             visible: Value<bool>(false),
             source: Value<String>("ciqual"),

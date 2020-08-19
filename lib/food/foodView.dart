@@ -64,6 +64,26 @@ class FoodView extends StatelessWidget {
     );
   }
 
+  // Create a new food from a previous model,
+  // insterting this in the database will add a new model instead of overiding the previous one.
+  _getFormFoodDuplicate() {
+    return FoodModelsCompanion.insert(
+      name: controllers["name"].text,
+      portion: int.parse(controllers["portion"].text),
+      unit: controllers["unit"].text,
+      calorie: int.parse(controllers["calorie"].text),
+      // id: Value<int>(this.food.id),
+      serving: Value<int>(int.tryParse(controllers["serving"].text)),
+      source: Value<String>("user"),
+      barcode: Value<String>(controllers["barcode"].text),
+      proteins: Value<int>(int.tryParse(controllers["proteins"].text) ?? 0),
+      carbohydrates:
+          Value<int>(int.tryParse(controllers["carbohydrates"].text) ?? 0),
+      lipids: Value<int>(int.tryParse(controllers["lipids"].text) ?? 0),
+      visible: Value<bool>(true),
+    );
+  }
+
   _getItemsDivider({double height: 5}) {
     return Divider(
       color: appBgColor,
@@ -83,7 +103,11 @@ class FoodView extends StatelessWidget {
               return IconButton(
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
-                    database.upsertFoodModel(_getFormFood());
+                    if (this.food.source == "ciqual") {
+                      database.upsertFoodModel(_getFormFoodDuplicate());
+                    } else {
+                      database.upsertFoodModel(_getFormFood());
+                    }
                     Navigator.pop(context);
                   }
                 },
