@@ -60,6 +60,7 @@ class FoodView extends StatelessWidget {
       carbohydrates:
           Value<int>(int.tryParse(controllers["carbohydrates"].text) ?? 0),
       lipids: Value<int>(int.tryParse(controllers["lipids"].text) ?? 0),
+      visible: Value<bool>(this.food.visible),
     );
   }
 

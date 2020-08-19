@@ -157,6 +157,13 @@ class MyDatabase extends _$MyDatabase {
         .watch();
   }
 
+  Future<List<FoodModel>> searchFood(String search) {
+    // assume that an entry is important if it has the string "important" somewhere in its content
+    return (select(foodModels)..where((tbl) =>
+        // (tbl.name.like("$search") & tbl.calorie.isBiggerThanValue(0))))
+        (tbl.name.like("$search")))).get();
+  }
+
   // The stream will automatically emit new items whenever the underlying data changes.
   Stream<List<ConsumedFood>> watchEntriesInDailyFoods(
       DateTime selectDate, String meal) {
@@ -330,13 +337,12 @@ class MyDatabase extends _$MyDatabase {
   /// the if(true ...) should be transformed to check a debug (or dev) mode flag instead
   @override
   MigrationStrategy get migration {
-    return MigrationStrategy(onCreate: (Migrator m) {
-      // Custom statement to enable primary key
+    return MigrationStrategy(onCreate: (Migrator m) async {
       customStatement('PRAGMA foreign_keys = ON;');
-      return m.createAll();
+      var res = m.createAll();
+      return res;
     }, beforeOpen: (openingDetails) async {
       if (true /* or some other flag */) {
-        final m = createMigrator(); // changed to this
         if (openingDetails.wasCreated) {
           debugPrint("data base was just created.");
           await _populateDatabase();
