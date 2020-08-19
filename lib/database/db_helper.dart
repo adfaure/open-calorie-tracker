@@ -26,8 +26,11 @@ import 'package:moor/ffi.dart';
 =======
 import 'dart:convert';
 
+<<<<<<< HEAD
 >>>>>>> 9ccf8c2 (code: remove dep to df library)
 import 'package:df/df.dart';
+=======
+>>>>>>> 8602bf6 (code: compute missing kcal values in R)
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:moor_ffi/moor_ffi.dart';

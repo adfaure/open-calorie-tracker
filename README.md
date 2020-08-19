@@ -133,6 +133,14 @@ https://ciqual.anses.fr/cms/sites/default/files/inline-files/Table%20Ciqual%2020
     - The login page / or the user page enables to find how to set the best objectives for your use cases
 - Add Ciqual database
 
+
+# Pre-Added Data
+The ciqual database is very weird, and I find it not very useful.
+A better solution IMHO would be to create my own database.
+
+- https://www.foodspring.fr/tableau-calories
+- https://tools.myfooddata.com/nutrition-facts-database-spreadsheet.php
+
 ## Someday
 
 - Use enum for: mealtype and objective
