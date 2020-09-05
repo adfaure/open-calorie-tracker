@@ -33,6 +33,10 @@ scanAndAddProduct(BuildContext build) async {
   String _scanBarcode = "UNKNOW";
 
   _scanBarcode = await scanBarcodeNormal(build);
+  if(_scanBarcode == "-1") {
+    return;
+  }
+
   ProductQueryConfiguration configurations =
       ProductQueryConfiguration(_scanBarcode,
           // language: OpenFoodFactsLanguage.GERMAN,
@@ -142,7 +146,6 @@ Future<String> scanBarcodeNormal(BuildContext context) async {
   try {
     barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
         "#ff6666", "Cancel", true, ScanMode.BARCODE);
-    print(barcodeScanRes);
   } on PlatformException {
     barcodeScanRes = AppLocalizations.of(context).scanFailPlatformError;
   }
