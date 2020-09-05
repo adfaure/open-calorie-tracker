@@ -27,11 +27,16 @@ data_fr = read_xls("Table Ciqual 2020_FR_2020 07 07.xls") %>%
 select_eng = read_xls("Table Ciqual 2020_ENG_2020 07 07.xls") %>%
   select(alim_nom_eng, alim_code)
 
-data_fr %>% full_join(select_eng) %>%
+control_data = data_fr %>% full_join(select_eng) %>%
   mutate(alim_nom_eng = str_replace_all(alim_nom_eng, ",", ";")) %>%
   mutate(alim_nom_fr = str_replace_all(alim_nom_fr,",", ";")) %>%
   rename(kcal = "Energie, Règlement UE N° 1169/2011 (kcal/100 g)",
          proteins = "Protéines, N x facteur de Jones (g/100 g)",
          carbohydrates = "Glucides (g/100 g)",
          lipids = "Lipides (g/100 g)") %>%
+  # Compute missing kcal
+  # The ansee FAQ states that the kcal depends of several factors, and when they don't have enough information
+  # to do a "perfect" computation, they just put 0. 
+  # For my usage, I compute an unprecise kcal value with the simple formula: 4 * (carbohydrates + proteins) + 9 * lipids.
+  mutate(kcal = ifelse(kcal == 0, (proteins * 4) + (carbohydrates * 4) + (lipids * 9), kcal)) %>%
   write_csv("ciqual_2020_fr_eng.csv")

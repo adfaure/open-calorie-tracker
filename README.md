@@ -124,20 +124,20 @@ https://ciqual.anses.fr/cms/sites/default/files/inline-files/Table%20Ciqual%2020
 
 ## V1 
 
-- Add unknown barcode to OFF master
+- Add unknown barcode to OFF master.
+- Update create new food widget.
 - Localize the application eng/fr.
   - Almost done, find a way to localize the error form's error messages.
 - Create a first login page, to enter user information such as the objective.
     - The initialization of the application allows to create the initialization date.
       The init date is then used as the first date the user can navigate from, and ensure the consistency of the objective data.
-    - The login page / or the user page enables to find how to set the best objectives for your use cases
-- Add Ciqual database
-
+    - The login page / or the user page enables to find how to set the best objectives for your use cases.
+- Add Ciqual database.
+ 
 
 # Pre-Added Data
-The ciqual database is very weird, and I find it not very useful.
-A better solution IMHO would be to create my own database.
 
+Alternative databases: 
 - https://www.foodspring.fr/tableau-calories
 - https://tools.myfooddata.com/nutrition-facts-database-spreadsheet.php
 
