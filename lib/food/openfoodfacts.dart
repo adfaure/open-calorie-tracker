@@ -33,6 +33,7 @@ scanAndAddProduct(BuildContext build) async {
   String _scanBarcode = "UNKNOW";
 
   _scanBarcode = await scanBarcodeNormal(build);
+  // In case of the user cancels the scan, we just return.
   if(_scanBarcode == "-1") {
     return;
   }

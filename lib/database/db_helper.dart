@@ -109,7 +109,7 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    file.delete();
+    // file.delete();
     return VmDatabase(file);
   });
 }
@@ -128,7 +128,7 @@ class MyDatabase extends _$MyDatabase {
   @override
   int get schemaVersion => 1;
 
-  // returns the generated id
+  // returns the generated idàu
   Future<int> addFoodModel(FoodModelsCompanion entry) {
     return into(foodModels).insert(entry);
   }
@@ -163,6 +163,11 @@ class MyDatabase extends _$MyDatabase {
   Stream<List<FoodModel>> watchVisibleFoods() {
     return (select(foodModels)..where((tbl) => tbl.visible.equals(true)))
         .watch();
+  }
+
+  // The stream will automatically emit new items whenever the underlying data changes.
+  Future<List<FoodModel>> getVisibleFoods() {
+    return (select(foodModels)..where((tbl) => tbl.visible.equals(true))).get();
   }
 
   Future<List<FoodModel>> searchFood(String search) {

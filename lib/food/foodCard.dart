@@ -21,19 +21,27 @@ import 'package:open_weight/database/db_helper.dart';
 class FoodCard extends Card {
   final FoodModel food;
   final actionButton;
-  FoodCard({Key key, @required this.food, this.actionButton}) : super(key:key);
+  FoodCard({Key key, @required this.food, this.actionButton}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var bgColors = Colors.red.shade100;
+    if (food.source == "OpenFoodFacts") {
+      bgColors = Colors.blue.shade100;
+    } else if (food.source == "user") {
+      bgColors = Colors.green.shade100;
+    }
+
     return Card(
       child: ListTile(
           leading: CircleAvatar(
             child: Text('${food.name[0]}'),
             radius: 20,
+            foregroundColor: Colors.black,
+            backgroundColor: bgColors,
           ),
           title: Text(food.name),
-          subtitle:
-              Text("kcal. ${food.calorie} (${food.portion}${food.unit})"),
+          subtitle: Text("kcal. ${food.calorie} (${food.portion}${food.unit})"),
           trailing: actionButton),
     );
   }

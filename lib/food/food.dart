@@ -17,11 +17,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:open_weight/common/ui.dart';
 import 'package:open_weight/food/createFood.dart';
-import 'package:open_weight/food/list_food.dart';
-import 'package:open_weight/food/openfoodfacts.dart';
 import 'package:open_weight/food/search_food.dart';
 
 import '../application_localization.dart';
@@ -41,35 +37,9 @@ class ListFood extends StatelessWidget {
         length: 2,
         child: Scaffold(
             backgroundColor: bgColor,
-            appBar: AppBar(
-              title: Text(AppLocalizations.of(build).foodListTitle),
-              bottom: TabBar(
-                indicatorColor: Colors.pink.shade200,
-                indicatorWeight: 5,
-                labelColor: Colors.pinkAccent.shade50,
-                tabs: [
-                  Tab(icon: Icon(FontAwesomeIcons.carrot)),
-                  Tab(icon: Icon(FontAwesomeIcons.book)),
-                  // Tab(icon: Icon(Icons.pie_chart_outlined)),
-                ],
-              ),
-              actions: <Widget>[
-                Builder(builder: (_context) {
-                  return IconButton(
-                    icon: FaIcon(FontAwesomeIcons.barcode),
-                    onPressed: () async {
-                      scanAndAddProduct(_context);
-                    },
-                  );
-                })
-              ],
-            ),
-            body: Container(
-                color: appBgColor,
-                child: TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [FoodList(), SearchFood()],
-                )),
+            appBar:
+                AppBar(title: Text(AppLocalizations.of(build).foodListTitle)),
+            body: SearchFood(),
             floatingActionButton: Builder(
               builder: (context) => FloatingActionButton(
                   onPressed: () => _navigateAndDisplaySelection(context),

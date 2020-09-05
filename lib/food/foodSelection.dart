@@ -24,6 +24,7 @@ import 'package:moor/moor.dart' hide Column;
 import 'package:open_weight/food/createFood.dart';
 import 'package:open_weight/food/foodCard.dart';
 import 'package:open_weight/food/openfoodfacts.dart';
+import 'package:open_weight/food/search_food.dart';
 import 'package:open_weight/models/objective.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,40 +56,10 @@ class SelectFood extends StatelessWidget {
     return Scaffold(
         backgroundColor: bgColor,
         appBar: AppBar(
-          title: Text(AppLocalizations.of(build).localizedMealtype(this.title)),
-          actions: <Widget>[
-            Builder(builder: (_context) {
-              return IconButton(
-                icon: FaIcon(FontAwesomeIcons.barcode),
-                onPressed: () async {
-                  scanAndAddProduct(_context);
-                },
-              );
-            })
-          ],
-        ),
-        body: Consumer<MyDatabase>(builder: (builder, database, child) {
-          return StreamBuilder(
-              stream: database.watchEntriesInFoods(),
-              initialData: List<FoodModel>(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<FoodModel>> snapshot) {
-                return ListView.builder(
-                  // When the widget is first initialize, the data is null.
-                  // Tertiary operators prevent getting an error (It might be seen as a workaround, idk yet)
-                  itemCount: snapshot.data.length ?? 0,
-                  itemBuilder: (_, index) {
-                    // Passing by a builder so one can display a snackbar after the dialog ended.
-                    return GestureDetector(
-                        onTap: () => {
-                              _getNumberOfPortion(context, snapshot.data[index])
-                            },
-                        child: FoodCard(
-                          food: snapshot.data[index],
-                        ));
-                  },
-                );
-              });
+            title:
+                Text(AppLocalizations.of(build).localizedMealtype(this.title))),
+        body: SearchFood(onTapFoodCard: (food) {
+          _getNumberOfPortion(build, food);
         }),
         floatingActionButton: Builder(
           builder: (context) => FloatingActionButton(
@@ -114,63 +85,62 @@ class SelectFood extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Center(
-                child: Column(children: [
-              Text(
-                '${AppLocalizations.of(context).add}: ${selectedFood.name}',
-              ),
-              Text(
-                '(${AppLocalizations.of(context).unit}: ' +
-                    "${selectedFood.unit})",
-                textAlign: TextAlign.left,
-                textScaleFactor: 0.7,
-              )
-            ])),
-            children: <Widget>[
-              Row(children: [
-                SizedBox(
-                  width: 50,
+              title: Center(
+                  child: Column(children: [
+                Text(
+                  '${AppLocalizations.of(context).add}: ${selectedFood.name}',
                 ),
-                Expanded(
-                  child: Form(
-                      key: _dialogKey,
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        controller: numberOfPortionCtrl,
-                        decoration: InputDecoration(
-                          hintText: "80",
-                        ),
-                        validator: (value) {
-                          var doubleString =
-                              numberOfPortionCtrl.text.replaceAll(",", ".");
-                          var quantity;
-                          try {
-                            quantity = int.parse(doubleString);
-                          } catch (e) {
-                            return AppLocalizations.of(context).invalidNumber;
-                          }
-                          if (quantity <= 0) {
-                            return AppLocalizations.of(context)
-                                .requirePositiveNumber;
-                          }
-                          return null;
-                        },
-                        onFieldSubmitted: (newValue) {
-                          if (_dialogKey.currentState.validate()) {
-                            var doubleString =
-                                numberOfPortionCtrl.text.replaceAll(",", ".");
-                            Navigator.pop(context, int.parse(doubleString));
-                          }
-                        },
-                      )),
-                ),
-                SizedBox(
-                  width: 50,
-                ),
-              ]),
-            ],
-          );
+                Text(
+                  '(${AppLocalizations.of(context).unit}: ' +
+                      "${selectedFood.unit})",
+                  textAlign: TextAlign.left,
+                  textScaleFactor: 0.7,
+                )
+              ])),
+              children: <Widget>[
+                Row(children: [
+                  SizedBox(
+                    width: 50,
+                  ),
+                  Expanded(
+                      child: Form(
+                          key: _dialogKey,
+                          child: TextFormField(
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
+                              controller: numberOfPortionCtrl,
+                              decoration: InputDecoration(
+                                hintText: "80",
+                              ),
+                              validator: (value) {
+                                var doubleString = numberOfPortionCtrl.text
+                                    .replaceAll(",", ".");
+                                var quantity;
+                                try {
+                                  quantity = int.parse(doubleString);
+                                } catch (e) {
+                                  return AppLocalizations.of(context)
+                                      .invalidNumber;
+                                }
+                                if (quantity <= 0) {
+                                  return AppLocalizations.of(context)
+                                      .requirePositiveNumber;
+                                }
+                                return null;
+                              },
+                              onFieldSubmitted: (newValue) {
+                                if (_dialogKey.currentState.validate()) {
+                                  var doubleString = numberOfPortionCtrl.text
+                                      .replaceAll(",", ".");
+                                  Navigator.pop(
+                                      context, int.parse(doubleString));
+                                }
+                              }))),
+                  SizedBox(
+                    width: 50,
+                  )
+                ])
+              ]);
         }).then((quantity) async {
       if (quantity != null) {
         var database = Provider.of<MyDatabase>(context, listen: false);
@@ -188,7 +158,7 @@ class SelectFood extends StatelessWidget {
           carbohydrates: Value<int>(selectedFood.carbohydrates),
           lipids: Value<int>(selectedFood.lipids),
         ));
-        
+
         Navigator.of(context).pop();
 
         // If we register a food, we check if anyobjective are up for, for the calorie and the nutrients.
@@ -245,7 +215,6 @@ class SelectFood extends StatelessWidget {
           database.createOrUpdateObjective(
               Objective(date: this.date, objective: lipidObj, type: "lipid"));
         }
-
       }
     });
   }
