@@ -44,7 +44,7 @@ class _JournalViewState extends State<JournalView> {
 
   @override
   void initState() {
-    var idx = today().difference(widget.january2010).inDays + 1;
+    var idx = today().difference(widget.january2010).inDays;
     widget.january2010.add(Duration(days: idx));
 
     this.dateIndex = idx;
