@@ -16,6 +16,10 @@ Enter into the shell.
 NIXPKGS_ALLOW_UNFREE=1 ns shell.nix
 ```
 
+According to https://github.com/NixOS/nixpkgs/pull/76420#issuecomment-634273694, and https://github.com/NixOS/nixpkgs/issues/23910#issuecomment-634270758 it is not possible yet to use the sdk packaged within Nixos with flutter.
+It causes a license error.
+My solution is to install android-studio, and install the android SDK from here.
+
 ## Run on your phone
 
 Launch the android server: `adb start-server`.

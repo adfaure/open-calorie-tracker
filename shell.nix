@@ -1,15 +1,12 @@
 # https://specific.solutions.limited/projects/hanging-plotter/android-environment.md
-{ pkgs ? import (fetchTarball https://channels.nixos.org/nixos-20.03/nixexprs.tar.xz) {
-    config.android_sdk.accept_license = true;
-  }
+{ pkgs ? import (fetchTarball https://channels.nixos.org/nixos-20.09/nixexprs.tar.xz) {
+  config.android_sdk.accept_license = true;
+  config.allowUnfree = true; }
 }:
 let
-  allowUnfree = true;
-  # flutterPkgs = (import (builtins.fetchTarball "https://github.com/babariviere/nixpkgs/archive/flutter-testing.tar.gz")  {});
-  # unstablePkgs = (import (builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/75717901da4b40ebc2667a0dca79b10304358a87.tar.gz")   {});
-  
+
   # Git revision of the channel: be42a66cd30e6bc957d919a9afbb0eb83adb6c26
-  unstablePkgs = (import (builtins.fetchTarball "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz")   {});
+  unstablePkgs = (import (builtins.fetchTarball "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz") {});
   extensions = (with unstablePkgs.vscode-extensions; [
       bbenoist.Nix
   ]) ++ unstablePkgs.vscode-utils.extensionsFromVscodeMarketplace [({
@@ -46,7 +43,7 @@ let
   # flutter binary to flutter-variantname. It makes flutter undetectable for
   # editors which are looking for `flutter`.
   mkFlutter = opts: pkgs.callPackage
-    (import "${unstablePkgs.path}/pkgs/development/compilers/flutter/flutter.nix" opts) { };
+    (import "${pkgs.path}/pkgs/development/compilers/flutter/flutter.nix" opts) {  };
 
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
@@ -55,28 +52,48 @@ let
   flutter-dev = mkFlutter rec {
     pname = "flutter";
     channel = "stable";
-    version = "1.20.1";
+    version = "1.22.3";
     filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "sha256:0dpmi2c16s91ayfds1rqirs12jysjyqqh40n9v5h5xsizr7vzcx2";
-    patches = getPatches "${unstablePkgs.path}/pkgs/development/compilers/flutter/patches/beta";
- };
+    sha256Hash = "sha256:1qr9fn6fmiqiv163a5zqdmni1zp5gcligm5gmm85wbsl0bghws4a";
+    patches = getPatches "${pkgs.path}/pkgs/development/compilers/flutter/patches/beta";
+   };
 
-  androidSdk = pkgs.androidenv.androidPkgs_9_0.androidsdk;
+  # androidComposition = pkgs.androidenv.composeAndroidPackages {
+  #   # toolsVersion = "25.2.5";
+  #   # platformToolsVersion = "27.0.1";
+  #   buildToolsVersions = [ "29.0.3" ];
+  #   # includeEmulator = false;
+  #   # emulatorVersion = "27.2.0";
+  #   platformVersions = [ "29" ];
+  #   # includeSources = false;
+  #   # includeDocs = false;
+  #   # includeSystemImages = false;
+  #   # systemImageTypes = [ "default" ];
+  #   # abiVersions = [ "armeabi-v7a" ];
+  #   # lldbVersions = [ "2.0.2558144" ];
+  #   # cmakeVersions = [ "3.6.4111459" ];
+  #   # includeNDK = false;
+  #   # ndkVersion = "16.1.4479499";
+  #   # useGoogleAPIs = false;
+  #   # useGoogleTVAddOns = false;
+  #   # includeExtras = [
+  #   #   "extras;google;gcm"
+  #   # ];
+  # };
 
 in
 pkgs.mkShell {
   buildInputs = with pkgs; [
-    unstablePkgs.dart
+    dart
     flutter-dev
-    # unstablePkgs.flutter
     vscode-with-extensions
-    # unstablePkgs.flutterPackages.dev
-    unstablePkgs.android-studio
 
     # androidSdk
-    # Includes aapt2
-    androidenv.androidPkgs_9_0.androidsdk
-    androidenv.androidPkgs_9_0.platform-tools
+    # androidComposition.androidsdk # androidSdk
+    # androidComposition.platform-tools
+
+    android-studio
+
     jdk
     git
     adb-sync
@@ -88,8 +105,8 @@ pkgs.mkShell {
   shellHook=''
     export USE_CCACHE=1
     export ANDROID_JAVA_HOME=${pkgs.jdk.home}
-    export ANDROID_SDK_ROOT=${androidSdk}/libexec/android-sdk
+    '';
+    # export ANDROID_SDK_ROOT=
     # export ANDROID_HOME=$ANDROID_SDK_ROOT
-    export FLUTTER_SDK=${unstablePkgs.flutter.unwrapped}
-  '';
+    # export FLUTTER_SDK=${unstablePkgs.flutter.unwrapped}
 }
