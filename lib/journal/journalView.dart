@@ -25,6 +25,7 @@ import 'package:open_weight/journal/dayCard.dart';
 import 'package:open_weight/journal/calorieMeter.dart';
 import 'package:open_weight/journal/mealCard.dart';
 import '../database/db_helper.dart';
+import 'dart:developer' as developer;
 
 class JournalView extends StatefulWidget {
   final String title;
@@ -80,7 +81,7 @@ class _JournalViewState extends State<JournalView> {
   }
 
   _changeDate(DateTime newDate, MyDatabase database) async {
-    var newIdx = newDate.difference(widget.january2010).inDays + 1;
+    var newIdx = newDate.difference(widget.january2010).inDays;
     this._pageController.animateToPage(newIdx,
         curve: Curves.ease, duration: Duration(milliseconds: 50));
   }
@@ -115,10 +116,12 @@ class JournalPage extends StatelessWidget {
                       onTapMiddle: () => _selectDate(context, database, date),
                       onTapNext: () async {
                         var _nextDay = nextDay(date);
+                        debugPrint('movieTitle: $_nextDay');
                         dateCallback(_nextDay, database);
                       },
                       onTapPrevious: () async {
                         var _previousDay = previousDay(date);
+                        debugPrint('movieTitle: $_previousDay');
                         dateCallback(_previousDay, database);
                       },
                     ),

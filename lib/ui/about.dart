@@ -57,21 +57,21 @@ https://world.openfoodfacts.org/
       ),
       body: Padding(
           child: Markdown(
-            onTapLink: _launchURL,
+            // onTapLink: _launchURL,
             controller: controller,
             selectable: false,
             data: _markdownData,
-          ),
+            ),
           padding: EdgeInsets.all(10)),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.arrow_upward),
         onPressed: () => controller.animateTo(0,
-            duration: Duration(seconds: 1), curve: Curves.easeOut),
-      ),
-    );
+          duration: Duration(seconds: 1), curve: Curves.easeOut),
+        ),
+      );
   }
 
-  _launchURL(String url) async {
+  void _launchURL(String url, String other) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {

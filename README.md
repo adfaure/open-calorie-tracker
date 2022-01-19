@@ -29,12 +29,13 @@ Then to run the application on your phone, use in a terminal: `flutter run`
 
 launch android-studio and configure+launch an emulator. (Currently broken...)
 
-## Launching on emulator  (**WIP**)
+## Launching on emulator  (**WIP**)
 
-To build the emulator use: `nix-build emulate.nix`.
-Then start the emulator: `./result/bin/run-test-emulator`.
-
-The emulator is launched, however flutter doesn't find as a connected device.
+Create an emulator with android studio. It can be started later with flutter.
+```
+nix develop
+fluter emulators
+```
 
 # Notes
 
@@ -42,7 +43,7 @@ The emulator is launched, however flutter doesn't find as a connected device.
 - If database not working with dlopen failing this link might fix it: https://stackoverflow.com/a/62308661
 - I am interested to learn about the Bloc pattern. Looks like this article is a good entry point: https://www.didierboelens.com/2018/08/reactive-programming-streams-bloc/.
 
-# Database
+# Database
 
 Any changes on the database tables needs to generate the flutter classes to be effective:
 

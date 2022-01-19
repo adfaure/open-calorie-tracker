@@ -19,7 +19,7 @@ class ApplicationTabBar extends StatelessWidget {
             bottom: TabBar(
               indicatorColor: Colors.pink.shade200,
               indicatorWeight: 5,
-              labelColor: Colors.pinkAccent.shade50,
+              // labelColor: Colors.pinkAccent.shade50,
               tabs: [
                 Tab(icon: Icon(FontAwesomeIcons.tasks)),
                 Tab(icon: Icon(Icons.calendar_today)),

@@ -36,29 +36,30 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
   factory FoodModel.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
     return FoodModel(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      portion:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}portion']),
-      unit: stringType.mapFromDatabaseResponse(data['${effectivePrefix}unit']),
-      serving:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}serving']),
-      servingUnit: stringType
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      portion: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}portion']),
+      unit: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}unit']),
+      serving: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}serving']),
+      servingUnit: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}serving_unit']),
-      calorie:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}calorie']),
-      source:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}source']),
-      barcode:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}barcode']),
-      lipids: intType.mapFromDatabaseResponse(data['${effectivePrefix}lipids']),
-      carbohydrates: intType
+      calorie: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}calorie']),
+      source: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}source']),
+      barcode: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}barcode']),
+      lipids: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}lipids']),
+      carbohydrates: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}carbohydrates']),
-      proteins:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}proteins']),
+      proteins: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}proteins']),
     );
   }
   @override
@@ -220,30 +221,10 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          name.hashCode,
-          $mrjc(
-              portion.hashCode,
-              $mrjc(
-                  unit.hashCode,
-                  $mrjc(
-                      serving.hashCode,
-                      $mrjc(
-                          servingUnit.hashCode,
-                          $mrjc(
-                              calorie.hashCode,
-                              $mrjc(
-                                  source.hashCode,
-                                  $mrjc(
-                                      barcode.hashCode,
-                                      $mrjc(
-                                          lipids.hashCode,
-                                          $mrjc(carbohydrates.hashCode,
-                                              proteins.hashCode))))))))))));
+  int get hashCode => Object.hash(id, name, portion, unit, serving, servingUnit,
+      calorie, source, barcode, lipids, carbohydrates, proteins);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FoodModel &&
           other.id == this.id &&
@@ -431,150 +412,81 @@ class $FoodModelsTable extends FoodModels
   final String _alias;
   $FoodModelsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
+  GeneratedColumn<String> _name;
   @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn(
-      'name',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<String> get name =>
+      _name ??= GeneratedColumn<String>('name', aliasedName, false,
+          typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _portionMeta = const VerificationMeta('portion');
-  GeneratedIntColumn _portion;
+  GeneratedColumn<int> _portion;
   @override
-  GeneratedIntColumn get portion => _portion ??= _constructPortion();
-  GeneratedIntColumn _constructPortion() {
-    return GeneratedIntColumn(
-      'portion',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get portion =>
+      _portion ??= GeneratedColumn<int>('portion', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _unitMeta = const VerificationMeta('unit');
-  GeneratedTextColumn _unit;
+  GeneratedColumn<String> _unit;
   @override
-  GeneratedTextColumn get unit => _unit ??= _constructUnit();
-  GeneratedTextColumn _constructUnit() {
-    return GeneratedTextColumn(
-      'unit',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<String> get unit =>
+      _unit ??= GeneratedColumn<String>('unit', aliasedName, false,
+          typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _servingMeta = const VerificationMeta('serving');
-  GeneratedIntColumn _serving;
+  GeneratedColumn<int> _serving;
   @override
-  GeneratedIntColumn get serving => _serving ??= _constructServing();
-  GeneratedIntColumn _constructServing() {
-    return GeneratedIntColumn(
-      'serving',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get serving =>
+      _serving ??= GeneratedColumn<int>('serving', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _servingUnitMeta =
       const VerificationMeta('servingUnit');
-  GeneratedTextColumn _servingUnit;
+  GeneratedColumn<String> _servingUnit;
   @override
-  GeneratedTextColumn get servingUnit =>
-      _servingUnit ??= _constructServingUnit();
-  GeneratedTextColumn _constructServingUnit() {
-    return GeneratedTextColumn(
-      'serving_unit',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<String> get servingUnit => _servingUnit ??=
+      GeneratedColumn<String>('serving_unit', aliasedName, true,
+          typeName: 'TEXT', requiredDuringInsert: false);
   final VerificationMeta _calorieMeta = const VerificationMeta('calorie');
-  GeneratedIntColumn _calorie;
+  GeneratedColumn<int> _calorie;
   @override
-  GeneratedIntColumn get calorie => _calorie ??= _constructCalorie();
-  GeneratedIntColumn _constructCalorie() {
-    return GeneratedIntColumn(
-      'calorie',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get calorie =>
+      _calorie ??= GeneratedColumn<int>('calorie', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _sourceMeta = const VerificationMeta('source');
-  GeneratedTextColumn _source;
+  GeneratedColumn<String> _source;
   @override
-  GeneratedTextColumn get source => _source ??= _constructSource();
-  GeneratedTextColumn _constructSource() {
-    return GeneratedTextColumn(
-      'source',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<String> get source =>
+      _source ??= GeneratedColumn<String>('source', aliasedName, true,
+          typeName: 'TEXT', requiredDuringInsert: false);
   final VerificationMeta _barcodeMeta = const VerificationMeta('barcode');
-  GeneratedTextColumn _barcode;
+  GeneratedColumn<String> _barcode;
   @override
-  GeneratedTextColumn get barcode => _barcode ??= _constructBarcode();
-  GeneratedTextColumn _constructBarcode() {
-    return GeneratedTextColumn(
-      'barcode',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<String> get barcode =>
+      _barcode ??= GeneratedColumn<String>('barcode', aliasedName, true,
+          typeName: 'TEXT', requiredDuringInsert: false);
   final VerificationMeta _lipidsMeta = const VerificationMeta('lipids');
-  GeneratedIntColumn _lipids;
+  GeneratedColumn<int> _lipids;
   @override
-  GeneratedIntColumn get lipids => _lipids ??= _constructLipids();
-  GeneratedIntColumn _constructLipids() {
-    return GeneratedIntColumn(
-      'lipids',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get lipids =>
+      _lipids ??= GeneratedColumn<int>('lipids', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _carbohydratesMeta =
       const VerificationMeta('carbohydrates');
-  GeneratedIntColumn _carbohydrates;
+  GeneratedColumn<int> _carbohydrates;
   @override
-  GeneratedIntColumn get carbohydrates =>
-      _carbohydrates ??= _constructCarbohydrates();
-  GeneratedIntColumn _constructCarbohydrates() {
-    return GeneratedIntColumn(
-      'carbohydrates',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get carbohydrates => _carbohydrates ??=
+      GeneratedColumn<int>('carbohydrates', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _proteinsMeta = const VerificationMeta('proteins');
-  GeneratedIntColumn _proteins;
+  GeneratedColumn<int> _proteins;
   @override
-  GeneratedIntColumn get proteins => _proteins ??= _constructProteins();
-  GeneratedIntColumn _constructProteins() {
-    return GeneratedIntColumn(
-      'proteins',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get proteins =>
+      _proteins ??= GeneratedColumn<int>('proteins', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -591,11 +503,9 @@ class $FoodModelsTable extends FoodModels
         proteins
       ];
   @override
-  $FoodModelsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'food_models';
   @override
-  String get $tableName => _alias ?? 'food_models';
-  @override
-  final String actualTableName = 'food_models';
+  String get actualTableName => 'food_models';
   @override
   VerificationContext validateIntegrity(Insertable<FoodModel> instance,
       {bool isInserting = false}) {
@@ -667,8 +577,8 @@ class $FoodModelsTable extends FoodModels
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FoodModel map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return FoodModel.fromData(data, _db, prefix: effectivePrefix);
+    return FoodModel.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -704,28 +614,28 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
   factory ConsumedFood.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return ConsumedFood(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      date:
-          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
-      mealType: stringType
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      date: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      mealType: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}meal_type']),
-      quantity:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}quantity']),
-      portion:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}portion']),
-      unit: stringType.mapFromDatabaseResponse(data['${effectivePrefix}unit']),
-      calorie:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}calorie']),
-      lipids: intType.mapFromDatabaseResponse(data['${effectivePrefix}lipids']),
-      carbohydrates: intType
+      quantity: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}quantity']),
+      portion: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}portion']),
+      unit: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}unit']),
+      calorie: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}calorie']),
+      lipids: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}lipids']),
+      carbohydrates: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}carbohydrates']),
-      proteins:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}proteins']),
+      proteins: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}proteins']),
     );
   }
   @override
@@ -875,28 +785,10 @@ class ConsumedFood extends DataClass implements Insertable<ConsumedFood> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          name.hashCode,
-          $mrjc(
-              date.hashCode,
-              $mrjc(
-                  mealType.hashCode,
-                  $mrjc(
-                      quantity.hashCode,
-                      $mrjc(
-                          portion.hashCode,
-                          $mrjc(
-                              unit.hashCode,
-                              $mrjc(
-                                  calorie.hashCode,
-                                  $mrjc(
-                                      lipids.hashCode,
-                                      $mrjc(carbohydrates.hashCode,
-                                          proteins.hashCode)))))))))));
+  int get hashCode => Object.hash(id, name, date, mealType, quantity, portion,
+      unit, calorie, lipids, carbohydrates, proteins);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ConsumedFood &&
           other.id == this.id &&
@@ -1075,136 +967,74 @@ class $ConsumedFoodsTable extends ConsumedFoods
   final String _alias;
   $ConsumedFoodsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
+  GeneratedColumn<String> _name;
   @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn(
-      'name',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<String> get name =>
+      _name ??= GeneratedColumn<String>('name', aliasedName, false,
+          typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _dateMeta = const VerificationMeta('date');
-  GeneratedDateTimeColumn _date;
+  GeneratedColumn<DateTime> _date;
   @override
-  GeneratedDateTimeColumn get date => _date ??= _constructDate();
-  GeneratedDateTimeColumn _constructDate() {
-    return GeneratedDateTimeColumn(
-      'date',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<DateTime> get date =>
+      _date ??= GeneratedColumn<DateTime>('date', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _mealTypeMeta = const VerificationMeta('mealType');
-  GeneratedTextColumn _mealType;
+  GeneratedColumn<String> _mealType;
   @override
-  GeneratedTextColumn get mealType => _mealType ??= _constructMealType();
-  GeneratedTextColumn _constructMealType() {
-    return GeneratedTextColumn(
-      'meal_type',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<String> get mealType =>
+      _mealType ??= GeneratedColumn<String>('meal_type', aliasedName, false,
+          typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _quantityMeta = const VerificationMeta('quantity');
-  GeneratedIntColumn _quantity;
+  GeneratedColumn<int> _quantity;
   @override
-  GeneratedIntColumn get quantity => _quantity ??= _constructQuantity();
-  GeneratedIntColumn _constructQuantity() {
-    return GeneratedIntColumn(
-      'quantity',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get quantity =>
+      _quantity ??= GeneratedColumn<int>('quantity', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _portionMeta = const VerificationMeta('portion');
-  GeneratedIntColumn _portion;
+  GeneratedColumn<int> _portion;
   @override
-  GeneratedIntColumn get portion => _portion ??= _constructPortion();
-  GeneratedIntColumn _constructPortion() {
-    return GeneratedIntColumn(
-      'portion',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get portion =>
+      _portion ??= GeneratedColumn<int>('portion', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _unitMeta = const VerificationMeta('unit');
-  GeneratedTextColumn _unit;
+  GeneratedColumn<String> _unit;
   @override
-  GeneratedTextColumn get unit => _unit ??= _constructUnit();
-  GeneratedTextColumn _constructUnit() {
-    return GeneratedTextColumn(
-      'unit',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<String> get unit =>
+      _unit ??= GeneratedColumn<String>('unit', aliasedName, false,
+          typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _calorieMeta = const VerificationMeta('calorie');
-  GeneratedIntColumn _calorie;
+  GeneratedColumn<int> _calorie;
   @override
-  GeneratedIntColumn get calorie => _calorie ??= _constructCalorie();
-  GeneratedIntColumn _constructCalorie() {
-    return GeneratedIntColumn(
-      'calorie',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get calorie =>
+      _calorie ??= GeneratedColumn<int>('calorie', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _lipidsMeta = const VerificationMeta('lipids');
-  GeneratedIntColumn _lipids;
+  GeneratedColumn<int> _lipids;
   @override
-  GeneratedIntColumn get lipids => _lipids ??= _constructLipids();
-  GeneratedIntColumn _constructLipids() {
-    return GeneratedIntColumn(
-      'lipids',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get lipids =>
+      _lipids ??= GeneratedColumn<int>('lipids', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _carbohydratesMeta =
       const VerificationMeta('carbohydrates');
-  GeneratedIntColumn _carbohydrates;
+  GeneratedColumn<int> _carbohydrates;
   @override
-  GeneratedIntColumn get carbohydrates =>
-      _carbohydrates ??= _constructCarbohydrates();
-  GeneratedIntColumn _constructCarbohydrates() {
-    return GeneratedIntColumn(
-      'carbohydrates',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get carbohydrates => _carbohydrates ??=
+      GeneratedColumn<int>('carbohydrates', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _proteinsMeta = const VerificationMeta('proteins');
-  GeneratedIntColumn _proteins;
+  GeneratedColumn<int> _proteins;
   @override
-  GeneratedIntColumn get proteins => _proteins ??= _constructProteins();
-  GeneratedIntColumn _constructProteins() {
-    return GeneratedIntColumn(
-      'proteins',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get proteins =>
+      _proteins ??= GeneratedColumn<int>('proteins', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1220,11 +1050,9 @@ class $ConsumedFoodsTable extends ConsumedFoods
         proteins
       ];
   @override
-  $ConsumedFoodsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'consumed_foods';
   @override
-  String get $tableName => _alias ?? 'consumed_foods';
-  @override
-  final String actualTableName = 'consumed_foods';
+  String get actualTableName => 'consumed_foods';
   @override
   VerificationContext validateIntegrity(Insertable<ConsumedFood> instance,
       {bool isInserting = false}) {
@@ -1296,8 +1124,8 @@ class $ConsumedFoodsTable extends ConsumedFoods
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ConsumedFood map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return ConsumedFood.fromData(data, _db, prefix: effectivePrefix);
+    return ConsumedFood.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -1315,15 +1143,13 @@ class Objective extends DataClass implements Insertable<Objective> {
   factory Objective.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final dateTimeType = db.typeSystem.forDartType<DateTime>();
-    final stringType = db.typeSystem.forDartType<String>();
     return Objective(
-      objective:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}objective']),
-      date:
-          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
-      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      objective: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}objective']),
+      date: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type']),
     );
   }
   @override
@@ -1386,10 +1212,9 @@ class Objective extends DataClass implements Insertable<Objective> {
   }
 
   @override
-  int get hashCode =>
-      $mrjf($mrjc(objective.hashCode, $mrjc(date.hashCode, type.hashCode)));
+  int get hashCode => Object.hash(objective, date, type);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Objective &&
           other.objective == this.objective &&
@@ -1466,49 +1291,29 @@ class $ObjectivesTable extends Objectives
   final String _alias;
   $ObjectivesTable(this._db, [this._alias]);
   final VerificationMeta _objectiveMeta = const VerificationMeta('objective');
-  GeneratedIntColumn _objective;
+  GeneratedColumn<int> _objective;
   @override
-  GeneratedIntColumn get objective => _objective ??= _constructObjective();
-  GeneratedIntColumn _constructObjective() {
-    return GeneratedIntColumn(
-      'objective',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get objective =>
+      _objective ??= GeneratedColumn<int>('objective', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _dateMeta = const VerificationMeta('date');
-  GeneratedDateTimeColumn _date;
+  GeneratedColumn<DateTime> _date;
   @override
-  GeneratedDateTimeColumn get date => _date ??= _constructDate();
-  GeneratedDateTimeColumn _constructDate() {
-    return GeneratedDateTimeColumn(
-      'date',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<DateTime> get date =>
+      _date ??= GeneratedColumn<DateTime>('date', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedTextColumn _type;
+  GeneratedColumn<String> _type;
   @override
-  GeneratedTextColumn get type => _type ??= _constructType();
-  GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn(
-      'type',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<String> get type =>
+      _type ??= GeneratedColumn<String>('type', aliasedName, false,
+          typeName: 'TEXT', requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [objective, date, type];
   @override
-  $ObjectivesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'objectives';
   @override
-  String get $tableName => _alias ?? 'objectives';
-  @override
-  final String actualTableName = 'objectives';
+  String get actualTableName => 'objectives';
   @override
   VerificationContext validateIntegrity(Insertable<Objective> instance,
       {bool isInserting = false}) {
@@ -1539,8 +1344,8 @@ class $ObjectivesTable extends Objectives
   Set<GeneratedColumn> get $primaryKey => {date, type};
   @override
   Objective map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Objective.fromData(data, _db, prefix: effectivePrefix);
+    return Objective.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
