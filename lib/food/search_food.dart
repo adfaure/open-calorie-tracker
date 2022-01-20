@@ -40,7 +40,7 @@ class _SearchFoodState extends State<SearchFood> {
     this.cache = Map<String, List<FoodModel>>();
     this.status = Map<String, SearchStatus>();
 
-    this.foods = List<FoodModel>();
+    this.foods = [];
     this._streamCtrl = StreamController();
 
     this._streamCtrl.stream.listen((event) {
@@ -77,7 +77,9 @@ class _SearchFoodState extends State<SearchFood> {
                 return TextField(
                   onChanged: (search) {
                     this.research = search;
-                    _search(database);
+                    if (search.length > 0) {
+                      _search(database);
+                    }
                   },
                 );
               }))),
@@ -134,7 +136,7 @@ class _SearchFoodState extends State<SearchFood> {
     }
 
     // The search is performed in two phases.
-    // First, I look for the aliment that start with the looked string, and then I look for aliment that contains the string.
+    // First, I look for the aliment that start with the looked string, and then I look for aliment that contains the string.
     status[research] = SearchStatus.waiting;
     var all = await database.searchFood("$research%");
 
