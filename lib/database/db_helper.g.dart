@@ -40,6 +40,8 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
     final effectivePrefix = prefix ?? '';
     return FoodModel(
       id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      visible: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}visible']),
       name: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}name']),
       portion: const IntType()
@@ -234,41 +236,10 @@ class FoodModel extends DataClass implements Insertable<FoodModel> {
   }
 
   @override
-<<<<<<< HEAD
-  int get hashCode => Object.hash(id, name, portion, unit, serving, servingUnit,
-      calorie, source, barcode, lipids, carbohydrates, proteins);
+  int get hashCode => Object.hash(id, visible, name, portion, unit, serving,
+      servingUnit, calorie, source, barcode, lipids, carbohydrates, proteins);
   @override
   bool operator ==(Object other) =>
-=======
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          visible.hashCode,
-          $mrjc(
-              name.hashCode,
-              $mrjc(
-                  portion.hashCode,
-                  $mrjc(
-                      unit.hashCode,
-                      $mrjc(
-                          serving.hashCode,
-                          $mrjc(
-                              servingUnit.hashCode,
-                              $mrjc(
-                                  calorie.hashCode,
-                                  $mrjc(
-                                      source.hashCode,
-                                      $mrjc(
-                                          barcode.hashCode,
-                                          $mrjc(
-                                              lipids.hashCode,
-                                              $mrjc(
-                                                  carbohydrates.hashCode,
-                                                  proteins
-                                                      .hashCode)))))))))))));
-  @override
-  bool operator ==(dynamic other) =>
->>>>>>> edff263 (code: populate database of startup)
       identical(this, other) ||
       (other is FoodModel &&
           other.id == this.id &&
@@ -470,29 +441,20 @@ class $FoodModelsTable extends FoodModels
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedColumn<int> _id;
   @override
-<<<<<<< HEAD
   GeneratedColumn<int> get id =>
       _id ??= GeneratedColumn<int>('id', aliasedName, false,
           typeName: 'INTEGER',
           requiredDuringInsert: false,
           defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-=======
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
   final VerificationMeta _visibleMeta = const VerificationMeta('visible');
-  GeneratedBoolColumn _visible;
+  GeneratedColumn<bool> _visible;
   @override
-  GeneratedBoolColumn get visible => _visible ??= _constructVisible();
-  GeneratedBoolColumn _constructVisible() {
-    return GeneratedBoolColumn('visible', $tableName, false,
-        defaultValue: const Constant(true));
-  }
-
->>>>>>> edff263 (code: populate database of startup)
+  GeneratedColumn<bool> get visible =>
+      _visible ??= GeneratedColumn<bool>('visible', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (visible IN (0, 1))',
+          defaultValue: const Constant(true));
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   GeneratedColumn<String> _name;
   @override

@@ -16,25 +16,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+import 'dart:convert';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 // import 'package:moor_ffi/moor_ffi.dart';
 
 import 'package:moor/ffi.dart';
-=======
-=======
-import 'dart:convert';
-
-<<<<<<< HEAD
->>>>>>> 9ccf8c2 (code: remove dep to df library)
-import 'package:df/df.dart';
-=======
->>>>>>> 8602bf6 (code: compute missing kcal values in R)
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:moor_ffi/moor_ffi.dart';
->>>>>>> edff263 (code: populate database of startup)
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:moor/moor.dart';
